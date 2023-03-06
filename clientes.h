@@ -4,8 +4,7 @@
 #include "helper.h"
 
 typedef struct xclientes{
-    char name[MAX_NAME], morada[MAX_MORADA];
-    int NIF, idade;
+    char name[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF];
     float saldo;
     char password[MAX_PASSWORD];
     struct xclientes *next;

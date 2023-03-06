@@ -6,6 +6,7 @@
 #define MAX_NAME 50
 #define MAX_MORADA 150
 #define MAX_PASSWORD 150
+#define MAX_NIF 9
 
 
 

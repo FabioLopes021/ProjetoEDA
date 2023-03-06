@@ -4,11 +4,11 @@
 #include "helper.h"
 
 typedef struct xgestores{
-    char name[MAX_NAME], morada[MAX_MORADA];
-    int nif;
+    char name[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF];
     char password[MAX_PASSWORD];
     struct xgestores *next;
 } Gestores;
+
 
 
 
