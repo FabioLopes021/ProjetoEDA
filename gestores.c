@@ -54,6 +54,11 @@ Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
         printf("A base de dados esta vazia");
         return NULL;
     }
+
+    if(!(existeGestor((*inicio), NIF))){
+        printf("Nao existe nenhum gestor resgistado com o NIF indicado...\n");
+        return NULL;
+    }
     
     if (!strcmp((*inicio)->NIF, NIF) && i == 1){
         aux = (*inicio)->next;
@@ -68,4 +73,9 @@ Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
         (*inicio)->next = removerGestor(&(*inicio)->next, NIF, ++i);
         return (*inicio);
     }
+}
+
+
+int loginGestores(Gestores **inicio,char password[]){
+    
 }
