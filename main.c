@@ -16,6 +16,7 @@ int main(){
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
     float saldo;
 
+    /*
     strcpy(nome, "Fabio Lopes");
     strcpy(morada, "Rua da penide n236, Areias S vicente");
     strcpy(NIF, "12345678");
@@ -41,7 +42,7 @@ int main(){
 
     printf("-----------Listagem---------------\n");
     listarGestor(g);
-
+    */
 
     /*
     for (int i = 0; i < 3; i++){
@@ -55,7 +56,7 @@ int main(){
     printf("existe: %d",existeMeio(h,10));
     printf("-----------Listagem---------------\n");
     listarMeios(h);
-    
+    */
 
     strcpy(nome, "Fabio Lopes");
     strcpy(morada, "Rua da penide n236, Areias S vicente");
@@ -78,13 +79,13 @@ int main(){
     printf("-----------Listagem---------------\n");
     listarCliente(c);
 
-    removerCliente(&c,"12345678",1);
+    removerCliente(&c,"12351678",1);
 
     printf("\n\n\n\n");
 
     printf("-----------Listagem---------------\n");
     listarCliente(c);
-    */
+   
 
     return 1;
 }

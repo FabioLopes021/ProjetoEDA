@@ -50,6 +50,11 @@ Meio *removerMeio(Meio **inicio, int adr, int i){
         printf("A base de dados esta vazia");
         return NULL;
     }
+
+    if(!(existeMeio((*inicio), adr))){
+        printf("Nao existe nenhum meio de transporte resgistado com esse codigo...\n");
+        return NULL;
+    }
     
     if (((*inicio)->codigo == adr) && i == 1){
         aux = (*inicio)->next;

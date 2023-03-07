@@ -52,7 +52,12 @@ Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
     Clientes *aux;
 
     if (!*inicio){
-        printf("A base de dados esta vazia");
+        printf("A base de dados esta vazia\n");
+        return NULL;
+    }
+
+    if(!(existeCliente((*inicio), NIF))){
+        printf("Nao existe nenhum cliente resgistado com o NIF indicado...\n");
         return NULL;
     }
     
