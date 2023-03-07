@@ -20,7 +20,10 @@ int listarCliente(Clientes* inicio);
 int existeCliente(Clientes* inicio, char NIF[]);
 
 // Remover um meio a partir do seu código
-Clientes *removerCliente(Clientes **inicio, int NIF, int i);
+Clientes *removerCliente(Clientes **inicio, char NIF[], int i);
+
+// compara dois NIFs 
+//int compararNif(char NIF[], char NIF1[]);
 
 
 

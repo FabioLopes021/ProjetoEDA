@@ -35,7 +35,7 @@ int listarGestor(Gestores* inicio){
     puts(inicio->NIF);
     printf("\n email: ");
     puts(inicio->email);
-    listarCliente(inicio->next);
+    listarGestor(inicio->next);
 }
 
 
@@ -44,10 +44,10 @@ int existeGestor(Gestores* inicio, char NIF[]){
         return 0;
     if (!strcmp(NIF, inicio->NIF))   
         return 1;
-    return existeCliente(inicio->next, NIF);
+    return existeGestor(inicio->next, NIF);
 }
 
-Gestores *removerCliente(Gestores **inicio, int NIF, int i){
+Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
     Gestores *aux;
 
     if (!*inicio){
@@ -65,7 +65,7 @@ Gestores *removerCliente(Gestores **inicio, int NIF, int i){
         free((*inicio));
         return aux;
     }else{
-        (*inicio)->next = removerMeio(&(*inicio)->next, NIF, ++i);
+        (*inicio)->next = removerGestor(&(*inicio)->next, NIF, ++i);
         return (*inicio);
     }
 }

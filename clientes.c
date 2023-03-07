@@ -47,3 +47,26 @@ int existeCliente(Clientes* inicio, char NIF[]){
         return 1;
     return existeCliente(inicio->next, NIF);
 }
+
+Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
+    Clientes *aux;
+
+    if (!*inicio){
+        printf("A base de dados esta vazia");
+        return NULL;
+    }
+    
+    if (!strcmp((*inicio)->NIF, NIF) && i == 1){
+        aux = (*inicio)->next;
+        free((*inicio));
+        (*inicio) = aux;
+        return aux;
+    }else if (!strcmp((*inicio)->NIF, NIF)){
+        aux = (*inicio)->next;
+        free((*inicio));
+        return aux;
+    }else{
+        (*inicio)->next = removerCliente(&(*inicio)->next, NIF, ++i);
+        return (*inicio);
+    }
+}

@@ -20,7 +20,7 @@ int listarGestor(Gestores* inicio);
 int existeGestor(Gestores* inicio, char NIF[]);
 
 // Remover um meio a partir do seu código
-Gestores *removerGestor(Gestores **inicio, int NIF, int i);
+Gestores *removerGestor(Gestores **inicio, char NIF[], int i);
 
 
 #endif //final da guarda de ficheiro
