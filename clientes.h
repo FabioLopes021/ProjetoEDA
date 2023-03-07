@@ -3,6 +3,7 @@
 
 #include "helper.h"
 
+
 typedef struct xclientes{
     char name[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
     float saldo;
@@ -19,11 +20,15 @@ int listarCliente(Clientes* inicio);
 // Determinar existência do 'codigo' na lista ligada 'inicio'
 int existeCliente(Clientes* inicio, char NIF[]);
 
+// Determinar existência do email na lista ligada 'inicio'
+int existeClienteEmail(Clientes* inicio, char email[]);
+
 // Remover um meio a partir do seu código
 Clientes *removerCliente(Clientes **inicio, char NIF[], int i);
 
-// compara dois NIFs 
-//int compararNif(char NIF[], char NIF1[]);
+// Funçoes para verificar informaçoes de Login
+Clientes *loginClientes(Clientes **inicio,char password[], char email[]);
+
 
 
 

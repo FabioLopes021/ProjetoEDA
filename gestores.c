@@ -47,6 +47,14 @@ int existeGestor(Gestores* inicio, char NIF[]){
     return existeGestor(inicio->next, NIF);
 }
 
+int existeGestorEmail(Gestores* inicio, char email[]){
+    if (!inicio)
+        return 0;
+    if (!strcmp(email, inicio->email))   
+        return 1;
+    return existeGestorEmail(inicio->next, email);
+}
+
 Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
     Gestores *aux;
 
@@ -76,6 +84,20 @@ Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
 }
 
 
-int loginGestores(Gestores **inicio,char password[]){
-    
+
+Gestores *loginGestores(Gestores **inicio,char password[], char email[]){
+
+    if (!(*inicio)){
+        return NULL;
+    }
+
+    if (!existeGestorEmail((*inicio), email)){
+        return NULL;
+    }
+
+    if (strcmp(password, (*inicio)->password)){
+        return loginGestores(&(*inicio)->next, password, email);
+    }
+
+    return (*inicio);
 }

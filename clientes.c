@@ -48,6 +48,14 @@ int existeCliente(Clientes* inicio, char NIF[]){
     return existeCliente(inicio->next, NIF);
 }
 
+int existeClienteEmail(Clientes* inicio, char email[]){
+    if (!inicio)
+        return 0;
+    if (!strcmp(email, inicio->email))   
+        return 1;
+    return existeClienteEmail(inicio->next, email);
+}
+
 Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
     Clientes *aux;
 
@@ -74,4 +82,22 @@ Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
         (*inicio)->next = removerCliente(&(*inicio)->next, NIF, ++i);
         return (*inicio);
     }
+}
+
+
+Clientes *loginClientes(Clientes **inicio,char password[], char email[]){
+    
+    if (!(*inicio)){
+        return NULL;
+    }
+
+    if (!existeClienteEmail((*inicio), email)){
+        return NULL;
+    }
+
+    if (strcmp(password, (*inicio)->password)){
+        return loginClientes(&(*inicio)->next, password, email);
+    }
+
+    return (*inicio);
 }

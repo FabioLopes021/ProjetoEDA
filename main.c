@@ -10,82 +10,53 @@
 
 int main(){
     Meio *h = NULL;
-    Clientes *c = NULL;
-    Gestores *g = NULL;
+    Clientes *c = NULL, *loginc = NULL;
+    Gestores *g = NULL, *loging = NULL;
+
 
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
+    char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
     float saldo;
 
-    /*
-    strcpy(nome, "Fabio Lopes");
-    strcpy(morada, "Rua da penide n236, Areias S vicente");
+    strcpy(nome,"Fabio Lopes");
+    strcpy(morada,"Rua da Penide n236 Areias S Vicente, Barcelos");
     strcpy(NIF, "12345678");
+    strcpy(password, "fabio");
     strcpy(email, "fabiolopes021@gmail.com");
-    strcpy(password, "fabiolopes");
-
+    saldo = 530.67;
+    
+    //inserirCliente(&c,nome,morada,NIF,saldo,password,email);
     inserirGestor(&g, nome, morada, NIF, password, email);
 
-    strcpy(nome, "Andre Lopes");
-    strcpy(morada, "Rua da penide n236, Areias S vicente");
-    strcpy(NIF, "98765431");
+
+    strcpy(nome,"Andre Lopes");
+    strcpy(morada,"Rua da Penide n236 Areias S Vicente, Barcelos");
+    strcpy(NIF, "87654321");
+    strcpy(password, "andre");
     strcpy(email, "andrelopes021@gmail.com");
-    strcpy(password, "andrelopes");
-
+    saldo = 9530.67;
+    
+    //inserirCliente(&c,nome,morada,NIF,saldo,password,email);
     inserirGestor(&g, nome, morada, NIF, password, email);
 
-    printf("-----------Listagem---------------\n");
-    listarGestor(g);
+    printf("\n---------LOGIN--------\n");
+    printf("indique o seu email: ");
+    fgets(emaillog,MAX_EMAIL,stdin);
+    emaillog[strlen(emaillog) - 1] = '\0';
 
-    removerGestor(&g,"98765431",1);
+    printf("Indique a sua password: ");
+    fgets(passwordlog,MAX_PASSWORD,stdin);
+    passwordlog[strlen(passwordlog) - 1] = '\0';
 
-    printf("\n\n\n\n");
 
-    printf("-----------Listagem---------------\n");
-    listarGestor(g);
-    */
-
-    /*
-    for (int i = 0; i < 3; i++){
-        printf("codigo, bateria, autonomia, tipo\n");
-        scanf("%d", &code);
-        scanf("%d", &bateria);
-        scanf("%f", &autonomia);
-        scanf("%s", tip);
-        inserirMeio(&h, code, tip, bateria, autonomia);
+    loging = loginGestores(&g, passwordlog, emaillog);
+    if ( loging == NULL){
+        printf("\nOcorreu um erro no login, password ou email errados...\n");
+    }else{
+        puts(loging->name);
     }
-    printf("existe: %d",existeMeio(h,10));
-    printf("-----------Listagem---------------\n");
-    listarMeios(h);
-    */
 
-    strcpy(nome, "Fabio Lopes");
-    strcpy(morada, "Rua da penide n236, Areias S vicente");
-    strcpy(NIF, "12345678");
-    strcpy(email, "fabiolopes021@gmail.com");
-    strcpy(password, "fabiolopes");
-    saldo = 500.59;
 
-    inserirCliente(&c, nome, morada, NIF, saldo, password, email);
-
-    strcpy(nome, "Andre Lopes");
-    strcpy(morada, "Rua da penide n236, Areias S vicente");
-    strcpy(NIF, "98765431");
-    strcpy(email, "andrelopes021@gmail.com");
-    strcpy(password, "andrelopes");
-    saldo = 5500.59;
-
-    inserirCliente(&c, nome, morada, NIF, saldo, password, email);
-
-    printf("-----------Listagem---------------\n");
-    listarCliente(c);
-
-    removerCliente(&c,"12351678",1);
-
-    printf("\n\n\n\n");
-
-    printf("-----------Listagem---------------\n");
-    listarCliente(c);
-   
 
     return 1;
 }
