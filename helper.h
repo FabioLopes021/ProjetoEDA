@@ -7,8 +7,6 @@
 #define MAX_MORADA 150
 #define MAX_PASSWORD 150
 #define MAX_NIF 9
-
-
-
+#define MAX_EMAIL 60
 
 #endif //final da guarda de ficheiro
