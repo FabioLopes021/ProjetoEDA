@@ -10,4 +10,6 @@
 #define MAX_EMAIL 60
 
 
+
+
 #endif //final da guarda de ficheiro
