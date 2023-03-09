@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "helper.h"
+#include "helper.c"
 #include "meio.h"
 #include "meio.c"
 #include "clientes.h"
@@ -7,15 +9,12 @@
 #include "gestores.h"
 #include "gestores.c"
 
-int menu();
-int menuclientes();
-int menucGestores();
-
 
 // Funçao de apoio as funçoes de Login, serve para reduzir o menu para apenas uma opçao de login
-int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], Clientes **logc, Gestores **logg);
-int menuclientes();
-int menucGestores();
+//int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], Clientes **logc, Gestores **logg);
+//int menu();
+//int menuclientes();
+//int menucGestores();
 
 
 int main(){
@@ -23,7 +22,7 @@ int main(){
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug;
+    int menu1, menuc, menug, menuconta;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
@@ -113,10 +112,23 @@ int main(){
                         break;
                     case 0:
                         break;
-                    
                 }
             case 2:
-            
+                //Criar Conta
+                do{
+                    menuconta = menuCriarConta();
+                    switch(menuconta){
+                    case 1:
+                        printf("\nCriar conta cliente\n");
+                        break;
+                    case 2:
+                        printf("\nCriar conta gestor\n");
+                        break;
+                    case 0:
+                        printf("\nVoltar ao menu principal\n");
+                        break;
+                }
+                }while(menuconta != 0);
                 break;
             case 0:
                 printf("Deseja guardar as alteraçoes ?");
@@ -129,7 +141,7 @@ int main(){
 
 
 
-
+/*
 int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], Clientes **logc, Gestores **logg){
     int i = 0;
     
@@ -204,3 +216,6 @@ int menucGestores(){
 
 }
 
+
+
+*/
