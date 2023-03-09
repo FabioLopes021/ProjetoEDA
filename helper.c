@@ -22,8 +22,6 @@ int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], 
     return i;
 }
 
-
-
 int menu(){
     int opc;
 
