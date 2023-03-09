@@ -35,8 +35,7 @@ int main(){
     strcpy(password, "fabio");
     strcpy(email, "fabiolopes021@gmail.com");
     saldo = 530.67;
-    
-    //inserirCliente(&c,nome,morada,NIF,saldo,password,email);
+
     inserirGestor(&g, nome, morada, NIF, password, email);
 
 
@@ -46,63 +45,77 @@ int main(){
     strcpy(password, "andre");
     strcpy(email, "andrelopes021@gmail.com");
     saldo = 9530.67;
-    
-    //inserirCliente(&c,nome,morada,NIF,saldo,password,email);
-    //inserirGestor(&g, nome, morada, NIF, password, email);
+
     inserirCliente(&c, nome, morada, NIF, saldo, password, email);
-
-    printf("\n---------LOGIN--------\n");
-    printf("indique o seu email: ");
-    fgets(emaillog,MAX_EMAIL,stdin);
-    emaillog[strlen(emaillog) - 1] = '\0';
-
-    printf("Indique a sua password: ");
-    fgets(passwordlog,MAX_PASSWORD,stdin);
-    passwordlog[strlen(passwordlog) - 1] = '\0';
-
-    // teste login unico
-    logmenu = funcaoLogin(&c, &g, passwordlog, emaillog, &loginc, &loging);
-    
-    switch(logmenu){
-        case 1:
-            if (loginc != NULL){
-                printf("Login efetuado com sucesso. (cliente: %s)\n", loginc->name);
-            }else{
-                printf("Password ou email incorretos...\n");
-            }
-            break;
-        case 2:
-            if (loging != NULL){
-                printf("Login efetuado com sucesso. (cliente: %s)\n", loginc->name);
-            }else{
-                printf("Password ou email incorretos...\n");
-            }
-            break;
-        case 0:
-            break;
-    }
-
 
     do{
         menu1 = menu();
         switch(menu1){
             case 1:
-                do{
-                    menuc = menuclientes();
-                    switch(menuc){
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 0:
-                            printf("Loging out...");
-                    }
-                }while(menuc != 0);
-                break;
+                printf("indique o seu email: ");
+                scanf("%s", emaillog);
+
+                printf("Indique a sua password: ");
+                scanf("%s", passwordlog);
+
+                logmenu = funcaoLogin(&c, &g, passwordlog, emaillog, &loginc, &loging);
+
+                switch(logmenu){
+                    case 1:
+                        if (loginc != NULL){
+                            printf("Login efetuado com sucesso. (cliente: %s)\n", loginc->name);
+                            do{
+                                menuc = menuclientes();
+                                
+                                switch(menuc){
+                                    case 1:
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 0:
+                                        printf("\nA sair da conta...\n");
+                                        break;
+                                }
+                            }while(menuc != 0);
+                        }else{
+                            printf("Password ou email incorretos...\n");
+                        }
+                        loginc = NULL;
+                        logmenu = 0;
+                        break;
+                    case 2:
+                        if (loging != NULL){
+                            printf("Login efetuado com sucesso. (Gestor: %s)\n", loging->name);
+                            do{
+                                menug = menucGestores();
+                                
+                                switch(menug){
+                                    case 1:
+                                        break;
+                                    case 2:
+                                        break;
+                                    case 3:
+                                        break;
+                                    case 4:
+                                        break;
+                                    case 5:
+                                        break;
+                                    case 0:
+                                        printf("\nA sair da conta...\n");
+                                        break;
+                                }
+                            }while(menuc != 0);
+                        }else{
+                            printf("Password ou email incorretos...\n");
+                        }
+                        loging = NULL;
+                        logmenu = 0;
+                        break;
+                    case 0:
+                        break;
+                    
+                }
             case 2:
-                //menug
-                break;
-            case 3:
             
                 break;
             case 0:
@@ -119,7 +132,7 @@ int main(){
 
 int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], Clientes **logc, Gestores **logg){
     int i = 0;
-
+    
 
     if (existeClienteEmail((*inicio), email)){
         i = 1;
@@ -135,6 +148,23 @@ int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], 
     return i;
 }
 
+
+
+int menu(){
+    int opc;
+
+    do{
+        printf("\n ------------------------------\n");
+        printf("| 1 - login                    |\n");
+        printf("| 3 - Criar conta              |\n");
+        printf("| 0 - Sair                     |\n");
+        printf(" ------------------------------\n");
+        printf("Opcao: ");
+        scanf("%d", &opc);
+    }while(opc < 0 || opc > 2);
+
+    return opc;
+}
 
 
 int menuclientes(){
