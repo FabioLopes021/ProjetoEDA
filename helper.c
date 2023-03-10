@@ -94,7 +94,7 @@ int menuCriarConta(){
     return opc;
 }
 
-int menuAlterarCliente(){
+int menuAlterarDadosCliente(){
     int opc;
 
     do{

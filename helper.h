@@ -7,6 +7,7 @@
 #define MAX_PASSWORD 150
 #define MAX_NIF 10
 #define MAX_EMAIL 60
+#define MIN_NAME 2
 
 #include "clientes.h"
 #include "gestores.h"
@@ -16,6 +17,6 @@ int menu();
 int menuclientes();
 int menucGestores();
 int menuCriarConta();
-int menuAlterarCliente();
+int menuAlterarDadosCliente();
 
 #endif //final da guarda de ficheiro

@@ -32,6 +32,21 @@ Clientes *removerCliente(Clientes **inicio, char NIF[], int i);
 // Funçoes para verificar informaçoes de Login
 Clientes *loginClientes(Clientes **inicio,char password[], char email[]);
 
+// Funçao para alterar o nome de um utilizador
+void alterarNomeCliente(Clientes *cliente, char novonome[]);
+
+// Funçao para alterar a morada de um utilizador
+void alterarMoradaCliente(Clientes *cliente, char novamorada[]);
+
+// Funçao para alterar o NIF de um utilizador
+void alterarNIFCliente(Clientes *cliente, char novoNIF[]);
+
+// Funçao para alterar o email de um utilizador
+void alterarEmailCliente(Clientes *cliente, char novoemail[]);
+
+// Funçao para alterar a password de um utilizador
+void alterarPasswordCliente(Clientes *cliente, char novapassword[]);
+
 
 
 

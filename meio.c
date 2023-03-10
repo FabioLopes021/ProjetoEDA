@@ -104,8 +104,6 @@ Meio *removerMeio(Meio **inicio, int adr, int i){
     }
 }
 
-
-
 void alugarMeio(Meio *inicio, Clientes *alugar, int id){
     
     while(inicio != NULL && inicio->codigo != id){
@@ -124,3 +122,4 @@ void terminarAluguer(Meio *inicio, Clientes *alugar, int id){
 
     inicio->aluguer = NULL;
 }
+

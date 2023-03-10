@@ -142,3 +142,40 @@ Clientes *loginClientes(Clientes **inicio,char password[], char email[]){
 
     return (*inicio);
 }
+
+void alterarNomeCliente(Clientes *cliente, char novonome[]){
+
+    if (strlen(novonome) > MIN_NAME){
+        strcpy(cliente->name, novonome);
+    }
+}
+
+void alterarMoradaCliente(Clientes *cliente, char novamorada[]){
+
+    if (strlen(novamorada) > MIN_NAME){
+        strcpy(cliente->morada, novamorada);
+    }
+}
+
+void alterarNIFCliente(Clientes *cliente, char novoNIF[]){
+
+    if (strlen(novoNIF) > MIN_NAME){
+        strcpy(cliente->NIF, novoNIF);
+    }
+}
+
+void alterarEmailCliente(Clientes *cliente, char novoemail[]){
+
+    if (strlen(novoemail) > MIN_NAME){
+        strcpy(cliente->email, novoemail);
+    }
+}
+
+void alterarPasswordCliente(Clientes *cliente, char novapassword[]){
+
+    if (strlen(novapassword) > MIN_NAME){
+        strcpy(cliente->password, novapassword);
+    }
+}
+
+

@@ -15,7 +15,7 @@ int main(){
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta, id, num = 0;
+    int menu1, menuc, menug, menuconta, id, num = 0, menualtc;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
@@ -83,6 +83,49 @@ int main(){
                                         id = 0;                                        
                                         break;
                                     case 3:
+                                        do{
+                                            menualtc = menuAlterarDadosCliente();
+                                            switch(menualtc){
+                                                case 1:     // Alterar nome
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o seu nome: ");
+                                                    fgets(nome, MAX_NAME, stdin);
+                                                    sscanf(nome,"%*s",nome);
+                                                    nome[strlen(nome)-1] = '\0';
+                                                    alterarNomeCliente(loginc, nome);
+                                                    break;
+                                                case 2:     // Alterar morada
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique a sua morada: ");
+                                                    fgets(morada, MAX_MORADA, stdin);
+                                                    morada[strlen(morada) - 1] = '\0';
+                                                    alterarMoradaCliente(loginc, morada);
+                                                    break;
+                                                case 3:     // Alterar NIF
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o seu NIF: ");
+                                                    fgets(NIF, MAX_NIF, stdin);
+                                                    NIF[MAX_NIF] = '\0';
+                                                    alterarNIFCliente(loginc, NIF);
+                                                    break;
+                                                case 4:     // Alterar email
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o seu email: ");
+                                                    fgets(email, MAX_EMAIL, stdin);
+                                                    email[strlen(email)-1] = '\0';
+                                                    alterarEmailCliente(loginc, email);
+                                                    break;
+                                                case 5:     // Alterar  password
+                                                    while ((getchar()) != '\n');    
+                                                    printf("\nIndique a sua password: ");
+                                                    fgets(password, MAX_PASSWORD, stdin);
+                                                    password[strlen(password)-1] = '\0';
+                                                    alterarPasswordCliente(loginc, password);
+                                                    break;
+                                                case 0:
+                                                    break;
+                                            }
+                                        }while(menualtc != 0);
                                         
                                         break;
                                     case 0:
@@ -147,6 +190,7 @@ int main(){
                         break;
                     case 2:
                         printf("\nCriar conta gestor\n");
+                        lerDadosGestor(&g);
                         break;
                     case 0:
                         printf("\nVoltar ao menu principal\n");
