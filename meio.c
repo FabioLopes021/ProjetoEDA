@@ -43,6 +43,39 @@ int listarMeios(Meio* inicio){
     listarMeios(inicio->next);
 }
 
+int listarMeiosLivres(Meio* inicio){
+
+    if (!inicio)
+        return 0;
+
+    if (inicio->aluguer == NULL){
+        printf("#############################################\n");
+        printf("codigo: %d\n", inicio->codigo);
+        printf("Tipo: %s\n", inicio->tipo);
+        printf("Bateria: %d\n", inicio->bateria);
+        printf("Autonomia: %f\n", inicio->autonomia);
+    }
+    
+    listarMeios(inicio->next);
+}
+
+int listarMeiosAlugados(Meio* inicio, Clientes *c, int i){
+
+    if (!inicio)
+        return i;
+        
+    if(inicio->aluguer == c){
+        printf("#############################################\n");
+        printf("codigo: %d\n", inicio->codigo);
+        printf("Tipo: %s\n", inicio->tipo);
+        printf("Bateria: %d\n", inicio->bateria);
+        printf("Autonomia: %f\n", inicio->autonomia);
+        i++;
+    }
+    
+    listarMeiosAlugados(inicio->next, c, i);
+}
+
 Meio *removerMeio(Meio **inicio, int adr, int i){ 
     Meio *aux;
 
@@ -73,4 +106,21 @@ Meio *removerMeio(Meio **inicio, int adr, int i){
 
 
 
+void alugarMeio(Meio *inicio, Clientes *alugar, int id){
+    
+    while(inicio != NULL && inicio->codigo != id){
+        inicio = inicio->next;
+    }
 
+    inicio->aluguer = alugar;
+}
+
+
+void terminarAluguer(Meio *inicio, Clientes *alugar, int id){
+
+    while(inicio != NULL && inicio->codigo != id){
+        inicio = inicio->next;
+    }
+
+    inicio->aluguer = NULL;
+}

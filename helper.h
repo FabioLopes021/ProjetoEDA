@@ -5,7 +5,7 @@
 #define MAX_NAME 50
 #define MAX_MORADA 150
 #define MAX_PASSWORD 150
-#define MAX_NIF 9
+#define MAX_NIF 10
 #define MAX_EMAIL 60
 
 #include "clientes.h"
@@ -16,5 +16,6 @@ int menu();
 int menuclientes();
 int menucGestores();
 int menuCriarConta();
+int menuAlterarCliente();
 
 #endif //final da guarda de ficheiro

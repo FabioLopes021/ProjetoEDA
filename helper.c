@@ -45,12 +45,13 @@ int menuclientes(){
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Alugar meio              |\n");
-        printf("| 2 - Alterar dados            |\n");
+        printf("| 2 - Terminar aluguer         |\n");
+        printf("| 3 - Alterar dados            |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 2);
+    }while(opc < 0 || opc > 3);
 
     return opc;
 }
@@ -65,7 +66,7 @@ int menucGestores(){
         printf("| 3 - Estatisticas             |\n");
         printf("| 4 - Validaçoes               |\n");
         printf("| 5 - Alterar meios            |\n");
-        printf("| 5 - Alterar dados            |\n");
+        printf("| 6 - Alterar dados            |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
@@ -89,6 +90,25 @@ int menuCriarConta(){
         printf("Opcao: ");
         scanf("%d", &opc);
     }while(opc < 0 || opc > 2);
+
+    return opc;
+}
+
+int menuAlterarCliente(){
+    int opc;
+
+    do{
+        printf("\n ------------------------------\n");
+        printf("| 1 - Alterar nome             |\n");
+        printf("| 2 - Alterar morada           |\n");
+        printf("| 3 - Alterar NIF              |\n");
+        printf("| 4 - Alterar email            |\n");
+        printf("| 5 - Alterar password         |\n");
+        printf("| 0 - Voltar                   |\n");
+        printf(" ------------------------------\n");
+        printf("Opcao: ");
+        scanf("%d", &opc);
+    }while(opc < 0 || opc > 5);
 
     return opc;
 }

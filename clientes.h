@@ -14,6 +14,9 @@ typedef struct xclientes{
 // Inserção de um novo registo
 void inserirCliente(Clientes** inicio, char nome[], char morada[], char NIF[], float saldo, char password[], char email[]); 
 
+// Funçao para ler os dados do cliente para serem envidos a funçao "inserirCliente"
+void lerDados(Clientes** inicio);
+
 // listar na consola o conteúdo da lista ligada
 int listarCliente(Clientes* inicio); 
 

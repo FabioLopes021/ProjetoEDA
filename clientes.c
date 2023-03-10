@@ -21,6 +21,47 @@ void inserirCliente(Clientes** inicio, char nome[], char morada[], char NIF[], f
     (*inicio) = new;
 }
 
+void lerDados(Clientes** inicio){
+    char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
+    float saldo = 0;
+
+    while ((getchar()) != '\n');
+
+    system("clear");
+    printf("\n--------------- Criar Conta ---------------");
+    printf("\nIndique o seu nome: ");
+    fgets(nome, MAX_NAME, stdin);
+    sscanf(nome,"%*s",nome);
+    nome[strlen(nome)-1] = '\0';
+
+    while ((getchar()) != '\n');
+
+    printf("\nIndique a sua morada: ");
+    fgets(morada, MAX_MORADA, stdin);
+    morada[strlen(morada) - 1] = '\0';
+
+    while ((getchar()) != '\n');
+
+    printf("\nIndique o seu NIF: ");
+    fgets(NIF, MAX_NIF, stdin);
+    NIF[MAX_NIF] = '\0';
+
+    while ((getchar()) != '\n');
+
+    printf("\nIndique o seu email: ");
+    fgets(email, MAX_EMAIL, stdin);
+    email[strlen(email)-1] = '\0';
+
+    while ((getchar()) != '\n');
+
+    printf("\nIndique a sua password: ");
+    fgets(password, MAX_PASSWORD, stdin);
+    password[strlen(password)-1] = '\0';
+
+    while ((getchar()) != '\n');
+    inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email);
+}
+
 int listarCliente(Clientes* inicio){
 
     if (!inicio)

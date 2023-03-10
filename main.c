@@ -15,7 +15,7 @@ int main(){
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta;
+    int menu1, menuc, menug, menuconta, id, num = 0;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
@@ -40,6 +40,9 @@ int main(){
 
     inserirCliente(&c, nome, morada, NIF, saldo, password, email);
 
+    inserirMeio(&h, 1, "trotinete", 95, 200);
+    inserirMeio(&h, 2, "bicicleta", 70, 250);
+
     do{
         menu1 = menu();
         switch(menu1){
@@ -60,9 +63,27 @@ int main(){
                                 menuc = menuclientes();
                                 
                                 switch(menuc){
-                                    case 1:
+                                    case 1:     //Alugar meio
+                                        listarMeiosLivres(h);
+                                        printf("Indique o id do meio que deseja alugar: ");
+                                        scanf("%d", &id);
+                                        alugarMeio( h, c, id);
+                                        id = 0;
                                         break;
-                                    case 2:
+                                    case 2:     //Terminar aluguer 
+                                        num = listarMeiosAlugados(h, c, 0);
+                                        if (num == 0){
+                                            printf("\nEste utilizador nao tem meios alugados\n");
+                                        }else{
+                                            printf("\nIndique o id do meio que deseja terminar o aluger: ");
+                                            scanf("%d", &id);
+                                            terminarAluguer(h ,c ,id);
+                                        }
+                                        num = 0;
+                                        id = 0;                                        
+                                        break;
+                                    case 3:
+                                        
                                         break;
                                     case 0:
                                         printf("\nA sair da conta...\n");
@@ -82,21 +103,29 @@ int main(){
                                 menug = menucGestores();
                                 
                                 switch(menug){
-                                    case 1:
+                                    case 1:     //Adicionar meios
+
                                         break;
-                                    case 2:
+                                    case 2:     //Consultar historico
+
                                         break;
-                                    case 3:
+                                    case 3:     //Estatisticas
+
                                         break;
-                                    case 4:
+                                    case 4:     //Validaçoes
+
                                         break;
-                                    case 5:
+                                    case 5:     //Alterar meios
+
+                                        break;
+                                    case 6:     //Alterar dados
+
                                         break;
                                     case 0:
                                         printf("\nA sair da conta...\n");
                                         break;
                                 }
-                            }while(menuc != 0);
+                            }while(menug != 0);
                         }else{
                             printf("Password ou email incorretos...\n");
                         }
@@ -106,6 +135,7 @@ int main(){
                     case 0:
                         break;
                 }
+                break;
             case 2:
                 //Criar Conta
                 do{
@@ -113,6 +143,7 @@ int main(){
                     switch(menuconta){
                     case 1:
                         printf("\nCriar conta cliente\n");
+                        lerDados(&c);
                         break;
                     case 2:
                         printf("\nCriar conta gestor\n");
