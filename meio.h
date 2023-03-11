@@ -17,6 +17,8 @@ typedef struct xMeio{
 // Inserção de um novo registo
 void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut); 
 
+void lerDadosMeio(Meio** inicio);
+
 // listar na consola o conteúdo da lista ligada
 int listarMeios(Meio* inicio);
 
@@ -38,5 +40,11 @@ void alugarMeio(Meio *inicio, Clientes *alugar, int id);
 // Terminar aluguer de meio
 void terminarAluguer(Meio *inicio, Clientes *alugar, int id);
 
+// Funçao para alterar o tipo de um meio
+void alterarTipoMeio(Meio *inicio, char tipo[], int id);
+
+void alterarBateria(Meio *inicio, int bat, int id);
+
+void alterarAutonomia(Meio *inicio, float aut, int id);
 
 #endif //final da guarda de ficheiro

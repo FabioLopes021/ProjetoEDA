@@ -12,6 +12,8 @@ typedef struct xgestores{
 // Inserção de um novo registo
 void inserirGestor(Gestores** inicio, char nome[], char morada[], char NIF[], char password[], char email[]); 
 
+void lerDadosGestor(Gestores** inicio);
+
 // listar na consola o conteúdo da lista ligada
 int listarGestor(Gestores* inicio); 
 

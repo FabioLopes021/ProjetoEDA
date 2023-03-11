@@ -142,3 +142,38 @@ Gestores *loginGestores(Gestores **inicio,char password[], char email[]){
 
     return (*inicio);
 }
+
+void alterarNomeGestor(Gestores *gestor, char novonome[]){
+
+    if (strlen(novonome) > MIN_NAME){
+        strcpy(gestor->name, novonome);
+    }
+}
+
+void alterarMoradaGestor(Gestores *gestor, char novamorada[]){
+
+    if (strlen(novamorada) > MIN_NAME){
+        strcpy(gestor->morada, novamorada);
+    }
+}
+
+void alterarNIFGestor(Gestores *gestor, char novoNIF[]){
+
+    if (strlen(novoNIF) > MIN_NAME){
+        strcpy(gestor->NIF, novoNIF);
+    }
+}
+
+void alterarEmailGestor(Gestores *gestor, char novoemail[]){
+
+    if (strlen(novoemail) > MIN_NAME){
+        strcpy(gestor->email, novoemail);
+    }
+}
+
+void alterarPasswordGestor(Gestores *gestor, char novapassword[]){
+
+    if (strlen(novapassword) > MIN_NAME){
+        strcpy(gestor->password, novapassword);
+    }
+}

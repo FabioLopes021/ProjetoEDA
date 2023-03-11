@@ -18,5 +18,7 @@ int menuclientes();
 int menucGestores();
 int menuCriarConta();
 int menuAlterarDadosCliente();
+int menuAlterarDadosGestor();
+int menuAlterarDadosMeio();
 
 #endif //final da guarda de ficheiro

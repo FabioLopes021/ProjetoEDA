@@ -71,7 +71,7 @@ int menucGestores(){
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 5);
+    }while(opc < 0 || opc > 6);
 
     return opc;
 
@@ -111,4 +111,44 @@ int menuAlterarDadosCliente(){
     }while(opc < 0 || opc > 5);
 
     return opc;
+}
+
+
+int menuAlterarDadosGestor(){
+    int opc;
+
+    do{
+        printf("\n ------------------------------\n");
+        printf("| 1 - Alterar nome             |\n");
+        printf("| 2 - Alterar morada           |\n");
+        printf("| 3 - Alterar NIF              |\n");
+        printf("| 4 - Alterar email            |\n");
+        printf("| 5 - Alterar password         |\n");
+        printf("| 0 - Voltar                   |\n");
+        printf(" ------------------------------\n");
+        printf("Opcao: ");
+        scanf("%d", &opc);
+    }while(opc < 0 || opc > 5);
+
+    return opc;
+
+}
+
+int menuAlterarDadosMeio(){
+    int opc;
+
+    do{
+        printf("\n ------------------------------\n");
+        printf("| 1 - Alterar Tipo             |\n");
+        printf("| 2 - Alterar bateria          |\n");
+        printf("| 3 - Alterar autonomia        |\n");
+        printf("| 4 - Alterar custo            |\n");
+        printf("| 0 - Voltar                   |\n");
+        printf(" ------------------------------\n");
+        printf("Opcao: ");
+        scanf("%d", &opc);
+    }while(opc < 0 || opc > 3);
+
+    return opc;
+
 }

@@ -15,11 +15,11 @@ int main(){
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta, id, num = 0, menualtc;
+    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count;
     
-    char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
+    char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
-    float saldo;
+    float saldo, autonomia, custo;
 
     strcpy(nome,"Fabio Lopes");
     strcpy(morada,"Rua da Penide n236 Areias S Vicente, Barcelos");
@@ -40,8 +40,8 @@ int main(){
 
     inserirCliente(&c, nome, morada, NIF, saldo, password, email);
 
-    inserirMeio(&h, 1, "trotinete", 95, 200);
-    inserirMeio(&h, 2, "bicicleta", 70, 250);
+    inserirMeio(&h, 1, "trotinete", 95, 200, 0.2);
+    inserirMeio(&h, 2, "bicicleta", 70, 250, 0.35);
 
     do{
         menu1 = menu();
@@ -147,10 +147,10 @@ int main(){
                                 
                                 switch(menug){
                                     case 1:     //Adicionar meios
-
+                                        lerDadosMeio(&h);
                                         break;
                                     case 2:     //Consultar historico
-
+                                    
                                         break;
                                     case 3:     //Estatisticas
 
@@ -159,10 +159,94 @@ int main(){
 
                                         break;
                                     case 5:     //Alterar meios
-
+                                        do{
+                                            count = 0;
+                                            system("clear");
+                                            listarMeios(h);
+                                            
+                                            do{
+                                                if(count == 0)  
+                                                    printf("\nIndique o meio que deseja alterar:");
+                                                else   
+                                                    printf("\nIndique um meio valido:"); 
+                                                scanf("%d", &idmeio);
+                                                count++;
+                                            }while(!existeMeio(h,idmeio));
+                                            menualtm = menuAlterarDadosMeio();
+                                            switch(menualtm){
+                                                case 1:     // Alterar tipo
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o tipo: ");
+                                                    fgets(tipo, MAX_CODE, stdin);
+                                                    sscanf(tipo,"%*s",tipo);
+                                                    tipo[strlen(tipo)-1] = '\0';
+                                                    alterarTipoMeio(h, tipo, idmeio);
+                                                    break;
+                                                case 2:     // Alterar bateria
+                                                    printf("\nIndique a bateria do meio:");
+                                                    scanf("%d", &bateria);
+                                                    alterarBateria(h, bateria, idmeio);
+                                                    break;
+                                                case 3:     // Alterar autonomia
+                                                    printf("\nIndique a autonomia do meio");
+                                                    scanf("%f", &autonomia);
+                                                    alterarAutonomia(h, autonomia, idmeio);
+                                                    break;
+                                                case 4:     // Alterar custo
+                                                    printf("\nIndique a autonomia do meio");
+                                                    scanf("%f", &custo);
+                                                    alterarCusto(h, custo, idmeio);
+                                                    break;
+                                                case 0:
+                                                    break;
+                                            }
+                                            break;
+                                        }while(menualtc != 0);
                                         break;
                                     case 6:     //Alterar dados
-
+                                        do{
+                                            menualtg = menuAlterarDadosGestor();
+                                            switch(menualtg){
+                                                case 1:     // Alterar nome
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o seu nome: ");
+                                                    fgets(nome, MAX_NAME, stdin);
+                                                    sscanf(nome,"%*s",nome);
+                                                    nome[strlen(nome)-1] = '\0';
+                                                    alterarNomeGestor(loging, nome);
+                                                    break;
+                                                case 2:     // Alterar morada
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique a sua morada: ");
+                                                    fgets(morada, MAX_MORADA, stdin);
+                                                    morada[strlen(morada) - 1] = '\0';
+                                                    alterarMoradaGestor(loging, morada);
+                                                    break;
+                                                case 3:     // Alterar NIF
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o seu NIF: ");
+                                                    fgets(NIF, MAX_NIF, stdin);
+                                                    NIF[MAX_NIF] = '\0';
+                                                    alterarNIFGestor(loging, NIF);
+                                                    break;
+                                                case 4:     // Alterar email
+                                                    while ((getchar()) != '\n');
+                                                    printf("\nIndique o seu email: ");
+                                                    fgets(email, MAX_EMAIL, stdin);
+                                                    email[strlen(email)-1] = '\0';
+                                                    alterarEmailGestor(loging, email);
+                                                    break;
+                                                case 5:     // Alterar  password
+                                                    while ((getchar()) != '\n');    
+                                                    printf("\nIndique a sua password: ");
+                                                    fgets(password, MAX_PASSWORD, stdin);
+                                                    password[strlen(password)-1] = '\0';
+                                                    alterarPasswordGestor(loging, password);
+                                                    break;
+                                                case 0:
+                                                    break;
+                                            }
+                                        }while(menualtg != 0);
                                         break;
                                     case 0:
                                         printf("\nA sair da conta...\n");

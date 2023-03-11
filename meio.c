@@ -19,6 +19,37 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut){
     (*inicio) = new;
 }
 
+void lerDadosMeio(Meio** inicio){
+    char tipo[MAX_NAME];
+    int cod = 0,i = 0;
+    float bat, aut;
+
+    while ((getchar()) != '\n');
+
+    system("clear");
+    printf("\n--------------- Criar Conta ---------------");
+    printf("\nIndique o tipo de meio: ");
+    fgets(tipo, MAX_NAME, stdin);
+    sscanf(tipo,"%*s",tipo);
+    tipo[strlen(tipo)-1] = '\0';
+
+    do{
+    if(cod == 0)
+        printf("\nIndique um codigo para o meio:");
+    if(cod > 0)
+        printf("\nIndique um codigo valido:");
+    scanf("%d", &cod);
+    i++;
+    }while(existeMeio((*inicio), cod));
+
+    printf("\nIndique a bateria do meio:");
+    scanf("%f", &bat);
+
+    printf("\nIndique a autonomia do meio:");
+    scanf("%f", &bat);
+    
+    inserirMeio(&(*inicio), cod, tipo, bat, aut);
+}
 
 int existeMeio(Meio* inicio, int codigo){
     if (!inicio)
@@ -123,3 +154,46 @@ void terminarAluguer(Meio *inicio, Clientes *alugar, int id){
     inicio->aluguer = NULL;
 }
 
+
+void alterarTipoMeio(Meio *inicio, char tipo[], int id){
+
+    while(inicio->codigo != id)
+        inicio = inicio->next;
+
+    if (strlen(tipo) > MIN_NAME){
+        strcpy(inicio->tipo, tipo);
+    }
+
+}
+
+
+void alterarBateria(Meio *inicio, int bat, int id){
+
+    while(inicio->codigo != id)
+        inicio = inicio->next;
+
+    if (bat > 0 && bat < 100){
+        inicio->bateria = bat;
+    }
+
+}
+
+void alterarAutonomia(Meio *inicio, float aut, int id){
+
+    while(inicio->codigo != id)
+        inicio = inicio->next;
+
+    if (aut > 0 && aut < 100){
+        inicio->autonomia = aut;
+    }
+}
+
+/*
+void alterarCusto(Meio *inicio, float custo){
+
+    if (custo > 0 && custo < 100){
+        inicio-> = custo;
+    }
+
+}
+*/
