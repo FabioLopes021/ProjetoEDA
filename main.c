@@ -21,27 +21,9 @@ int main(){
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
     float saldo, autonomia, custo;
 
-    strcpy(nome,"Fabio Lopes");
-    strcpy(morada,"Rua da Penide n236 Areias S Vicente, Barcelos");
-    strcpy(NIF, "12345678");
-    strcpy(password, "fabio");
-    strcpy(email, "fabiolopes021@gmail.com");
-    saldo = 530.67;
-
-    inserirGestor(&g, nome, morada, NIF, password, email);
-
-
-    strcpy(nome,"Andre Lopes");
-    strcpy(morada,"Rua da Penide n236 Areias S Vicente, Barcelos");
-    strcpy(NIF, "87654321");
-    strcpy(password, "andre");
-    strcpy(email, "andrelopes021@gmail.com");
-    saldo = 9530.67;
-
-    inserirCliente(&c, nome, morada, NIF, saldo, password, email);
-
-    inserirMeio(&h, 1, "trotinete", 95, 200, 0.2);
-    inserirMeio(&h, 2, "bicicleta", 70, 250, 0.35);
+    readMeios(&h);
+    readClientes(&c);
+    readGestores(&g);
 
     do{
         menu1 = menu();
@@ -283,10 +265,19 @@ int main(){
                 }while(menuconta != 0);
                 break;
             case 0:
-                printf("Deseja guardar as alteraçoes ?");
                 break;
         }
     }while(menu1 != 0);
-
+    /*
+    char ver;
+    printf("Deseja guardar as alteraçoes ? (s,n)");
+    scanf("%c", &ver);
+    if (ver == 's'){
+        guardarMeios(h);
+    }
+    */
+    //guardarGestores(g);
+    //guardarClientes(c);
+    //guardarMeios(h);
     return 1;
 }

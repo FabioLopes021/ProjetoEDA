@@ -9,13 +9,14 @@ typedef struct xMeio{
     char tipo[MAX_CODE];    //Nome do tipo de transporte
     int bateria;            //Percentagem de Bateria do meio
     float autonomia;        //Autonomia do meio
+    float custo;            //custo por km do meio
     Clientes *aluguer;
     struct xMeio *next;     //Next node
 } Meio;
 
 
 // Inserção de um novo registo
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut); 
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo); 
 
 void lerDadosMeio(Meio** inicio);
 
@@ -46,5 +47,12 @@ void alterarTipoMeio(Meio *inicio, char tipo[], int id);
 void alterarBateria(Meio *inicio, int bat, int id);
 
 void alterarAutonomia(Meio *inicio, float aut, int id);
+
+void alterarCusto(Meio *inicio, float custo, int id);
+
+void readMeios(Meio **inicio);
+
+void guardarMeios(Meio *inicio);
+
 
 #endif //final da guarda de ficheiro

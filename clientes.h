@@ -49,5 +49,7 @@ void alterarPasswordCliente(Clientes *cliente, char novapassword[]);
 
 
 
+void guardarClientes(Clientes* inicio);
+
 
 #endif //final da guarda de ficheiro

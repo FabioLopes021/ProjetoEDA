@@ -179,3 +179,68 @@ void alterarPasswordCliente(Clientes *cliente, char novapassword[]){
 }
 
 
+void readClientes(Clientes **inicio){
+    FILE* fp;
+    float saldo;
+    char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], email[MAX_EMAIL], password[MAX_PASSWORD];
+    char line[1024];
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6;
+
+    fp = fopen("clientes.txt","r");
+
+    if (fp != NULL) {
+		while (fgets(line, sizeof(line), fp)) {
+
+			campo1 = strtok(line, ";");
+			campo2 = strtok(NULL, ";");
+			campo3 = strtok(NULL, ";");
+			campo4 = strtok(NULL, ";");
+			campo5 = strtok(NULL, ";");
+			campo6 = strtok(NULL, ";");
+
+            strcpy(nome, campo1);
+            strcpy(morada, campo2);
+            strcpy(NIF, campo3);
+            strcpy(email, campo4);
+            strcpy(password, campo5);
+			saldo = atof(campo6);
+
+            inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email);
+		}
+		fclose(fp);
+	}
+	else {
+		printf("Erro ao abrir o ficheiro");
+	}
+}
+
+
+void guardarClientes(Clientes* inicio){
+    FILE* fp;
+
+    fp = fopen("clientes.txt","w");
+
+    if (fp!=NULL){
+        
+        while (inicio != NULL){
+        fputs(inicio->name, fp);
+        fprintf(fp,";");
+        fputs(inicio->morada, fp);
+        fprintf(fp,";");
+        fputs(inicio->NIF, fp);
+        fprintf(fp,";");
+        fputs(inicio->email, fp);
+        fprintf(fp,";");
+        fputs(inicio->password, fp);
+        fprintf(fp,";");
+        fprintf(fp,"%.2f\n", inicio->saldo);
+        inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Clientes guardados com sucesso\n");
+    }else
+        printf("Erro ao abrir ficheiro Clientes\n");
+}
+

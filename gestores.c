@@ -177,3 +177,65 @@ void alterarPasswordGestor(Gestores *gestor, char novapassword[]){
         strcpy(gestor->password, novapassword);
     }
 }
+
+
+
+void readGestores(Gestores **inicio){
+    FILE* fp;
+    char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], email[MAX_EMAIL], password[MAX_PASSWORD];
+    char line[1024];
+	char* campo1, * campo2, * campo3, * campo4, * campo5;
+
+    fp = fopen("gestores.txt","r");
+
+    if (fp != NULL) {
+		while (fgets(line, sizeof(line), fp)) {
+
+			campo1 = strtok(line, ";");
+			campo2 = strtok(NULL, ";");
+			campo3 = strtok(NULL, ";");
+			campo4 = strtok(NULL, ";");
+			campo5 = strtok(NULL, ";");
+
+            strcpy(nome, campo1);
+            strcpy(morada, campo2);
+            strcpy(NIF, campo3);
+            strcpy(email, campo4);
+            strcpy(password, campo5);
+
+            inserirGestor(&(*inicio), nome, morada, NIF, password, email);
+		}
+		fclose(fp);
+	}
+	else {
+		printf("Erro ao abrir o ficheiro");
+	}
+}
+
+
+void guardarGestores(Gestores* inicio){
+    FILE* fp;
+
+    fp = fopen("gestores.txt","w");
+
+    if (fp!=NULL){
+        
+        while (inicio != NULL){
+        fputs(inicio->name, fp);
+        fprintf(fp,";");
+        fputs(inicio->morada, fp);
+        fprintf(fp,";");
+        fputs(inicio->NIF, fp);
+        fprintf(fp,";");
+        fputs(inicio->email, fp);
+        fprintf(fp,";");
+        fputs(inicio->password, fp);
+        inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Gestores guardados com sucesso\n");
+    }else
+        printf("Erro ao abrir ficheiro Clientes\n");
+}

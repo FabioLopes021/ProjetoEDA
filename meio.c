@@ -5,7 +5,7 @@
 
 
 
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut){
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo){
     Meio *new;
     
     new = (Meio *) malloc(sizeof(Meio));
@@ -14,6 +14,7 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut){
     strcpy(new->tipo, tipo);
     new->bateria = bat;
     new->autonomia = aut;
+    new->custo = custo;
 
     new->next = (*inicio);
     (*inicio) = new;
@@ -22,12 +23,12 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut){
 void lerDadosMeio(Meio** inicio){
     char tipo[MAX_NAME];
     int cod = 0,i = 0;
-    float bat, aut;
+    float bat, aut, custo;
 
     while ((getchar()) != '\n');
 
     system("clear");
-    printf("\n--------------- Criar Conta ---------------");
+    printf("\n--------------- Adicionar Meio ---------------");
     printf("\nIndique o tipo de meio: ");
     fgets(tipo, MAX_NAME, stdin);
     sscanf(tipo,"%*s",tipo);
@@ -47,8 +48,11 @@ void lerDadosMeio(Meio** inicio){
 
     printf("\nIndique a autonomia do meio:");
     scanf("%f", &bat);
+
+    printf("\nIndique o custo por km do meio:");
+    scanf("%f", &custo);
     
-    inserirMeio(&(*inicio), cod, tipo, bat, aut);
+    inserirMeio(&(*inicio), cod, tipo, bat, aut, custo);
 }
 
 int existeMeio(Meio* inicio, int codigo){
@@ -70,7 +74,8 @@ int listarMeios(Meio* inicio){
     printf("codigo: %d\n", inicio->codigo);
     printf("Tipo: %s\n", inicio->tipo);
     printf("Bateria: %d\n", inicio->bateria);
-    printf("Autonomia: %f\n", inicio->autonomia);
+    printf("Autonomia: %.2f\n", inicio->autonomia);
+    printf("Custo: %.2f\n", inicio->custo);
     listarMeios(inicio->next);
 }
 
@@ -84,7 +89,8 @@ int listarMeiosLivres(Meio* inicio){
         printf("codigo: %d\n", inicio->codigo);
         printf("Tipo: %s\n", inicio->tipo);
         printf("Bateria: %d\n", inicio->bateria);
-        printf("Autonomia: %f\n", inicio->autonomia);
+        printf("Autonomia: %.2f\n", inicio->autonomia);
+        printf("Custo: %.2f\n", inicio->custo);
     }
     
     listarMeios(inicio->next);
@@ -100,7 +106,8 @@ int listarMeiosAlugados(Meio* inicio, Clientes *c, int i){
         printf("codigo: %d\n", inicio->codigo);
         printf("Tipo: %s\n", inicio->tipo);
         printf("Bateria: %d\n", inicio->bateria);
-        printf("Autonomia: %f\n", inicio->autonomia);
+        printf("Autonomia: %.2f\n", inicio->autonomia);
+        printf("Custo: %.2f\n", inicio->custo);
         i++;
     }
     
@@ -188,12 +195,70 @@ void alterarAutonomia(Meio *inicio, float aut, int id){
     }
 }
 
-/*
-void alterarCusto(Meio *inicio, float custo){
+
+void alterarCusto(Meio *inicio, float custo, int id){
+
+    while(inicio->codigo != id)
+        inicio = inicio->next;
 
     if (custo > 0 && custo < 100){
-        inicio-> = custo;
+        inicio->custo = custo;
     }
 
 }
-*/
+
+
+
+void readMeios(Meio **inicio){
+    FILE* fp;
+    int cod, bat;
+    float aut, custo;
+    char tipo[MAX_CODE];
+    char line[1024];
+	char* campo1, * campo2, * campo3, * campo4, * campo5;
+
+    fp = fopen("meios.txt","r");
+
+    if (fp != NULL) {
+		while (fgets(line, sizeof(line), fp)) {
+
+			campo1 = strtok(line, ";");
+			campo2 = strtok(NULL, ";");
+			campo3 = strtok(NULL, ";");
+			campo4 = strtok(NULL, ";");
+			campo5 = strtok(NULL, ";");
+
+			cod = atoi(campo1);
+			bat = atoi(campo2);
+			aut = atof(campo3);
+			custo = atof(campo4);
+            strcpy(tipo, campo5);
+
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat);
+		}
+		fclose(fp);
+	}
+	else {
+		printf("Erro ao abrir o ficheiro");
+	}
+}
+
+
+void guardarMeios(Meio* inicio){
+    FILE* fp;
+
+    fp = fopen("meios.txt","w");
+
+    if (fp!=NULL){
+        
+        while (inicio != NULL){
+        fprintf(fp,"%d;%d;%f;%f;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->tipo);
+        inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Meios guardados com sucesso\n");
+    }else
+        printf("Erro ao abrir ficheiro\n");
+}
