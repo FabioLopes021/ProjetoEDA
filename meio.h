@@ -54,5 +54,6 @@ void readMeios(Meio **inicio);
 
 void guardarMeios(Meio *inicio);
 
+void ordenarMeios(Meio **inicio);
 
 #endif //final da guarda de ficheiro

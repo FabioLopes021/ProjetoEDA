@@ -46,7 +46,8 @@ int main(){
                                 
                                 switch(menuc){
                                     case 1:     //Alugar meio
-                                        listarMeiosLivres(h);
+                                        //listarMeiosLivres(h);
+                                        ordenarMeios(&h);
                                         printf("Indique o id do meio que deseja alugar: ");
                                         scanf("%d", &id);
                                         alugarMeio( h, c, id);

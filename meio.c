@@ -262,3 +262,86 @@ void guardarMeios(Meio* inicio){
     }else
         printf("Erro ao abrir ficheiro\n");
 }
+
+
+
+void ordenarMeios(Meio **inicio){
+    Meio *h, *c, *d, *aux, *auxn;
+    int b = 1,i = 0;
+
+    h = (*inicio);
+    c = h->next;
+    d = c->next;
+    
+    if(c == NULL){
+
+    }else   if (d == NULL){
+
+        if ((c->autonomia > h->autonomia)){
+            auxn = c->next;
+            aux = h;
+            (*inicio) = c;
+            (*inicio)->next = aux;
+            c = h;
+            c->next = auxn;
+        }
+
+    }else{
+
+        while (b) {
+            b = 0;
+            i = 0;
+            h = (*inicio);
+            c = h->next;
+            d = c->next;
+            for (; d != NULL; c = c->next, h = h->next, d = d->next) {
+                if ((c->autonomia > h->autonomia) && (i == 0)){
+                    auxn = c->next;
+                    aux = h;
+                    (*inicio) = c;
+                    (*inicio)->next = aux;
+                    c = h;
+                    c->next = auxn;
+                    b = 1;
+                }
+                if (d->autonomia > c->autonomia){
+                    auxn = d->next;
+                    aux = c;
+                    c = d;
+                    c->next = aux;
+                    d = aux;
+                    d->next = auxn;
+                    h->next = c;
+                    c = aux;
+                    b = 1;
+                }
+                i++;
+            }
+	    }
+    }
+
+    listarMeios(*inicio);
+}
+
+
+/*
+int bubbleSort(int a[], int s) {
+	int aux, i, b = 1, n = 0;
+
+	while (b) {
+		b = 0;
+		n++;
+		for (i = 0; i < s - 1; i++) {
+			n++;
+			if (a[i] > a[i + 1]) {
+				aux = a[i];
+				a[i] = a[i + 1];
+				a[i + 1] = aux;
+				b = 1;
+			}
+		}
+	}
+
+	return n;
+}
+*/
