@@ -21,16 +21,23 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
 void lerDadosMeio(Meio** inicio);
 
 // listar na consola o conteúdo da lista ligada
-int listarMeios(Meio* inicio);
+int listarMeios(Meio* inicio, int i);
 
 // Listar meios livres
-int listarMeiosLivres(Meio* inicio);
+int listarMeiosLivres(Meio* inicio, int i);
 
 // listar na consola os meios alugados por um determinado utilizador e tambem retornar o numero
 int listarMeiosAlugados(Meio* inicio, Clientes *c, int i);
 
 // Determinar existência do 'codigo' na lista ligada 'inicio'
 int existeMeio(Meio* inicio, int codigo); 
+
+
+int meioLivre(Meio* inicio, int codigo);
+
+
+int meioAlugado(Meio* inicio, int codigo, Clientes *ver);
+
 
 // Remover um meio a partir do seu código
 Meio *removerMeio(Meio **inicio, int adr, int i);

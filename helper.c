@@ -25,6 +25,7 @@ int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], 
 int menu(){
     int opc;
 
+    generico();
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - login                    |\n");
@@ -39,19 +40,22 @@ int menu(){
 }
 
 
-int menuclientes(){
+int menuclientes(char nome[], float saldo){
     int opc;
 
+    generico();
+    printf("\nCliente: %s\nSaldo: %.2f", nome, saldo);
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Alugar meio              |\n");
         printf("| 2 - Terminar aluguer         |\n");
         printf("| 3 - Alterar dados            |\n");
+        printf("| 4 - Adicionar Saldo          |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 3);
+    }while(opc < 0 || opc > 4);
 
     return opc;
 }
@@ -59,6 +63,7 @@ int menuclientes(){
 int menucGestores(){
     int opc;
 
+    generico();
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Adicionar meios          |\n");
@@ -74,13 +79,13 @@ int menucGestores(){
     }while(opc < 0 || opc > 6);
 
     return opc;
-
 }
 
 
 int menuCriarConta(){
     int opc;
 
+    generico();
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Conta Cliente            |\n");
@@ -97,6 +102,7 @@ int menuCriarConta(){
 int menuAlterarDadosCliente(){
     int opc;
 
+    generico();
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Alterar nome             |\n");
@@ -117,6 +123,7 @@ int menuAlterarDadosCliente(){
 int menuAlterarDadosGestor(){
     int opc;
 
+    generico();
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Alterar nome             |\n");
@@ -137,6 +144,7 @@ int menuAlterarDadosGestor(){
 int menuAlterarDadosMeio(){
     int opc;
 
+    generico();
     do{
         printf("\n ------------------------------\n");
         printf("| 1 - Alterar Tipo             |\n");
@@ -151,4 +159,15 @@ int menuAlterarDadosMeio(){
 
     return opc;
 
+}
+
+
+void generico(){
+    system("clear");
+    printf("    ________________  __________________  __\n");
+    printf("   / ____/ ____/ __ \\/ ____/  _/_  __/\\ \\/ /\n");
+    printf("  / __/ / /   / / / / /    / /  / /    \\  / \n");
+    printf(" / /___/ /___/ /_/ / /____/ /  / /     / /  \n");
+    printf("/_____/\\____/\\____/\\____/___/ /_/     /_/   \n");
+    printf("Copiryght by Fabio Lopes 2023\n");
 }

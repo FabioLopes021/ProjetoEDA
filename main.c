@@ -10,21 +10,25 @@
 #include "gestores.c"
 
 
+
 int main(){
     Meio *h = NULL;
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count;
+    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
     float saldo, autonomia, custo;
 
+    //Carregar dados dos ficheiros
     readMeios(&h);
     readClientes(&c);
     readGestores(&g);
 
+
+    //Estrutura do programa
     do{
         menu1 = menu();
         switch(menu1){
@@ -42,15 +46,21 @@ int main(){
                         if (loginc != NULL){
                             printf("Login efetuado com sucesso. (cliente: %s)\n", loginc->name);
                             do{
-                                menuc = menuclientes();
+                                menuc = menuclientes(loginc->name, loginc->saldo);
                                 
                                 switch(menuc){
                                     case 1:     //Alugar meio
-                                        //listarMeiosLivres(h);
                                         ordenarMeios(&h);
-                                        printf("Indique o id do meio que deseja alugar: ");
-                                        scanf("%d", &id);
-                                        alugarMeio( h, c, id);
+                                        listarMeiosLivres(h, 0);
+                                        do{
+                                            if(i == 0)
+                                                printf("\nIndique um codigo para o meio:");
+                                            if(i > 0)
+                                                printf("\nIndique um codigo valido:");
+                                            scanf("%d", &id);
+                                            i++;
+                                        }while((existeMeio(h, id) == 0 ) && (meioLivre(h, id) == 0));
+                                        alugarMeio(h, c, id);
                                         id = 0;
                                         break;
                                     case 2:     //Terminar aluguer 
@@ -58,8 +68,15 @@ int main(){
                                         if (num == 0){
                                             printf("\nEste utilizador nao tem meios alugados\n");
                                         }else{
-                                            printf("\nIndique o id do meio que deseja terminar o aluger: ");
-                                            scanf("%d", &id);
+                                            i = 0;
+                                            do{
+                                                if (i == 0)
+                                                    printf("\nIndique o id do meio que deseja terminar o aluger: ");
+                                                if (i > 0)
+                                                    printf("\nIndique o id de um meio que tenha alugado: ");
+                                                scanf("%d", &id);
+                                                i++;
+                                            }while((meioAlugado(h, id, loginc) == 0));
                                             terminarAluguer(h ,c ,id);
                                         }
                                         num = 0;
@@ -73,7 +90,6 @@ int main(){
                                                     while ((getchar()) != '\n');
                                                     printf("\nIndique o seu nome: ");
                                                     fgets(nome, MAX_NAME, stdin);
-                                                    sscanf(nome,"%*s",nome);
                                                     nome[strlen(nome)-1] = '\0';
                                                     alterarNomeCliente(loginc, nome);
                                                     break;
@@ -109,7 +125,11 @@ int main(){
                                                     break;
                                             }
                                         }while(menualtc != 0);
-                                        
+                                        break;
+                                    case 4:
+                                        printf("Indique o saldo que deseja carregar: ");
+                                        scanf("%f", &saldo);
+                                        carregarSaldo(loginc, saldo);
                                         break;
                                     case 0:
                                         printf("\nA sair da conta...\n");
@@ -144,9 +164,8 @@ int main(){
                                     case 5:     //Alterar meios
                                         do{
                                             count = 0;
-                                            system("clear");
-                                            listarMeios(h);
-                                            
+                                            generico();
+                                            listarMeios(h, 0);
                                             do{
                                                 if(count == 0)  
                                                     printf("\nIndique o meio que deseja alterar:");
@@ -161,7 +180,6 @@ int main(){
                                                     while ((getchar()) != '\n');
                                                     printf("\nIndique o tipo: ");
                                                     fgets(tipo, MAX_CODE, stdin);
-                                                    sscanf(tipo,"%*s",tipo);
                                                     tipo[strlen(tipo)-1] = '\0';
                                                     alterarTipoMeio(h, tipo, idmeio);
                                                     break;
@@ -194,7 +212,6 @@ int main(){
                                                     while ((getchar()) != '\n');
                                                     printf("\nIndique o seu nome: ");
                                                     fgets(nome, MAX_NAME, stdin);
-                                                    sscanf(nome,"%*s",nome);
                                                     nome[strlen(nome)-1] = '\0';
                                                     alterarNomeGestor(loging, nome);
                                                     break;
@@ -269,16 +286,10 @@ int main(){
                 break;
         }
     }while(menu1 != 0);
-    /*
-    char ver;
-    printf("Deseja guardar as alteraçoes ? (s,n)");
-    scanf("%c", &ver);
-    if (ver == 's'){
-        guardarMeios(h);
-    }
-    */
-    //guardarGestores(g);
-    //guardarClientes(c);
-    //guardarMeios(h);
+
+    guardarGestores(g);
+    guardarClientes(c);
+    guardarMeios(h);
+
     return 1;
 }

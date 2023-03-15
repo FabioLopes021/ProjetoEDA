@@ -22,34 +22,33 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
 
 void lerDadosMeio(Meio** inicio){
     char tipo[MAX_NAME];
-    int cod = 0,i = 0;
-    float bat, aut, custo;
+    int cod = 0,i = 0, bat;
+    float aut, custo;
 
     while ((getchar()) != '\n');
 
-    system("clear");
+    generico();
     printf("\n--------------- Adicionar Meio ---------------");
     printf("\nIndique o tipo de meio: ");
     fgets(tipo, MAX_NAME, stdin);
-    sscanf(tipo,"%*s",tipo);
     tipo[strlen(tipo)-1] = '\0';
 
     do{
-    if(cod == 0)
-        printf("\nIndique um codigo para o meio:");
-    if(cod > 0)
-        printf("\nIndique um codigo valido:");
+    if(i == 0)
+        printf("Indique um codigo para o meio: ");
+    if(i > 0)
+        printf("Indique um codigo valido: ");
     scanf("%d", &cod);
     i++;
     }while(existeMeio((*inicio), cod));
 
-    printf("\nIndique a bateria do meio:");
-    scanf("%f", &bat);
+    printf("Indique a bateria do meio: ");
+    scanf("%d", &bat);
 
-    printf("\nIndique a autonomia do meio:");
-    scanf("%f", &bat);
+    printf("Indique a autonomia do meio: ");
+    scanf("%f", &aut);
 
-    printf("\nIndique o custo por km do meio:");
+    printf("Indique o custo por km do meio: ");
     scanf("%f", &custo);
     
     inserirMeio(&(*inicio), cod, tipo, bat, aut, custo);
@@ -63,51 +62,91 @@ int existeMeio(Meio* inicio, int codigo){
     return existeMeio(inicio->next, codigo);
 }
 
-
-
-int listarMeios(Meio* inicio){
-
+int meioLivre(Meio* inicio, int codigo){
     if (!inicio)
         return 0;
 
-    printf("#############################################\n");
-    printf("codigo: %d\n", inicio->codigo);
-    printf("Tipo: %s\n", inicio->tipo);
-    printf("Bateria: %d\n", inicio->bateria);
-    printf("Autonomia: %.2f\n", inicio->autonomia);
-    printf("Custo: %.2f\n", inicio->custo);
-    listarMeios(inicio->next);
+    if (inicio->codigo == codigo){
+        if (inicio->aluguer == NULL)
+            return 1;
+        else 
+            return 0;
+    }
+        
+    return meioLivre(inicio->next, codigo);
 }
 
-int listarMeiosLivres(Meio* inicio){
-
+int meioAlugado(Meio* inicio, int codigo, Clientes *ver){
+    
     if (!inicio)
         return 0;
 
+    if (inicio->codigo == codigo){
+        if (inicio->aluguer == ver)
+            return 1;
+        else 
+            return 0;
+    }
+        
+    return meioAlugado(inicio->next, codigo, ver);
+}
+
+
+int listarMeios(Meio* inicio, int i){
+
+    if (!inicio){
+        printf(" -------------------------------------------------------------------\n");
+        return 0;
+    }
+        
+
+    
+    if (i == 0){
+        printf(" -------------------------------------------------------------------\n");
+        printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
+        printf("|-------------------------------------------------------------------|\n");
+    }
+    printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+    
+
+    listarMeios(inicio->next, ++i);
+}
+
+int listarMeiosLivres(Meio* inicio, int i){
+
+    if (!inicio){
+        printf(" -------------------------------------------------------------------\n");
+        return 0;
+    }
+        
+
     if (inicio->aluguer == NULL){
-        printf("#############################################\n");
-        printf("codigo: %d\n", inicio->codigo);
-        printf("Tipo: %s\n", inicio->tipo);
-        printf("Bateria: %d\n", inicio->bateria);
-        printf("Autonomia: %.2f\n", inicio->autonomia);
-        printf("Custo: %.2f\n", inicio->custo);
+        if (i == 0){
+            printf(" -------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
+            printf("|-------------------------------------------------------------------|\n");
+        }
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+        i++;
     }
     
-    listarMeios(inicio->next);
+    listarMeiosLivres(inicio->next, i);
 }
 
 int listarMeiosAlugados(Meio* inicio, Clientes *c, int i){
 
-    if (!inicio)
+    if (!inicio){
+        printf(" -------------------------------------------------------------------\n");
         return i;
+    }
         
     if(inicio->aluguer == c){
-        printf("#############################################\n");
-        printf("codigo: %d\n", inicio->codigo);
-        printf("Tipo: %s\n", inicio->tipo);
-        printf("Bateria: %d\n", inicio->bateria);
-        printf("Autonomia: %.2f\n", inicio->autonomia);
-        printf("Custo: %.2f\n", inicio->custo);
+        if (i == 0){
+            printf(" -------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
+            printf("|-------------------------------------------------------------------|\n");
+        }
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
         i++;
     }
     
@@ -233,6 +272,7 @@ void readMeios(Meio **inicio){
 			aut = atof(campo3);
 			custo = atof(campo4);
             strcpy(tipo, campo5);
+            tipo[strlen(tipo) - 1] = '\0';
 
             inserirMeio(&(*inicio), cod, tipo, bat, aut, bat);
 		}
@@ -302,6 +342,7 @@ void ordenarMeios(Meio **inicio){
                     (*inicio)->next = aux;
                     c = h;
                     c->next = auxn;
+                    h = (*inicio);
                     b = 1;
                 }
                 if (d->autonomia > c->autonomia){
@@ -312,36 +353,10 @@ void ordenarMeios(Meio **inicio){
                     d = aux;
                     d->next = auxn;
                     h->next = c;
-                    c = aux;
                     b = 1;
                 }
                 i++;
             }
 	    }
     }
-
-    listarMeios(*inicio);
 }
-
-
-/*
-int bubbleSort(int a[], int s) {
-	int aux, i, b = 1, n = 0;
-
-	while (b) {
-		b = 0;
-		n++;
-		for (i = 0; i < s - 1; i++) {
-			n++;
-			if (a[i] > a[i + 1]) {
-				aux = a[i];
-				a[i] = a[i + 1];
-				a[i + 1] = aux;
-				b = 1;
-			}
-		}
-	}
-
-	return n;
-}
-*/

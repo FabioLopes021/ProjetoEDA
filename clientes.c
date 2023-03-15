@@ -31,7 +31,6 @@ void lerDados(Clientes** inicio){
     printf("\n--------------- Criar Conta ---------------");
     printf("\nIndique o seu nome: ");
     fgets(nome, MAX_NAME, stdin);
-    sscanf(nome,"%*s",nome);
     nome[strlen(nome)-1] = '\0';
 
     while ((getchar()) != '\n');
@@ -176,6 +175,16 @@ void alterarPasswordCliente(Clientes *cliente, char novapassword[]){
     if (strlen(novapassword) > MIN_NAME){
         strcpy(cliente->password, novapassword);
     }
+}
+
+void carregarSaldo(Clientes *cliente, float quantia){
+    
+    if(cliente == NULL){
+        return;
+    }
+
+    cliente->saldo += quantia;
+
 }
 
 

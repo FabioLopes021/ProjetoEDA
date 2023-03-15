@@ -29,7 +29,6 @@ void lerDadosGestor(Gestores** inicio){
     printf("\n--------------- Criar Conta ---------------");
     printf("\nIndique o seu nome: ");
     fgets(nome, MAX_NAME, stdin);
-    sscanf(nome,"%*s",nome);
     nome[strlen(nome)-1] = '\0';
 
     while ((getchar()) != '\n');
