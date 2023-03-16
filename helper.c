@@ -4,6 +4,17 @@
 #include <string.h>
 
 
+/**
+ * @brief Funçao para realizar login de um gestor ou cliente
+ * 
+ * @param inicio Apontador para a lista ligada de Clientes
+ * @param g Apontador para a lista ligada de Gestores
+ * @param password A palavra passe inserida pelo utilizador
+ * @param email O email inserido pelo utilizador
+ * @param logc Apontador para introduzir o endereço do cliente ao qual corresponde o login
+ * @param logg Apontador para introduzir o endereço do gestor ao qual corresponde o login
+ * @return int Retorna 1 se é um Cliente, 2 se é um Gestor e 0 se nao reconhecer os dados
+ */
 int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], Clientes **logc, Gestores **logg){
     int i = 0;
     
@@ -22,6 +33,12 @@ int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], 
     return i;
 }
 
+
+/**
+ * @brief Função para apresentar menu principal e receber a resposta do utilizador
+ * 
+ * @return int retorna a opção escolhida pelo utilizador
+ */
 int menu(){
     int opc;
 
@@ -39,7 +56,13 @@ int menu(){
     return opc;
 }
 
-
+/**
+ * @brief Função para apresentar o menu de Clientes e receber as suas respostas
+ * 
+ * @param nome nome do cliente logado
+ * @param saldo saldo do cliente logado
+ * @return int retorna a opçao escolhida pelo utilizador
+ */
 int menuclientes(char nome[], float saldo){
     int opc;
 
@@ -51,15 +74,22 @@ int menuclientes(char nome[], float saldo){
         printf("| 2 - Terminar aluguer         |\n");
         printf("| 3 - Alterar dados            |\n");
         printf("| 4 - Adicionar Saldo          |\n");
+        printf("| 5 - Consultar dados conta    |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 4);
+    }while(opc < 0 || opc > 5);
 
     return opc;
 }
 
+
+/**
+ * @brief Função para apresentar o menu de Gestores e receber as suas respostas
+ * 
+ * @return int retorna a opçao escolhida pelo utilizador
+ */
 int menucGestores(){
     int opc;
 
@@ -72,16 +102,26 @@ int menucGestores(){
         printf("| 4 - Validaçoes               |\n");
         printf("| 5 - Alterar meios            |\n");
         printf("| 6 - Alterar dados            |\n");
+        printf("| 7 - Remover Meio             |\n");
+        printf("| 8 - Remover Conta            |\n");
+        printf("| 9 - Consultar dados conta    |\n");
+        printf("| 10 - Imprimir lista clientes |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 6);
+    }while(opc < 0 || opc > 10);
 
     return opc;
 }
 
 
+
+/**
+ * @brief Função para apresentar o menu criação de contas e receber as respostas dos utilizadores
+ * 
+ * @return int retorna a opçao escolhida pelo utilizador
+ */
 int menuCriarConta(){
     int opc;
 
@@ -99,6 +139,12 @@ int menuCriarConta(){
     return opc;
 }
 
+
+/**
+ * @brief Função que apresenta o menu de opções para alterar os dados de um Cliente
+ * 
+ * @return int retorna a opçao escolhida pelo utilizador
+ */
 int menuAlterarDadosCliente(){
     int opc;
 
@@ -120,6 +166,12 @@ int menuAlterarDadosCliente(){
 }
 
 
+
+/**
+ * @brief Função que apresenta o menu de opções para alterar os dados de um Gestor
+ * 
+ * @return int retorna a opçao escolhida pelo utilizador
+ */
 int menuAlterarDadosGestor(){
     int opc;
 
@@ -141,6 +193,12 @@ int menuAlterarDadosGestor(){
 
 }
 
+
+/**
+ * @brief Função que apresenta o menu de opções para alterar os dados de um Meio
+ * 
+ * @return int retorna a opçao escolhida pelo utilizador
+ */
 int menuAlterarDadosMeio(){
     int opc;
 
@@ -162,6 +220,11 @@ int menuAlterarDadosMeio(){
 }
 
 
+
+/**
+ * @brief Função que limpa a consola e apresenta um banner
+ * 
+ */
 void generico(){
     system("clear");
     printf("    ________________  __________________  __\n");
@@ -169,5 +232,33 @@ void generico(){
     printf("  / __/ / /   / / / / /    / /  / /    \\  / \n");
     printf(" / /___/ /___/ /_/ / /____/ /  / /     / /  \n");
     printf("/_____/\\____/\\____/\\____/___/ /_/     /_/   \n");
-    printf("Copiryght by Fabio Lopes 2023\n");
+    printf("copyright by Fabio Lopes 2023\n");
+}
+
+
+void clearbuffer(){
+    int c;
+
+    while ( (c = getchar()) != '\n' && c != EOF ) { }
+
+}
+
+
+/**
+ * @brief Função que espera que o utilizar prima o enter para continuar
+ * 
+ */
+void EsperarQuePrimaEnter(){
+    int c;
+
+    do
+    {
+        c = fgetc( stdin);
+    } while( c != EOF && c != '\n');
+
+    clearerr( stdin);
+
+    printf( "Prima [ENTER] para continuar...");
+    fflush( stdout);
+    getchar();
 }

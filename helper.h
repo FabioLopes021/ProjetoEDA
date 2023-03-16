@@ -9,7 +9,7 @@
 #define MAX_NIF 10
 #define MAX_EMAIL 60
 #define MIN_NAME 2
-
+#define MAX_CODE 50         //Definir o limite para o nome do tipo de transporte
 
 #include "gestores.h"
 #include "clientes.h"
@@ -24,5 +24,7 @@ int menuAlterarDadosCliente();
 int menuAlterarDadosGestor();
 int menuAlterarDadosMeio();
 void generico();
+void clearbuffer();
+void EsperarQuePrimaEnter();
 
 #endif //final da guarda de ficheiro

@@ -1,1 +1,1 @@
-Andre Lopes;Rua da Penide Areias S Vicente, Barcelos;87654321;andrelopes021@gmail.com;andre;10030.67
+Andre Lopes;rua da penide ;123456789;andrelopes021@gmail.com;andre;0.00

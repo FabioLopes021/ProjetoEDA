@@ -5,7 +5,20 @@
 
 
 
-void inserirCliente(Clientes** inicio, char nome[], char morada[], char NIF[], float saldo, char password[], char email[]){
+
+/**
+ * @brief Funçao para adicionar um novo Cliente a lista ligada de clientes
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ * @param nome Nome do Cliente a ser inserido
+ * @param morada Morada do Cliente a ser inserido
+ * @param NIF NIF do Cliente a ser inserido
+ * @param saldo Saldo do Cliente a ser inserido
+ * @param password Password do Cliente a ser inserido
+ * @param email Email do Cliente a ser inserido
+ * @param id ID do Cliente a ser inserido
+ */
+void inserirCliente(Clientes** inicio, char nome[], char morada[], char NIF[], float saldo, char password[], char email[], int id){
     Clientes *new;
     
     new = (Clientes *) malloc(sizeof(Clientes));
@@ -16,16 +29,25 @@ void inserirCliente(Clientes** inicio, char nome[], char morada[], char NIF[], f
     strcpy(new->email, email);
     strcpy(new->password, password);
     new->saldo = saldo;
+    new->id = id;
 
     new->next = (*inicio);
     (*inicio) = new;
 }
 
+
+/**
+ * @brief Funçao para ler os dados de um Cliente e inseri-lo na lista ligada dos Clientes 
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ */
 void lerDados(Clientes** inicio){
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
+    int id;
     float saldo = 0;
 
-    while ((getchar()) != '\n');
+    //while ((getchar()) != '\n');
+    clearbuffer();
 
     system("clear");
     printf("\n--------------- Criar Conta ---------------");
@@ -33,53 +55,96 @@ void lerDados(Clientes** inicio){
     fgets(nome, MAX_NAME, stdin);
     nome[strlen(nome)-1] = '\0';
 
-    while ((getchar()) != '\n');
+    //while ((getchar()) != '\n');
+    clearbuffer();
 
     printf("\nIndique a sua morada: ");
     fgets(morada, MAX_MORADA, stdin);
     morada[strlen(morada) - 1] = '\0';
 
-    while ((getchar()) != '\n');
+    //while ((getchar()) != '\n');
+    clearbuffer();
 
     printf("\nIndique o seu NIF: ");
     fgets(NIF, MAX_NIF, stdin);
     NIF[MAX_NIF] = '\0';
 
-    while ((getchar()) != '\n');
+    //while ((getchar()) != '\n');
+    clearbuffer();
 
     printf("\nIndique o seu email: ");
     fgets(email, MAX_EMAIL, stdin);
     email[strlen(email)-1] = '\0';
 
-    while ((getchar()) != '\n');
+    clearbuffer();
 
     printf("\nIndique a sua password: ");
     fgets(password, MAX_PASSWORD, stdin);
     password[strlen(password)-1] = '\0';
+    clearbuffer();
 
-    while ((getchar()) != '\n');
-    inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email);
+    id = generateidCliente(*inicio);    
+
+    inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email, id);
 }
 
+
+/**
+ * @brief Funçao que lista os dados de todos os clientes registados
+ * 
+ * @param inicio Apontador para o inicio da lista ligada
+ * @return int retorna 0 se a lista estiver vazia ou quando a funçao chegar ao final da lista
+ */
 int listarCliente(Clientes* inicio){
 
     if (!inicio)
         return 0;
 
-    printf("#############################################\n");
-    printf("nome: ");
+    printf("\n------------------------ Lista de Clientes ----------------------\n");
+    printf("Nome: ");
     puts(inicio->name);
-    printf("\nmorada: ");
+    printf("Morada: ");
     puts(inicio->morada);
-    printf("\nNIF: ");
+    printf("NIF: ");
     puts(inicio->NIF);
-    printf("\n email: ");
+    printf("Email: ");
     puts(inicio->email);
-    printf("\nsaldo: %.2f\n", inicio->saldo);
+    printf("Saldo: %.2f\n", inicio->saldo);
+    printf("ID: %d\n", inicio->id);
     listarCliente(inicio->next);
 }
 
 
+/**
+ * @brief Funçao que lista os dados de um cliente
+ * 
+ * @param inicio Apontador para o inicio da lista ligada
+ * @return int retorna 1 se os dados do cliente foram listados com sucesso e 0 caso contrário.
+ */
+int printCliente(Clientes *inicio){
+    if (!inicio)
+        return 0;
+    
+    generico();
+
+    printf("\n\n ----------------------------------------------------------------------------------------------------- \n");
+    printf("|      Nome      |           Morada           |     NIF     |            Email            |   saldo   |\n");
+    printf(" ----------------------------------------------------------------------------------------------------- \n");
+    printf("|   %-4s  |       %-12s       |  %-3s  |  %-25s  |   %-4.2f€   |\n", inicio->name, inicio->morada, inicio->NIF,
+    inicio->email, inicio->saldo);
+    printf(" ----------------------------------------------------------------------------------------------------- \n");
+
+    EsperarQuePrimaEnter();
+    return 1;
+}
+
+/**
+ * @brief Funçao que verifica se um determinado cliete existe
+ * 
+ * @param inicio Apontador para o inicio da lista ligada
+ * @param NIF NIF do cliente a verificar
+ * @return int retorna 1 se o cliente existir, 0 caso contrario
+ */
 int existeCliente(Clientes* inicio, char NIF[]){
     if (!inicio)
         return 0;
@@ -88,6 +153,14 @@ int existeCliente(Clientes* inicio, char NIF[]){
     return existeCliente(inicio->next, NIF);
 }
 
+
+/**
+ * @brief Função que verifica se um determinado email corresponde a algum cliente
+ * 
+ * @param inicio Apontador para o inicio da lista ligada
+ * @param email Email a ser verificado 
+ * @return int retorna 1 se o email inserido corresponder ao email de algum cliente e 0 se nao corresponder
+ */
 int existeClienteEmail(Clientes* inicio, char email[]){
     if (!inicio)
         return 0;
@@ -96,6 +169,14 @@ int existeClienteEmail(Clientes* inicio, char email[]){
     return existeClienteEmail(inicio->next, email);
 }
 
+/**
+ * @brief Funçao para remover um determinado Cliente
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ * @param NIF NIF do cliete a ser removido
+ * @param i contador para a funçao
+ * @return Clientes* retorna o endereço do cliente seguinte ao cliente removido da lista, NULL caso o mesmo n seja encontrado
+ */
 Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
     Clientes *aux;
 
@@ -124,7 +205,14 @@ Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
     }
 }
 
-
+/**
+ * @brief Funçao para verificar a password e email de um cliente
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ * @param password Password a ser verificada
+ * @param email Email a ser verificado
+ * @return Clientes* Retorna o endereço do cliente correspondente as credenciais,NULL caso contrario 
+ */
 Clientes *loginClientes(Clientes **inicio,char password[], char email[]){
     
     if (!(*inicio)){
@@ -142,6 +230,13 @@ Clientes *loginClientes(Clientes **inicio,char password[], char email[]){
     return (*inicio);
 }
 
+
+/**
+ * @brief Funçao para alterar o nome de um cliente
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param novonome Novo nome do cliente
+ */
 void alterarNomeCliente(Clientes *cliente, char novonome[]){
 
     if (strlen(novonome) > MIN_NAME){
@@ -149,6 +244,12 @@ void alterarNomeCliente(Clientes *cliente, char novonome[]){
     }
 }
 
+/**
+ * @brief Funçao para alterar a morada de um cliente
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param novamorada Nova morada do cliente
+ */
 void alterarMoradaCliente(Clientes *cliente, char novamorada[]){
 
     if (strlen(novamorada) > MIN_NAME){
@@ -156,6 +257,13 @@ void alterarMoradaCliente(Clientes *cliente, char novamorada[]){
     }
 }
 
+
+/**
+ * @brief Funçao para alterar o NIF de um cliente
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param novoNIF Novo NIF do cliente
+ */
 void alterarNIFCliente(Clientes *cliente, char novoNIF[]){
 
     if (strlen(novoNIF) > MIN_NAME){
@@ -163,6 +271,12 @@ void alterarNIFCliente(Clientes *cliente, char novoNIF[]){
     }
 }
 
+/**
+ * @brief Funçao para alterar o email de um cliente
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param novoemail Novo email do cliente
+ */
 void alterarEmailCliente(Clientes *cliente, char novoemail[]){
 
     if (strlen(novoemail) > MIN_NAME){
@@ -170,6 +284,13 @@ void alterarEmailCliente(Clientes *cliente, char novoemail[]){
     }
 }
 
+
+/**
+ * @brief Funçao para alterar o email de um cliente
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param novapassword Nova password do cliente
+ */
 void alterarPasswordCliente(Clientes *cliente, char novapassword[]){
 
     if (strlen(novapassword) > MIN_NAME){
@@ -177,6 +298,13 @@ void alterarPasswordCliente(Clientes *cliente, char novapassword[]){
     }
 }
 
+
+/**
+ * @brief Funçao para carregar o saldo de um cliente
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param quantia Quantida a carregar
+ */
 void carregarSaldo(Clientes *cliente, float quantia){
     
     if(cliente == NULL){
@@ -187,13 +315,39 @@ void carregarSaldo(Clientes *cliente, float quantia){
 
 }
 
+/**
+ * @brief Funçao para gerar im ID unico para um novo cliente
+ * 
+ * @param inicio Apontador para o inicio da lista ligada
+ * @return int retorna um ID unico para o novo cliente
+ */
+int generateidCliente(Clientes *inicio){
+    int max = 1;
 
+    if (!inicio)
+        return max;
+
+    while(inicio != NULL){
+        if (max < inicio->id)
+            max = inicio->id;
+    }
+
+    return ++max;
+}
+
+
+/**
+ * @brief Funçao para carregar os cliente e os seus dados do ficheiro 
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ */
 void readClientes(Clientes **inicio){
     FILE* fp;
     float saldo;
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], email[MAX_EMAIL], password[MAX_PASSWORD];
+    int id;
     char line[1024];
-	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6;
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7;
 
     fp = fopen("clientes.txt","r");
 
@@ -206,6 +360,7 @@ void readClientes(Clientes **inicio){
 			campo4 = strtok(NULL, ";");
 			campo5 = strtok(NULL, ";");
 			campo6 = strtok(NULL, ";");
+			campo7 = strtok(NULL, ";");
 
             strcpy(nome, campo1);
             strcpy(morada, campo2);
@@ -214,7 +369,7 @@ void readClientes(Clientes **inicio){
             strcpy(password, campo5);
 			saldo = atof(campo6);
 
-            inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email);
+            inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email, id);
 		}
 		fclose(fp);
 	}
@@ -223,7 +378,11 @@ void readClientes(Clientes **inicio){
 	}
 }
 
-
+/**
+ * @brief Funçao para guardar os Clientes e os seus dados em ficheiro
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ */
 void guardarClientes(Clientes* inicio){
     FILE* fp;
 
