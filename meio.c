@@ -444,64 +444,67 @@ void guardarMeios(Meio* inicio){
 
 
 
-
 /**
  * @brief Funçao que ordena a lista ligada dos Meios por ordem decrescente de autonomia
  * 
  * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ * @return int retorna 1 se a lista foi ordenada com sucesso, 0 caso contrario 
  */
-void ordenarMeios(Meio **inicio){
-    Meio *h, *c, *d, *aux, *auxn;
-    int b = 1,i = 0;
+int ordenarMeios(Meio **inicio){
+    Meio *firstnode, *secondnode, *prev = NULL, *aux, *auxn;
+    int verificar = 1, i;
 
-    h = (*inicio);
-    c = h->next;
-    d = c->next;
-    
-    if(c == NULL){
+    if ((*inicio) == NULL) 
+        return 0;
 
-    }else   if (d == NULL){
 
-        if ((c->autonomia > h->autonomia)){
-            auxn = c->next;
-            aux = h;
-            (*inicio) = c;
-            (*inicio)->next = aux;
-            c = h;
-            c->next = auxn;
-        }
+    prev = (*inicio);
+    firstnode = prev->next;
+    secondnode = firstnode->next;
 
+    if( firstnode == NULL){
+        return 0;
+    }else if(secondnode == NULL){
+        aux = prev;
+        prev = firstnode;
+        firstnode = aux;
+        prev->next = firstnode;
     }else{
-
-        while (b) {
-            b = 0;
+        
+        while(verificar){
+            verificar = 0;
+            prev = (*inicio);
+            firstnode = prev->next;
+            secondnode = firstnode->next;
             i = 0;
-            h = (*inicio);
-            c = h->next;
-            d = c->next;
-            for (; d != NULL; c = c->next, h = h->next, d = d->next) {
-                if ((c->autonomia > h->autonomia) && (i == 0)){
-                    auxn = c->next;
-                    aux = h;
-                    (*inicio) = c;
-                    (*inicio)->next = aux;
-                    c = h;
-                    c->next = auxn;
-                    h = (*inicio);
-                    b = 1;
+            while(secondnode != NULL){
+                if( prev->autonomia  < firstnode->autonomia && i == 0){
+                    aux = prev;
+                    auxn = firstnode->next;
+                    prev = firstnode;
+                    firstnode = aux;
+                    prev->next = firstnode;
+                    firstnode->next = auxn;
+                    (*inicio) = prev;
+                    verificar = 1;
                 }
-                if (d->autonomia > c->autonomia){
-                    auxn = d->next;
-                    aux = c;
-                    c = d;
-                    c->next = aux;
-                    d = aux;
-                    d->next = auxn;
-                    h->next = c;
-                    b = 1;
+                if (firstnode->autonomia < secondnode->autonomia){
+                    aux = firstnode;
+                    auxn = secondnode->next;
+                    firstnode = secondnode;
+                    secondnode = aux;
+                    firstnode->next = secondnode;
+                    secondnode->next = auxn;
+                    prev->next = firstnode;
+                    verificar = 1;
                 }
                 i++;
+                prev = prev->next;
+                firstnode = firstnode->next;
+                secondnode = secondnode->next;
             }
-	    }
+
+        }
     }
+    return 1;
 }

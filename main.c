@@ -279,6 +279,11 @@ int main(){
                                         listarCliente(c);
                                         EsperarQuePrimaEnter();
                                         break;
+                                    case 11:
+                                        generico();
+                                        listarMeios(h,0);
+                                        EsperarQuePrimaEnter();
+                                        break;
                                     case 0:
                                         printf("\nA sair da conta...\n");
                                         break;
