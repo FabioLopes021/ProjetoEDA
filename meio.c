@@ -443,6 +443,11 @@ void guardarMeios(Meio* inicio){
 }
 
 
+/**
+ * @brief Funçao para guardar os Meios e os seus dados num ficheiro binario
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ */
 void guardarMeioBin(Meio *inicio){
     FILE *fp;
 
@@ -464,6 +469,11 @@ void guardarMeioBin(Meio *inicio){
 }
 
 
+/**
+ * @brief Funçao para carregar os cliente e os seus dados do ficheiro binario
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ */
 void lerMeioBin(Meio **inicio){
     FILE *fp;
     Meio *new;

@@ -83,35 +83,39 @@ void lerDados(Clientes** inicio){
     password[strlen(password)-1] = '\0';
     clearbuffer();
 
-    id = generateidCliente(*inicio);    
+    id = generateidCliente(*inicio);
+    encriptPassword(password);    
 
     inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email, id);
 }
+
 
 
 /**
  * @brief Funçao que lista os dados de todos os clientes registados
  * 
  * @param inicio Apontador para o inicio da lista ligada
+ * @param i Contador da funçao
  * @return int retorna 0 se a lista estiver vazia ou quando a funçao chegar ao final da lista
  */
-int listarCliente(Clientes* inicio){
+int listarCliente(Clientes* inicio, int i){
 
-    if (!inicio)
+    if (!inicio){
+        printf(" ------------------------------------------------------------------------------------------------------------- \n");
         return 0;
+    }
 
-    printf("\n------------------------ Lista de Clientes ----------------------\n");
-    printf("Nome: ");
-    puts(inicio->name);
-    printf("Morada: ");
-    puts(inicio->morada);
-    printf("NIF: ");
-    puts(inicio->NIF);
-    printf("Email: ");
-    puts(inicio->email);
-    printf("Saldo: %.2f\n", inicio->saldo);
-    printf("ID: %d\n", inicio->id);
-    listarCliente(inicio->next);
+    if(i == 1){
+        generico();
+        printf("\n\n ------------------------------------------------------------------------------------------------------------- \n");
+        printf("|      Nome       |           Morada           |     NIF     |            Email            |   saldo   |  ID  |\n");
+        printf(" ------------------------------------------------------------------------------------------------------------- \n");
+    }
+    printf("|   %-12s  |       %-14s       |  %-9s  |  %-25s  |   %-4.2f€   |  %-2d  |\n", inicio->name, inicio->morada, inicio->NIF,
+    inicio->email, inicio->saldo, inicio->id);
+    
+
+    listarCliente(inicio->next, ++i);
 }
 
 
@@ -127,12 +131,12 @@ int printCliente(Clientes *inicio){
     
     generico();
 
-    printf("\n\n ----------------------------------------------------------------------------------------------------- \n");
-    printf("|      Nome      |           Morada           |     NIF     |            Email            |   saldo   |\n");
-    printf(" ----------------------------------------------------------------------------------------------------- \n");
-    printf("|   %-4s  |       %-12s       |  %-3s  |  %-25s  |   %-4.2f€   |\n", inicio->name, inicio->morada, inicio->NIF,
-    inicio->email, inicio->saldo);
-    printf(" ----------------------------------------------------------------------------------------------------- \n");
+    printf("\n\n ------------------------------------------------------------------------------------------------------------- \n");
+    printf("|      Nome       |           Morada           |     NIF     |            Email            |   saldo   |  ID  |\n");
+    printf(" ------------------------------------------------------------------------------------------------------------- \n");
+    printf("|   %-12s  |       %-14s       |  %-9s  |  %-25s  |   %-4.2f€   |  %-2d  |\n", inicio->name, inicio->morada, inicio->NIF,
+    inicio->email, inicio->saldo, inicio->id);
+    printf(" ------------------------------------------------------------------------------------------------------------- \n");
 
     EsperarQuePrimaEnter();
     return 1;
@@ -418,3 +422,60 @@ void guardarClientes(Clientes* inicio){
         printf("Erro ao abrir ficheiro Clientes\n");
 }
 
+
+/**
+ * @brief Funçao para carregar os cliente e os seus dados do ficheiro binario
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
+ */
+void lerCLientesBin(Clientes **inicio){
+    FILE *fp;
+    Clientes *new;
+
+    new = (Clientes *) malloc(sizeof(Clientes));
+
+    fp = fopen("clientess.bin", "rb");
+
+    if(fp != NULL){
+
+       while (fread(new, sizeof(Clientes), 1, fp) == 1) {
+            if(new != NULL){
+                inserirCliente(&(*inicio), new->name, new->morada, new->NIF, new->saldo, new->password, new->email, new->id);
+            }
+             
+        }
+        free(new);
+        fclose(fp);
+
+        printf("Dados binarios lidos com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario\n");
+    }
+}
+
+
+
+/**
+ * @brief Funçao para guardar os Clientes e os seus dados num ficheiro binario
+ * 
+ * @param inicio Apontador para a lista de clientes
+ */
+void guardarClientesBin(Clientes *inicio){
+    FILE *fp;
+
+    fp = fopen("clientess.bin", "wb");
+
+    if(fp != NULL){
+
+        while (inicio != NULL) {
+            fwrite(inicio, sizeof(Clientes), 1, fp);
+            inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Meios guardados em binario com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario\n");
+    }
+}

@@ -76,6 +76,8 @@ void lerDadosGestor(Gestores** inicio){
 
     //chamar funçao para verificar qual o proximo id
     id = generateidGestor(*inicio);
+
+    encriptPassword(password);
     
     inserirGestor(&(*inicio), nome, morada, NIF, password, email, id);
 }
@@ -118,34 +120,26 @@ int printGestor(Gestores* inicio){
     
     generico();
 
-    printf("\n\n ------------------------------------------------------------------------------------------------- \n");
-    printf("|  ID  |      Nome      |           Morada           |     NIF     |            Email            |\n");
-    printf(" ------------------------------------------------------------------------------------------------- \n");
-    printf("|  %-3d |   %-4s  |       %-14s       |  %-3s  |  %-25s  |\n",inicio->id, inicio->name, inicio->morada, inicio->NIF,
-    inicio->email);
-    printf(" ------------------------------------------------------------------------------------------------- \n");
+    printf("\n\n --------------------------------------------------------------------------------------------------------- \n");
+    printf("|  ID  |       Nome       |           Morada           |     NIF     |            Email            |  ID  |\n");
+    printf(" --------------------------------------------------------------------------------------------------------- \n");
+    printf("|  %-3d |  %-14s  |       %-14s       |  %-9s  |  %-25s  |  %-2d  |\n",inicio->id, inicio->name, inicio->morada, inicio->NIF,
+    inicio->email, inicio->id);
+    printf(" --------------------------------------------------------------------------------------------------------- \n");
 
     EsperarQuePrimaEnter();
     return 1;
 
 }
 
+
 /**
  * @brief Funçao que verifica se um determinado gestor existe
  * 
  * @param inicio Apontador para o inicio da lista ligada
- * @param NIF NIF do gestor a verificar
+ * @param id ID do gestor a verificar
  * @return int retorna 1 se o gestor existir, 0 caso contrario
- 
-int existeGestor(Gestores* inicio, char NIF[]){
-    if (!inicio)
-        return 0;
-    if (!strcmp(NIF, inicio->NIF))   
-        return 1;
-    return existeGestor(inicio->next, NIF);
-}
-*/
-
+ */
 int existeGestor(Gestores* inicio, int id){
     if (!inicio)
         return 0;
@@ -175,7 +169,7 @@ int existeGestorEmail(Gestores* inicio, char email[]){
  * @brief Funçao para remover um determinado gestor
  * 
  * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Gestores
- * @param NIF NIF do gestor a ser removido
+ * @param id ID do gestor a ser removido
  * @param i Contador da funçao
  * @return Gestores* retorna o endereço do gestor seguinte ao cliente removido da lista, NULL caso o mesmo n seja encontrado
  */
@@ -395,4 +389,60 @@ void guardarGestores(Gestores* inicio){
         printf("Gestores guardados com sucesso\n");
     }else
         printf("Erro ao abrir ficheiro Clientes\n");
+}
+
+
+/**
+ * @brief Funçao para carregar os Gestores e os seus dados do ficheiro binario
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Gestores
+ */
+void lerGestoresBin(Gestores **inicio){
+    FILE *fp;
+    Gestores *new;
+
+    new = (Gestores *) malloc(sizeof(Gestores));
+
+    fp = fopen("gestoress.bin", "rb");
+
+    if(fp != NULL){
+
+       while (fread(new, sizeof(Gestores), 1, fp) == 1) {
+            if(new != NULL){
+                inserirGestor(&(*inicio), new->name, new->morada, new->NIF, new->password, new->email, new->id);
+            }
+             
+        }
+        free(new);
+        fclose(fp);
+
+        printf("Dados binarios lidos com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario\n");
+    }
+}
+
+/**
+ * @brief Funçao para guardar os gestores e os seus dados do ficheiro binario
+ * 
+ * @param inicio Apontador a cabeça da lista ligada dos Clientes
+ */
+void guardarGestoresBin(Gestores *inicio){
+    FILE *fp;
+
+    fp = fopen("gestoress.bin", "wb");
+
+    if(fp != NULL){
+
+        while (inicio != NULL) {
+            fwrite(inicio, sizeof(Gestores), 1, fp);
+            inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Gestores guardados em binario com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario\n");
+    }
 }

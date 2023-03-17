@@ -22,15 +22,17 @@ int main(){
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
     float saldo, autonomia, custo;
 
-    //Carregar dados dos ficheiros
-    readMeios(&h);
-    //lerMeioBin(&h);
-    readClientes(&c);
-    readGestores(&g);
+    //Carregar dados dos ficheiros txt
+    //readMeios(&h);
+    //readClientes(&c);
+    //readGestores(&g);
 
+    //Carregar dados dos ficheiros bin
+    lerMeioBin(&h);
+    lerGestoresBin(&g);
+    lerCLientesBin(&c);
 
-
-    ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia 
+    ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
     //Estrutura do programa
     do{
         menu1 = menu();     //Receber opçao do utilizador
@@ -41,6 +43,8 @@ int main(){
 
                 printf("Indique a sua password: ");
                 scanf("%s", passwordlog);
+
+                encriptPassword(passwordlog);
 
                 logmenu = funcaoLogin(&c, &g, passwordlog, emaillog, &loginc, &loging);
 
@@ -139,6 +143,13 @@ int main(){
                                         break;
                                     case 5:     //Imprimir dados de Cliente na consola
                                         printCliente(loginc);
+                                        break;
+                                    case 6:     //Imprimir dados de Cliente na consola
+                                        removerCliente(&c, loginc->id, 1);
+                                        generico();
+                                        printf("\nConta removida com sucesso, a voltar ao menu principal..\n\n");
+                                        EsperarQuePrimaEnter();
+                                        menuc = 0;
                                         break;
                                     case 0:
                                         generico();
@@ -284,7 +295,7 @@ int main(){
                                         break;
                                     case 10:
                                         generico();
-                                        listarCliente(c);
+                                        listarCliente(c, 1);
                                         EsperarQuePrimaEnter();
                                         break;
                                     case 11:    //Listar Meios
@@ -336,10 +347,14 @@ int main(){
     clearbuffer();   
 
     //Guardar dados em ficheiro
-    guardarGestores(g);
-    guardarClientes(c);
-    guardarMeios(h);
-    //guardarMeioBin(h);
+    //guardarGestores(g);
+    //guardarClientes(c);
+    //guardarMeios(h);
+
+    //Guardar dados em ficheiro binario
+    guardarMeioBin(h);
+    guardarClientesBin(c);
+    guardarGestoresBin(g);
 
     return 1;
 }

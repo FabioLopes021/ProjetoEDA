@@ -47,5 +47,8 @@ void clearbuffer();
 // Espera que o utilizador prima ENTER para continuar
 void EsperarQuePrimaEnter();
 
+// Encripta uma Password
+void encriptPassword(char *password);
+
 
 #endif //final da guarda de ficheiro

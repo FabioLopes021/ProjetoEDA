@@ -28,7 +28,7 @@ int existeGestor(Gestores* inicio, int id);
 // Determinar existência do email na lista ligada 'inicio'
 int existeGestorEmail(Gestores* inicio, char email[]);
 
-// Remover um meio a partir do seu código
+// Remover um meio a partir do seu ID
 Gestores *removerGestor(Gestores **inicio, int id, int i);
 
 // Verificar informaçoes de Login
@@ -58,5 +58,10 @@ void readGestores(Gestores **inicio);
 // Guarda num ficheiro os dados dos Clientes em memoria
 void guardarGestores(Gestores* inicio);
 
+// Carrega para memoria os dados dos Gestores guardados num ficheiro binario
+void lerGestoresBin(Gestores **inicio);
+
+// Guarda num ficheiro binario os dados dos Clientes em memoria
+void guardarGestoresBin(Gestores *inicio);
 
 #endif //final da guarda de ficheiro

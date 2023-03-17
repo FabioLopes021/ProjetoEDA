@@ -75,11 +75,12 @@ int menuclientes(char nome[], float saldo){
         printf("| 3 - Alterar dados            |\n");
         printf("| 4 - Adicionar Saldo          |\n");
         printf("| 5 - Consultar dados conta    |\n");
+        printf("| 6 - Remover Conta            |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 5);
+    }while(opc < 0 || opc > 6);
 
     return opc;
 }
@@ -262,4 +263,22 @@ void EsperarQuePrimaEnter(){
     printf( "Prima [ENTER] para continuar...");
     fflush( stdout);
     getchar();
+}
+
+/**
+ * @brief Funçao para encriptar a password dos utilizadores
+ * 
+ * @param password Apontador para a password a encriptar
+ */
+void encriptPassword(char *password){
+    int i, key = 1914, len;
+    len = strlen(password);
+
+    for (i = 0; i < len; i++){
+        if(password[i] >= 'a' && password[i] <= 'z'){
+            password[i] = (password[i] - 'a' + key) % 26 + 'a';
+        }else if(password[i] >= 'A' && password[i] <= 'Z'){
+            password[i] = (password[i] - 'A' + key) % 26 + 'A';
+        }
+    }
 }
