@@ -23,8 +23,8 @@ int main(){
     float saldo, autonomia, custo;
 
     //Carregar dados dos ficheiros
-    //readMeios(&h);
-    lerMeioBin(&h);
+    readMeios(&h);
+    //lerMeioBin(&h);
     readClientes(&c);
     readGestores(&g);
 
@@ -33,9 +33,9 @@ int main(){
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia 
     //Estrutura do programa
     do{
-        menu1 = menu();
+        menu1 = menu();     //Receber opçao do utilizador
         switch(menu1){
-            case 1:
+            case 1:         //Realizar Login
                 printf("indique o seu email: ");
                 scanf("%s", emaillog);
 
@@ -45,13 +45,13 @@ int main(){
                 logmenu = funcaoLogin(&c, &g, passwordlog, emaillog, &loginc, &loging);
 
                 switch(logmenu){
-                    case 1:
+                    case 1:     //login bem-sucedido de Clientes
                         if (loginc != NULL){
                             generico();
                             printf("\n\nLogin efetuado com sucesso. (cliente: %s)\n\n", loginc->name);
                             EsperarQuePrimaEnter();
                             do{
-                                menuc = menuclientes(loginc->name, loginc->saldo);
+                                menuc = menuclientes(loginc->name, loginc->saldo);      //Receber opçao do utilizador
                                 
                                 switch(menuc){
                                     case 1:     //Alugar meio
@@ -90,7 +90,7 @@ int main(){
                                         break;
                                     case 3:
                                         do{
-                                            menualtc = menuAlterarDadosCliente();
+                                            menualtc = menuAlterarDadosCliente();   //Receber opçao do utilizador
                                             switch(menualtc){
                                                 case 1:     // Alterar nome
                                                     clearbuffer();
@@ -132,12 +132,12 @@ int main(){
                                             }
                                         }while(menualtc != 0);
                                         break;
-                                    case 4:
+                                    case 4:     //Carregar Saldo
                                         printf("Indique o saldo que deseja carregar: ");
                                         scanf("%f", &saldo);
                                         carregarSaldo(loginc, saldo);
                                         break;
-                                    case 5:
+                                    case 5:     //Imprimir dados de Cliente na consola
                                         printCliente(loginc);
                                         break;
                                     case 0:
@@ -151,26 +151,26 @@ int main(){
                         loginc = NULL;
                         logmenu = 0;
                         break;
-                    case 2:
+                    case 2:     //login bem-sucedido de Gestores
                         if (loging != NULL){
                             generico();
                             printf("\n\nLogin efetuado com sucesso. (Gestor: %s)\n\n", loging->name);
                             EsperarQuePrimaEnter();
                             do{
-                                menug = menucGestores();
+                                menug = menucGestores();    //Receber opçao do utilizador
                                 
                                 switch(menug){
                                     case 1:     //Adicionar meios
                                         lerDadosMeio(&h);
                                         break;
                                     case 2:     //Consultar historico
-                                    
+                                        // Em desenvolvimento
                                         break;
                                     case 3:     //Estatisticas
-
+                                        // Em desenvolvimento
                                         break;
                                     case 4:     //Validaçoes
-
+                                        // Em desenvolvimento
                                         break;
                                     case 5:     //Alterar meios
                                         do{
@@ -217,7 +217,7 @@ int main(){
                                         break;
                                     case 6:     //Alterar dados
                                         do{
-                                            menualtg = menuAlterarDadosGestor();
+                                            menualtg = menuAlterarDadosGestor();    //Receber opçao do utilizador 
                                             switch(menualtg){
                                                 case 1:     // Alterar nome
                                                     clearbuffer();
@@ -259,7 +259,7 @@ int main(){
                                             }
                                         }while(menualtg != 0);
                                         break;
-                                    case 7: // remover meio
+                                    case 7:     // remover meio
                                         i = 0;
                                         listarMeios(h, 0);
                                         do{
@@ -272,14 +272,14 @@ int main(){
                                         }while(!existeMeio(h, id));
                                         removerMeio(&h, id, 1);
                                         break;
-                                    case 8: //remover conta
+                                    case 8:     //remover conta
                                         removerGestor(&g, loging->id, 1);
                                         generico();
                                         printf("\nConta removida com sucesso, a voltar ao menu principal..\n\n");
                                         EsperarQuePrimaEnter();
                                         menug = 0;
                                         break;
-                                    case 9: //remover conta
+                                    case 9:     //remover conta
                                         printGestor(loging);
                                         break;
                                     case 10:
@@ -287,12 +287,12 @@ int main(){
                                         listarCliente(c);
                                         EsperarQuePrimaEnter();
                                         break;
-                                    case 11:
+                                    case 11:    //Listar Meios
                                         generico();
                                         listarMeios(h,0);
                                         EsperarQuePrimaEnter();
                                         break;
-                                    case 0:
+                                    case 0:     //Logout
                                         generico();
                                         printf("\nA sair da conta...\n\n");
                                         EsperarQuePrimaEnter();
@@ -303,7 +303,7 @@ int main(){
                         loging = NULL;
                         logmenu = 0;
                         break;
-                    case 0:
+                    case 0:     //Dados de Login Incorretos
                         generico();
                         printf("\n\nPassword ou email incorretos...\n\n");
                         EsperarQuePrimaEnter();
@@ -311,15 +311,15 @@ int main(){
                 }
                 break;
             case 2:
-                //Criar Conta
+                //Criaçao de contas
                 do{
-                    menuconta = menuCriarConta();
+                    menuconta = menuCriarConta();   //Receber opçao do utilizador
                     switch(menuconta){
-                    case 1:
+                    case 1:     //Criar Conta Cliente
                         printf("\nCriar conta cliente\n");
                         lerDados(&c);
                         break;
-                    case 2:
+                    case 2:     //Criar conta Gestor
                         printf("\nCriar conta gestor\n");
                         lerDadosGestor(&g);
                         break;
@@ -334,10 +334,12 @@ int main(){
     }while(menu1 != 0);
 
     clearbuffer();   
+
+    //Guardar dados em ficheiro
     guardarGestores(g);
     guardarClientes(c);
     guardarMeios(h);
-    guardarMeioBin(h);
+    //guardarMeioBin(h);
 
     return 1;
 }
