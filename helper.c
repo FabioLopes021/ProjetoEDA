@@ -106,7 +106,7 @@ int menucGestores(){
         printf("| 8 - Remover Conta            |\n");
         printf("| 9 - Consultar dados conta    |\n");
         printf("| 10 - Imprimir lista clientes |\n");
-        printf("| 10 - Imprimir lista Meios    |\n");
+        printf("| 11 - Imprimir lista Meios    |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
@@ -214,7 +214,7 @@ int menuAlterarDadosMeio(){
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 3);
+    }while(opc < 0 || opc > 4);
 
     return opc;
 

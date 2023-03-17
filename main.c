@@ -23,11 +23,14 @@ int main(){
     float saldo, autonomia, custo;
 
     //Carregar dados dos ficheiros
-    readMeios(&h);
+    //readMeios(&h);
+    lerMeioBin(&h);
     readClientes(&c);
     readGestores(&g);
 
 
+
+    ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia 
     //Estrutura do programa
     do{
         menu1 = menu();
@@ -44,6 +47,7 @@ int main(){
                 switch(logmenu){
                     case 1:
                         if (loginc != NULL){
+                            generico();
                             printf("\n\nLogin efetuado com sucesso. (cliente: %s)\n\n", loginc->name);
                             EsperarQuePrimaEnter();
                             do{
@@ -62,11 +66,11 @@ int main(){
                                             scanf("%d", &id);
                                             i++;
                                         }while((existeMeio(h, id) == 0 ) && (meioLivre(h, id) == 0));
-                                        alugarMeio(h, c, id);
+                                        alugarMeio(h, loginc->id, id);
                                         id = 0;
                                         break;
                                     case 2:     //Terminar aluguer 
-                                        num = listarMeiosAlugados(h, c, 0);
+                                        num = listarMeiosAlugados(h, loginc->id, 0);
                                         if (num == 0){
                                             printf("\nEste utilizador nao tem meios alugados\n");
                                         }else{
@@ -78,8 +82,8 @@ int main(){
                                                     printf("\nIndique o id de um meio que tenha alugado: ");
                                                 scanf("%d", &id);
                                                 i++;
-                                            }while((meioAlugado(h, id, loginc) == 0));
-                                            terminarAluguer(h ,c ,id);
+                                            }while((meioAlugado(h, id, loginc->id) == 0));
+                                            terminarAluguer(h ,id );
                                         }
                                         num = 0;
                                         id = 0;                                        
@@ -137,18 +141,19 @@ int main(){
                                         printCliente(loginc);
                                         break;
                                     case 0:
-                                        printf("\nA sair da conta...\n");
+                                        generico();
+                                        printf("\nA sair da conta...\n\n");
+                                        EsperarQuePrimaEnter();
                                         break;
                                 }
                             }while(menuc != 0);
-                        }else{
-                            printf("Password ou email incorretos...\n");
                         }
                         loginc = NULL;
                         logmenu = 0;
                         break;
                     case 2:
                         if (loging != NULL){
+                            generico();
                             printf("\n\nLogin efetuado com sucesso. (Gestor: %s)\n\n", loging->name);
                             EsperarQuePrimaEnter();
                             do{
@@ -184,23 +189,23 @@ int main(){
                                             switch(menualtm){
                                                 case 1:     // Alterar tipo
                                                     clearbuffer();
-                                                    printf("\nIndique o tipo: ");
+                                                    printf("\nIndique o novo tipo do meio: ");
                                                     fgets(tipo, MAX_CODE, stdin);
                                                     tipo[strlen(tipo)-1] = '\0';
                                                     alterarTipoMeio(h, tipo, idmeio);
                                                     break;
                                                 case 2:     // Alterar bateria
-                                                    printf("\nIndique a bateria do meio:");
+                                                    printf("\nIndique a nova bateria do meio:");
                                                     scanf("%d", &bateria);
                                                     alterarBateria(h, bateria, idmeio);
                                                     break;
                                                 case 3:     // Alterar autonomia
-                                                    printf("\nIndique a autonomia do meio");
+                                                    printf("\nIndique a nova autonomia do meio");
                                                     scanf("%f", &autonomia);
                                                     alterarAutonomia(h, autonomia, idmeio);
                                                     break;
                                                 case 4:     // Alterar custo
-                                                    printf("\nIndique a autonomia do meio");
+                                                    printf("\nIndique um novo custo para meio: ");
                                                     scanf("%f", &custo);
                                                     alterarCusto(h, custo, idmeio);
                                                     break;
@@ -268,7 +273,10 @@ int main(){
                                         removerMeio(&h, id, 1);
                                         break;
                                     case 8: //remover conta
-                                        removerGestor(&g, loging->NIF, 1);
+                                        removerGestor(&g, loging->id, 1);
+                                        generico();
+                                        printf("\nConta removida com sucesso, a voltar ao menu principal..\n\n");
+                                        EsperarQuePrimaEnter();
                                         menug = 0;
                                         break;
                                     case 9: //remover conta
@@ -285,17 +293,20 @@ int main(){
                                         EsperarQuePrimaEnter();
                                         break;
                                     case 0:
-                                        printf("\nA sair da conta...\n");
+                                        generico();
+                                        printf("\nA sair da conta...\n\n");
+                                        EsperarQuePrimaEnter();
                                         break;
                                 }
                             }while(menug != 0);
-                        }else{
-                            printf("Password ou email incorretos...\n");
                         }
                         loging = NULL;
                         logmenu = 0;
                         break;
                     case 0:
+                        generico();
+                        printf("\n\nPassword ou email incorretos...\n\n");
+                        EsperarQuePrimaEnter();
                         break;
                 }
                 break;
@@ -313,7 +324,6 @@ int main(){
                         lerDadosGestor(&g);
                         break;
                     case 0:
-                        printf("\nVoltar ao menu principal\n");
                         break;
                 }
                 }while(menuconta != 0);
@@ -327,6 +337,7 @@ int main(){
     guardarGestores(g);
     guardarClientes(c);
     guardarMeios(h);
+    guardarMeioBin(h);
 
     return 1;
 }

@@ -67,7 +67,7 @@ void lerDados(Clientes** inicio){
 
     printf("\nIndique o seu NIF: ");
     fgets(NIF, MAX_NIF, stdin);
-    NIF[MAX_NIF] = '\0';
+    NIF[MAX_NIF - 1] = '\0';
 
     //while ((getchar()) != '\n');
     clearbuffer();
@@ -138,19 +138,21 @@ int printCliente(Clientes *inicio){
     return 1;
 }
 
+
+
 /**
  * @brief Funçao que verifica se um determinado cliete existe
  * 
  * @param inicio Apontador para o inicio da lista ligada
- * @param NIF NIF do cliente a verificar
+ * @param id ID do cliente a verificar
  * @return int retorna 1 se o cliente existir, 0 caso contrario
  */
-int existeCliente(Clientes* inicio, char NIF[]){
+int existeCliente(Clientes* inicio, int id){
     if (!inicio)
         return 0;
-    if (!strcmp(NIF, inicio->NIF))   
+    if (inicio->id == id)   
         return 1;
-    return existeCliente(inicio->next, NIF);
+    return existeCliente(inicio->next, id);
 }
 
 
@@ -177,7 +179,7 @@ int existeClienteEmail(Clientes* inicio, char email[]){
  * @param i contador para a funçao
  * @return Clientes* retorna o endereço do cliente seguinte ao cliente removido da lista, NULL caso o mesmo n seja encontrado
  */
-Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
+Clientes *removerCliente(Clientes **inicio, int id, int i){
     Clientes *aux;
 
     if (!*inicio){
@@ -185,22 +187,22 @@ Clientes *removerCliente(Clientes **inicio, char NIF[], int i){
         return NULL;
     }
 
-    if(!(existeCliente((*inicio), NIF))){
+    if(!(existeCliente((*inicio), id))){
         printf("Nao existe nenhum cliente resgistado com o NIF indicado...\n");
         return NULL;
     }
     
-    if (!strcmp((*inicio)->NIF, NIF) && i == 1){
+    if (((*inicio)->id == id) && i == 1){
         aux = (*inicio)->next;
         free((*inicio));
         (*inicio) = aux;
         return aux;
-    }else if (!strcmp((*inicio)->NIF, NIF)){
+    }else if (((*inicio)->id == id)){
         aux = (*inicio)->next;
         free((*inicio));
         return aux;
     }else{
-        (*inicio)->next = removerCliente(&(*inicio)->next, NIF, ++i);
+        (*inicio)->next = removerCliente(&(*inicio)->next, id, ++i);
         return (*inicio);
     }
 }
@@ -330,6 +332,7 @@ int generateidCliente(Clientes *inicio){
     while(inicio != NULL){
         if (max < inicio->id)
             max = inicio->id;
+        inicio = inicio->next;
     }
 
     return ++max;
@@ -368,6 +371,7 @@ void readClientes(Clientes **inicio){
             strcpy(email, campo4);
             strcpy(password, campo5);
 			saldo = atof(campo6);
+            id = atoi(campo7);
 
             inserirCliente(&(*inicio), nome, morada, NIF, saldo, password, email, id);
 		}
@@ -401,7 +405,9 @@ void guardarClientes(Clientes* inicio){
         fprintf(fp,";");
         fputs(inicio->password, fp);
         fprintf(fp,";");
-        fprintf(fp,"%.2f\n", inicio->saldo);
+        fprintf(fp,"%.2f", inicio->saldo);
+        fprintf(fp,";");
+        fprintf(fp,"%d\n", inicio->id);
         inicio = inicio->next;
         }
 

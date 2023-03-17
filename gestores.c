@@ -59,7 +59,7 @@ void lerDadosGestor(Gestores** inicio){
 
     printf("\nIndique o seu NIF: ");
     fgets(NIF, MAX_NIF, stdin);
-    NIF[MAX_NIF] = '\0';
+    NIF[MAX_NIF - 1] = '\0';
 
     clearbuffer();
 
@@ -136,13 +136,22 @@ int printGestor(Gestores* inicio){
  * @param inicio Apontador para o inicio da lista ligada
  * @param NIF NIF do gestor a verificar
  * @return int retorna 1 se o gestor existir, 0 caso contrario
- */
+ 
 int existeGestor(Gestores* inicio, char NIF[]){
     if (!inicio)
         return 0;
     if (!strcmp(NIF, inicio->NIF))   
         return 1;
     return existeGestor(inicio->next, NIF);
+}
+*/
+
+int existeGestor(Gestores* inicio, int id){
+    if (!inicio)
+        return 0;
+    if (inicio->id == id)   
+        return 1;
+    return existeGestor(inicio->next, id);
 }
 
 
@@ -170,7 +179,7 @@ int existeGestorEmail(Gestores* inicio, char email[]){
  * @param i Contador da funçao
  * @return Gestores* retorna o endereço do gestor seguinte ao cliente removido da lista, NULL caso o mesmo n seja encontrado
  */
-Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
+Gestores *removerGestor(Gestores **inicio, int id, int i){
     Gestores *aux;
 
     if (!*inicio){
@@ -178,22 +187,22 @@ Gestores *removerGestor(Gestores **inicio, char NIF[], int i){
         return NULL;
     }
 
-    if(!(existeGestor((*inicio), NIF))){
-        printf("Nao existe nenhum gestor resgistado com o NIF indicado...\n");
+    if(!(existeGestor((*inicio), id))){
+        printf("Nao existe nenhum gestor resgistado com o ID indicado...\n");
         return NULL;
     }
     
-    if (!strcmp((*inicio)->NIF, NIF) && i == 1){
+    if (((*inicio)->id == id) && i == 1){
         aux = (*inicio)->next;
         free((*inicio));
         (*inicio) = aux;
         return aux;
-    }else if (!strcmp((*inicio)->NIF, NIF)){
+    }else if ((*inicio)->id == id){
         aux = (*inicio)->next;
         free((*inicio));
         return aux;
     }else{
-        (*inicio)->next = removerGestor(&(*inicio)->next, NIF, ++i);
+        (*inicio)->next = removerGestor(&(*inicio)->next, id, ++i);
         return (*inicio);
     }
 }
@@ -308,6 +317,7 @@ int generateidGestor(Gestores *inicio){
     while(inicio != NULL){
         if (max < inicio->id)
             max = inicio->id;
+        inicio = inicio->next;
     }
 
     return ++max;
@@ -376,7 +386,7 @@ void guardarGestores(Gestores* inicio){
         fprintf(fp,";");
         fputs(inicio->password, fp);
         fprintf(fp,";");
-        fprintf(fp,"%d", inicio->id);
+        fprintf(fp,"%d\n", inicio->id);
         inicio = inicio->next;
         }
 

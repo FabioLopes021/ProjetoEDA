@@ -1,8 +1,8 @@
 #ifndef PROJECT_MEIO_H      //Guarda de Ficheiro
 #define PROJECT_MEIO_H      //Guarda de Ficheiro
 
-
 #include "clientes.h"
+
 
 typedef struct xMeio{
     int codigo;             //Codigo unico para identificar cada meio
@@ -10,13 +10,13 @@ typedef struct xMeio{
     int bateria;            //Percentagem de Bateria do meio
     float autonomia;        //Autonomia do meio
     float custo;            //custo por km do meio
-    Clientes *aluguer;
+    int idaluger;           //id do cliente que tem o meio alugado
     struct xMeio *next;     //Next node
 } Meio;
 
 
 // Inserção de um novo registo
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo); 
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo,int idaluguer); 
 
 // ler dados para realizar a inserçao de um novo meio
 void lerDadosMeio(Meio** inicio);
@@ -26,7 +26,7 @@ int existeMeio(Meio* inicio, int codigo);
 
 int meioLivre(Meio* inicio, int codigo);
 
-int meioAlugado(Meio* inicio, int codigo, Clientes *ver);
+int meioAlugado(Meio* inicio, int codigo, int idCliente);
 
 // listar na consola o conteúdo da lista ligada
 int listarMeios(Meio* inicio, int i);
@@ -35,10 +35,7 @@ int listarMeios(Meio* inicio, int i);
 int listarMeiosLivres(Meio* inicio, int i);
 
 // listar na consola os meios alugados por um determinado utilizador e tambem retornar o numero
-int listarMeiosAlugados(Meio* inicio, Clientes *c, int i);
-
-
-
+int listarMeiosAlugados(Meio* inicio, int idCliente, int i);
 
 
 
@@ -47,10 +44,10 @@ int listarMeiosAlugados(Meio* inicio, Clientes *c, int i);
 Meio *removerMeio(Meio **inicio, int adr, int i);
 
 // Funçao para alugar um meio
-void alugarMeio(Meio *inicio, Clientes *alugar, int id);
+void alugarMeio(Meio *inicio, int idCliente, int id);
 
 // Terminar aluguer de meio
-void terminarAluguer(Meio *inicio, Clientes *alugar, int id);
+void terminarAluguer(Meio *inicio, int id);
 
 // Funçao para alterar o tipo de um meio
 void alterarTipoMeio(Meio *inicio, char tipo[], int id);
@@ -66,6 +63,10 @@ int genereateCodigo(Meio *inico);
 void readMeios(Meio **inicio);
 
 void guardarMeios(Meio *inicio);
+
+void guardarMeioBin(Meio *inicio);
+
+void lerMeioBin(Meio **inicio);
 
 int ordenarMeios(Meio **inicio);
 

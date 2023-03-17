@@ -3,58 +3,63 @@
 
 #include "helper.h"
 
-typedef struct xclientes{
-    int id;
-    char name[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];
-    float saldo;
-    struct xclientes *next;
-} Clientes;
+typedef struct xclientes{   //Declaraçao da estrutura de Clientes 
+    int id;                 // ID unico para cada Cliente
+    char name[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL];    //Dados pessoais de Clientes
+    float saldo;            //Saldo de Clientes
+    struct xclientes *next; //Next node
+} Clientes;                 
 
 
 // Inserção de um novo registo
 void inserirCliente(Clientes** inicio, char nome[], char morada[], char NIF[], float saldo, char password[], char email[], int id); 
 
-// Funçao para ler os dados do cliente para serem envidos a funçao "inserirCliente"
+// Funçao para ler os dados do cliente e de seguida envia-los a funçao "inserirCliente"
 void lerDados(Clientes** inicio);
 
 // listar na consola o conteúdo da lista ligada
 int listarCliente(Clientes* inicio); 
 
+// Listar na Consola os dados de um cliente
 int printCliente(Clientes *inicio);
 
-// Determinar existência do 'codigo' na lista ligada 'inicio'
-int existeCliente(Clientes* inicio, char NIF[]);
+// Determinar existência do 'ID' na lista ligada 'inicio'
+int existeCliente(Clientes* inicio, int id);
 
 // Determinar existência do email na lista ligada 'inicio'
 int existeClienteEmail(Clientes* inicio, char email[]);
 
-// Remover um meio a partir do seu código
-Clientes *removerCliente(Clientes **inicio, char NIF[], int i);
+// Remover um meio a partir do seu ID
+Clientes *removerCliente(Clientes **inicio, int id, int i);
 
-// Funçoes para verificar informaçoes de Login
+// Verificar informaçoes de Login
 Clientes *loginClientes(Clientes **inicio,char password[], char email[]);
 
-// Funçao para alterar o nome de um utilizador
+// Alterar o nome de um Cliente
 void alterarNomeCliente(Clientes *cliente, char novonome[]);
 
 // Funçao para alterar a morada de um utilizador
 void alterarMoradaCliente(Clientes *cliente, char novamorada[]);
 
-// Funçao para alterar o NIF de um utilizador
+// Alterar o NIF de um Cliente
 void alterarNIFCliente(Clientes *cliente, char novoNIF[]);
 
-// Funçao para alterar o email de um utilizador
+// Alterar o Email de um Cliente
 void alterarEmailCliente(Clientes *cliente, char novoemail[]);
 
-// Funçao para alterar a password de um utilizador
+// Alterar a Password de um Cliente
 void alterarPasswordCliente(Clientes *cliente, char novapassword[]);
 
+// Carregar saldo a um Cliente
 void carregarSaldo(Clientes *cliente, float quantia);
 
+// Gera um codigo unico para um novo Cliente
 int generateidCliente(Clientes *inicio);
 
+// Carrega para memoria os dados dos Clientes guardados num ficheiro 
 void readClientes(Clientes **inicio);
 
+// Guarda num ficheiro os dados dos Clientes em memoria
 void guardarClientes(Clientes* inicio);
 
 

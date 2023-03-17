@@ -1,1 +1,1 @@
-Andre Lopes;rua da penide ;123456789;andrelopes021@gmail.com;andre;0.00
+Andre Lopes;rua da penide;123456789;andrelopes021@gmail.com;andre;0.00;1

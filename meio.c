@@ -14,7 +14,7 @@
  * @param aut Autonomia do meio a ser inserido
  * @param custo Custo por Km do meio a ser inserido
  */
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo){
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo,int idaluguer){
     Meio *new;
     
     new = (Meio *) malloc(sizeof(Meio));
@@ -24,6 +24,7 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
     new->bateria = bat;
     new->autonomia = aut;
     new->custo = custo;
+    new->idaluger = idaluguer;
 
     new->next = (*inicio);
     (*inicio) = new;
@@ -59,7 +60,7 @@ void lerDadosMeio(Meio** inicio){
     printf("Indique o custo por km do meio: ");
     scanf("%f", &custo);
     
-    inserirMeio(&(*inicio), cod, tipo, bat, aut, custo);
+    inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, 0);
 }
 
 
@@ -91,7 +92,7 @@ int meioLivre(Meio* inicio, int codigo){
         return 0;
 
     if (inicio->codigo == codigo){
-        if (inicio->aluguer == NULL)
+        if (inicio->idaluger == 0)
             return 1;
         else 
             return 0;
@@ -109,19 +110,19 @@ int meioLivre(Meio* inicio, int codigo){
  * @param ver Cliente a verificar
  * @return int retorna 1 se o Meio estiver alugado ao cliente, 0 caso contrario
  */
-int meioAlugado(Meio* inicio, int codigo, Clientes *ver){
+int meioAlugado(Meio* inicio, int codigo, int idCliente){
     
     if (!inicio)
         return 0;
 
     if (inicio->codigo == codigo){
-        if (inicio->aluguer == ver)
+        if (inicio->idaluger == idCliente)
             return 1;
         else 
             return 0;
     }
         
-    return meioAlugado(inicio->next, codigo, ver);
+    return meioAlugado(inicio->next, codigo, idCliente);
 }
 
 
@@ -168,7 +169,7 @@ int listarMeiosLivres(Meio* inicio, int i){
     }
         
 
-    if (inicio->aluguer == NULL){
+    if (inicio->idaluger == 0){
         if (i == 0){
             printf(" -------------------------------------------------------------------\n");
             printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
@@ -190,14 +191,14 @@ int listarMeiosLivres(Meio* inicio, int i){
  * @param i contador da funçao 
  * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
  */
-int listarMeiosAlugados(Meio* inicio, Clientes *c, int i){
+int listarMeiosAlugados(Meio* inicio, int idCliente, int i){
 
     if (!inicio){
         printf(" -------------------------------------------------------------------\n");
         return i;
     }
         
-    if(inicio->aluguer == c){
+    if(inicio->idaluger == idCliente){
         if (i == 0){
             printf(" -------------------------------------------------------------------\n");
             printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
@@ -207,7 +208,7 @@ int listarMeiosAlugados(Meio* inicio, Clientes *c, int i){
         i++;
     }
     
-    listarMeiosAlugados(inicio->next, c, i);
+    listarMeiosAlugados(inicio->next, idCliente, i);
 }
 
 
@@ -255,29 +256,28 @@ Meio *removerMeio(Meio **inicio, int adr, int i){
  * @param alugar Endereço do cliente que quer alugar o meio
  * @param id Codigo do meio
  */
-void alugarMeio(Meio *inicio, Clientes *alugar, int id){
+void alugarMeio(Meio *inicio, int idCliente, int id){
     
     while(inicio != NULL && inicio->codigo != id){
         inicio = inicio->next;
     }
 
-    inicio->aluguer = alugar;
+    inicio->idaluger = idCliente;
 }
 
 /**
  * @brief Funçao para terminar o aluguer de um Meio
  * 
  * @param inicio Apontador para o inicio da lista ligada
- * @param alugar Endereço do cliente que quer terminar o aluguer o meio
  * @param id Codigo do meio
  */
-void terminarAluguer(Meio *inicio, Clientes *alugar, int id){
+void terminarAluguer(Meio *inicio, int id){
 
     while(inicio != NULL && inicio->codigo != id){
         inicio = inicio->next;
     }
 
-    inicio->aluguer = NULL;
+    inicio->idaluger = 0;
 }
 
 
@@ -330,9 +330,7 @@ void alterarAutonomia(Meio *inicio, float aut, int id){
     while(inicio->codigo != id)
         inicio = inicio->next;
 
-    if (aut > 0 && aut < 100){
-        inicio->autonomia = aut;
-    }
+    inicio->autonomia = aut;
 }
 
 
@@ -385,11 +383,11 @@ int genereateCodigo(Meio *inico){
  */
 void readMeios(Meio **inicio){
     FILE* fp;
-    int cod, bat;
+    int cod, bat,idaluguer;
     float aut, custo;
     char tipo[MAX_CODE];
     char line[1024];
-	char* campo1, * campo2, * campo3, * campo4, * campo5;
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6;
 
     fp = fopen("meios.txt","r");
 
@@ -401,15 +399,17 @@ void readMeios(Meio **inicio){
 			campo3 = strtok(NULL, ";");
 			campo4 = strtok(NULL, ";");
 			campo5 = strtok(NULL, ";");
+			campo6 = strtok(NULL, ";");
 
 			cod = atoi(campo1);
 			bat = atoi(campo2);
 			aut = atof(campo3);
 			custo = atof(campo4);
-            strcpy(tipo, campo5);
+            idaluguer = atoi(campo5);
+            strcpy(tipo, campo6);
             tipo[strlen(tipo) - 1] = '\0';
 
-            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat);
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat, idaluguer);
 		}
 		fclose(fp);
 	}
@@ -431,7 +431,7 @@ void guardarMeios(Meio* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%f;%f;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->tipo);
+        fprintf(fp,"%d;%d;%f;%f;%d;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->idaluger, inicio->tipo);
         inicio = inicio->next;
         }
 
@@ -443,6 +443,51 @@ void guardarMeios(Meio* inicio){
 }
 
 
+void guardarMeioBin(Meio *inicio){
+    FILE *fp;
+
+    fp = fopen("meioss.bin", "wb");
+
+    if(fp != NULL){
+
+        while (inicio != NULL) {
+            fwrite(inicio, sizeof(Meio), 1, fp);
+            inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Meios guardados em binario com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario\n");
+    }
+}
+
+
+void lerMeioBin(Meio **inicio){
+    FILE *fp;
+    Meio *new;
+
+    new = (Meio *) malloc(sizeof(Meio));
+
+    fp = fopen("meioss.bin", "rb");
+
+    if(fp != NULL){
+
+       while (fread(new, sizeof(Meio), 1, fp) == 1) {
+            if(new != NULL){
+                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->custo, new->idaluger);
+            }
+             
+        }
+        free(new);
+        fclose(fp);
+
+        printf("Meios binarios lidos com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario\n");
+    }
+}
 
 /**
  * @brief Funçao que ordena a lista ligada dos Meios por ordem decrescente de autonomia
