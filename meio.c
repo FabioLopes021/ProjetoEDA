@@ -539,10 +539,16 @@ int ordenarMeios(Meio **inicio){
     if( firstnode == NULL){
         return 0;
     }else if(secondnode == NULL){
-        aux = prev;
-        prev = firstnode;
-        firstnode = aux;
-        prev->next = firstnode;
+        if (prev->autonomia < firstnode->autonomia){
+            aux = prev;
+            auxn = firstnode->next;
+            prev = firstnode;
+            firstnode = aux;
+            prev->next = firstnode;
+            firstnode->next = auxn;
+            (*inicio) = prev;
+        }
+        
     }else{
         
         while(verificar){
