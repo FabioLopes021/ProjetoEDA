@@ -79,6 +79,25 @@ int existeMeio(Meio* inicio, int codigo){
     return existeMeio(inicio->next, codigo);
 }
 
+/**
+ * @brief Funçao verifica o numero de meios livres
+ * 
+ * @param inicio Apontador para o inicio da lista ligada
+ * @return int retorna o numero de meios livres existentes
+ */
+int NumMeiosLivres(Meio* inicio){
+    int count = 0;
+
+    if (!inicio)
+        return 0;
+
+    while (inicio != NULL){
+        count ++;
+        inicio = inicio->next;
+    }
+    
+    return count;
+}
 
 /**
  * @brief Funçao que verifica se um meio esta livre

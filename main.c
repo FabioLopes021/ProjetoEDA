@@ -22,6 +22,7 @@ int main(){
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
     float saldo, autonomia, custo;
 
+
     //Carregar dados dos ficheiros txt
     //readMeios(&h);
     //readClientes(&c);
@@ -61,17 +62,22 @@ int main(){
                                     case 1:     //Alugar meio
                                         i = 0;
                                         ordenarMeios(&h);
-                                        listarMeiosLivres(h, 0);
-                                        do{
-                                            if(i == 0)
-                                                printf("\nIndique um codigo para o meio:");
-                                            if(i > 0)
-                                                printf("\nIndique um codigo valido:");
-                                            scanf("%d", &id);
-                                            i++;
-                                        }while((existeMeio(h, id) == 0 ) && (meioLivre(h, id) == 0));
-                                        alugarMeio(h, loginc->id, id);
-                                        id = 0;
+                                        if(NumMeiosLivres(h) != 0){
+                                            listarMeiosLivres(h, 0);
+                                            do{
+                                                if(i == 0)
+                                                    printf("\nIndique um codigo para o meio:");
+                                                if(i > 0)
+                                                    printf("\nIndique um codigo valido:");
+                                                scanf("%d", &id);
+                                                i++;
+                                            }while((existeMeio(h, id) == 1) && (meioLivre(h, id) == 0));
+                                            alugarMeio(h, loginc->id, id);
+                                            id = 0;
+                                        }else{
+                                            printf("Nao existem meios disponiveis\n");
+                                            EsperarQuePrimaEnter();
+                                        }
                                         break;
                                     case 2:     //Terminar aluguer 
                                         num = listarMeiosAlugados(h, loginc->id, 0);

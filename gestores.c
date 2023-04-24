@@ -46,7 +46,7 @@ void lerDadosGestor(Gestores** inicio){
     system("clear");
     printf("\n--------------- Criar Conta ---------------");
     printf("\nIndique o seu nome: ");
-    fgets(nome, MAX_NAME, stdin);
+    fgets(nome, sizeof(nome), stdin);
     nome[strlen(nome)-1] = '\0';
 
     clearbuffer();

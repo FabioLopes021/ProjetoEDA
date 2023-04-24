@@ -24,6 +24,9 @@ void lerDadosMeio(Meio** inicio);
 // Determinar existência do 'codigo' na lista ligada 'inicio'
 int existeMeio(Meio* inicio, int codigo); 
 
+// Retorna o Numerode leios livres
+int NumMeiosLivres(Meio* inicio);
+
 // Verifica se um meio esta livre ou alugado
 int meioLivre(Meio* inicio, int codigo);
 
