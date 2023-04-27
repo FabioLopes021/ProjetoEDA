@@ -24,12 +24,12 @@ int main(){
 
 
     //Carregar dados dos ficheiros txt
-    readMeios(&h);
+    //readMeios(&h);
     //readClientes(&c);
     //readGestores(&g);
 
     //Carregar dados dos ficheiros bin
-    //lerMeioBin(&h);
+    lerMeioBin(&h);
     lerGestoresBin(&g);
     lerCLientesBin(&c);
 
@@ -358,7 +358,7 @@ int main(){
     //guardarMeios(h);
 
     //Guardar dados em ficheiro binario
-    //guardarMeioBin(h);
+    guardarMeioBin(h);
     guardarClientesBin(c);
     guardarGestoresBin(g);
 
