@@ -8,14 +8,16 @@ typedef struct xhistorico{       // Declaraçao da estrutura de Clientes
     int idCliente, idMeio, id ;  // ID do Cliente, do meio que o mesmo alugou e id da entrada no historico
     double custoFinal;           // Custo total da viagem (Apenas é calculado quando é terminado o aluguer)
     float Custo;                 // Custo por minuto do meio   
-    struct tm inicio = {0};      // Hora de inicio de aluguer 
-    struct tm fim = {0};         // Hora de fim de aluguer
+    struct tm inicio;      // Hora de inicio de aluguer 
+    struct tm fim;         // Hora de fim de aluguer
     struct xhistorico *next;     // Next node
 } Historico;
 
 
+void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, struct tm start, struct tm end);
+
 // Inserção inicio de aluguer
-void inserirHistoricoInicio(Historico** inicio, int idc, int idm, int ide, float custo);
+void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo);
 
 // Inserção final de aluguer
 int inserirHistoricoFinal(Historico* inicio, int ide);
@@ -25,6 +27,20 @@ Historico *removerHistorico(Historico **inicio, int id, int i);
 
 // Gera um codigo unico para uma nova entrada no historico
 int generateidHistorico(Historico *inicio);
+
+int existeHistorico(Historico* inicio, int id);
+
+double calculoCustoTotal(Historico *entrada);
+
+int idEntrada(Historico *entrada, int idm);
+
+int imprimirHistorico(Historico *inicio);
+
+
+int imprimirHistoricoCliente(Historico *inicio, int id);
+
+
+int numEntradasCliente(Historico *inicio, int id);
 
 // Carrega para memoria os dados do Historico guardados num ficheiro 
 void readHistorico(Historico **inicio);

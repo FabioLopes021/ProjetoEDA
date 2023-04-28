@@ -8,19 +8,22 @@
 #include "clientes.c"
 #include "gestores.h"
 #include "gestores.c"
+#include "historico.h"
+#include "historico.c"
 
 
 
 int main(){
+    Historico *p;
     Meio *h = NULL;
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0;
+    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0, ident;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
-    float saldo, autonomia, custo;
+    float saldo, autonomia, custo, custoh;
 
 
     //Carregar dados dos ficheiros txt
@@ -73,6 +76,10 @@ int main(){
                                                 i++;
                                             }while((existeMeio(h, id) == 1) && (meioLivre(h, id) == 0));
                                             alugarMeio(h, loginc->id, id);
+                                            custoh = custoMeio(h, id);
+                                            inserirHistoricoInicio(&p, loginc->id, id, custoh);
+                                            imprimirHistorico(p);
+                                            EsperarQuePrimaEnter();
                                             id = 0;
                                         }else{
                                             printf("Nao existem meios disponiveis\n");
@@ -93,7 +100,11 @@ int main(){
                                                 scanf("%d", &id);
                                                 i++;
                                             }while((meioAlugado(h, id, loginc->id) == 0));
+                                            ident = idEntrada(p, id);
+                                            inserirHistoricoFinal(p, ident);
                                             terminarAluguer(h ,id );
+                                            imprimirHistorico(p);
+                                            EsperarQuePrimaEnter();
                                         }
                                         num = 0;
                                         id = 0;                                        
@@ -150,10 +161,15 @@ int main(){
                                     case 5:     //Imprimir dados de Cliente na consola
                                         printCliente(loginc);
                                         break;
-                                    case 6:     //Imprimir dados de Cliente na consola
+                                    case 6:     //Remover conta
                                         removerCliente(&c, loginc->id, 1);
                                         generico();
                                         printf("\nConta removida com sucesso, a voltar ao menu principal..\n\n");
+                                        EsperarQuePrimaEnter();
+                                        menuc = 0;
+                                        break;
+                                    case 7:
+                                        imprimirHistoricoCliente(p, loginc->id);
                                         EsperarQuePrimaEnter();
                                         menuc = 0;
                                         break;
@@ -181,7 +197,8 @@ int main(){
                                         lerDadosMeio(&h);
                                         break;
                                     case 2:     //Consultar historico
-                                        // Em desenvolvimento
+                                        imprimirHistorico(p);
+                                        EsperarQuePrimaEnter();
                                         break;
                                     case 3:     //Estatisticas
                                         // Em desenvolvimento

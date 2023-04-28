@@ -64,7 +64,10 @@ void alterarAutonomia(Meio *inicio, float aut, int id);
 void alterarCusto(Meio *inicio, float custo, int id);
 
 // Gera um codigo unico para a inserção de um novo meio
-int genereateCodigo(Meio *inico);
+int genereateCodigo(Meio *inicio);
+
+// retorna o custo por minuto de um meio a partir do seu id
+float custoMeio(Meio *inicio, int id);
 
 // Carrega para memoria os dados dos meios guardados num ficheiro 
 void readMeios(Meio **inicio);

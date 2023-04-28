@@ -379,20 +379,32 @@ void alterarCusto(Meio *inicio, float custo, int id){
  * @param inico Apontador para o inicio da lista ligada
  * @return int retorna o codigo unico para um meio novo
  */
-int genereateCodigo(Meio *inico){
+int genereateCodigo(Meio *inicio){
     int max = 1;
 
-    if (!inico)
+    if (!inicio)
         return max;
 
-    while( inico != NULL){
-        if (max < inico->codigo)
-            max = inico->codigo;
+    while( inicio != NULL){
+        if (max < inicio->codigo)
+            max = inicio->codigo;
 
-        inico = inico->next;
+        inicio = inicio->next;
     }
 
     return ++max;
+}
+
+float custoMeio(Meio *inicio, int id){
+    if (!inicio)
+        return 0;
+
+    while(inicio != NULL){
+        if(inicio->codigo == id)
+            return inicio->custo;
+        inicio = inicio->next;
+    }
+    return 0;
 }
 
 /**
