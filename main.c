@@ -30,11 +30,13 @@ int main(){
     //readMeios(&h);
     //readClientes(&c);
     //readGestores(&g);
+    readHistorico(&p);
 
     //Carregar dados dos ficheiros bin
     lerMeioBin(&h);
     lerGestoresBin(&g);
     lerCLientesBin(&c);
+    //lerHistoricoBin(&p);
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
     //Estrutura do programa
@@ -78,7 +80,6 @@ int main(){
                                             alugarMeio(h, loginc->id, id);
                                             custoh = custoMeio(h, id);
                                             inserirHistoricoInicio(&p, loginc->id, id, custoh);
-                                            imprimirHistorico(p);
                                             EsperarQuePrimaEnter();
                                             id = 0;
                                         }else{
@@ -103,7 +104,6 @@ int main(){
                                             ident = idEntrada(p, id);
                                             inserirHistoricoFinal(p, ident);
                                             terminarAluguer(h ,id );
-                                            imprimirHistorico(p);
                                             EsperarQuePrimaEnter();
                                         }
                                         num = 0;
@@ -171,7 +171,6 @@ int main(){
                                     case 7:
                                         imprimirHistoricoCliente(p, loginc->id);
                                         EsperarQuePrimaEnter();
-                                        menuc = 0;
                                         break;
                                     case 0:
                                         generico();
@@ -373,11 +372,13 @@ int main(){
     //guardarGestores(g);
     //guardarClientes(c);
     //guardarMeios(h);
+    guardarHistorico(p);
 
     //Guardar dados em ficheiro binario
     guardarMeioBin(h);
     guardarClientesBin(c);
     guardarGestoresBin(g);
+    //guardarHistoricoBin(p);
 
     return 1;
 }
