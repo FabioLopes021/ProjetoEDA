@@ -217,3 +217,47 @@ int numEntradasCliente(Historico *inicio, int id){
 
     return i;
 }
+
+void readHistorico(Historico **inicio){
+    FILE* fp;
+    int id, idc, idm;
+    float custo;
+    double custofinal;
+    struct tm aux;
+    char tipo[MAX_CODE];
+    struct tm inicio;
+    struct tm fim;
+    char line[1024];
+	char* campo1, * campo2, * campo3, * campo4, * campo5;
+    char *campoi1, *campoi2, *campoi3, *campoi4, *campoi5, *campoi6, *campoi7, *campoi8, *campoi9, *campoi10, *campoi11; 
+    char *campof1, *campof2, *campof3, *campof4, *campof5, *campof6, *campof7, *campof8, *campof9, *campof10, *campof11; 
+
+    fp = fopen("hist.txt","r");
+
+    if (fp != NULL) {
+		while (fgets(line, sizeof(line), fp)) {
+
+			campo1 = strtok(line, ";");
+			campo2 = strtok(NULL, ";");
+			campo3 = strtok(NULL, ";");
+			campo4 = strtok(NULL, ";");
+			campo5 = strtok(NULL, ";");
+			campo6 = strtok(NULL, ";");
+
+			cod = atoi(campo1);
+			bat = atoi(campo2);
+			aut = atof(campo3);
+			custo = atof(campo4);
+            idaluguer = atoi(campo5);
+            strcpy(tipo, campo6);
+            tipo[strlen(tipo) - 1] = '\0';
+
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat, idaluguer);
+		}
+		fclose(fp);
+	}
+	else {
+		printf("Erro ao abrir o ficheiro");
+	}
+
+}

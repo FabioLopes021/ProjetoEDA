@@ -14,7 +14,7 @@
 
 
 int main(){
-    Historico *p;
+    Historico *p = NULL;
     Meio *h = NULL;
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
