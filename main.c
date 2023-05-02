@@ -103,7 +103,8 @@ int main(){
                                             }while((meioAlugado(h, id, loginc->id) == 0));
                                             ident = idEntrada(p, id);
                                             inserirHistoricoFinal(p, ident);
-                                            terminarAluguer(h ,id );
+                                            terminarAluguer(h,id);
+                                            pagamento(loginc, calculoCustoTotal(p, ident));
                                             EsperarQuePrimaEnter();
                                         }
                                         num = 0;

@@ -322,6 +322,22 @@ void carregarSaldo(Clientes *cliente, float quantia){
 }
 
 /**
+ * @brief Funçao para retirar o saldo relativo ao aluguer de uma meio
+ * 
+ * @param cliente Endereço do cliente a alterar o nome
+ * @param quantia Quantida a retirar
+ */
+void pagamento(Clientes *cliente, double quantia){
+    
+    if(cliente == NULL){
+        return;
+    }
+
+    cliente->saldo -= quantia;
+
+}
+
+/**
  * @brief Funçao para gerar im ID unico para um novo cliente
  * 
  * @param inicio Apontador para o inicio da lista ligada

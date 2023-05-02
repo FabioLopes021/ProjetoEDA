@@ -42,16 +42,16 @@ void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo){
 
 int inserirHistoricoFinal(Historico* inicio, int ide){
     time_t t = time(NULL);
-    
+    double custof;    
 
     if(!inicio)
         return 0;
-    
+
     while(inicio != NULL && inicio->id != ide)
         inicio = inicio->next;
 
     inicio->fim = *localtime(&t);
-    inicio->custoFinal = calculoCustoTotal(inicio); 
+    inicio->custoFinal = calculoCustoTotal(inicio, ide); 
 
     return 1;     
 }
@@ -93,9 +93,13 @@ int existeHistorico(Historico* inicio, int id){
     return existeHistorico(inicio->next, id);
 }
 
-double calculoCustoTotal(Historico *entrada){
+double calculoCustoTotal(Historico *entrada, int ide){
     double seg, min;
     time_t startTime, endTime;
+
+    while(entrada != NULL && entrada->id != ide)
+        entrada = entrada->next;
+
 
     startTime = mktime(&(entrada->inicio));
     endTime = mktime(&(entrada->fim));

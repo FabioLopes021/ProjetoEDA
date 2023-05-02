@@ -30,7 +30,7 @@ int generateidHistorico(Historico *inicio);
 
 int existeHistorico(Historico* inicio, int id);
 
-double calculoCustoTotal(Historico *entrada);
+double calculoCustoTotal(Historico *entrada, int ide);
 
 int idEntrada(Historico *entrada, int idm);
 

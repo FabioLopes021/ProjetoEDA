@@ -53,6 +53,9 @@ void alterarPasswordCliente(Clientes *cliente, char novapassword[]);
 // Carregar saldo a um Cliente
 void carregarSaldo(Clientes *cliente, float quantia);
 
+// Retirar quantia relativa ao aluguer de uma meio
+void pagamento(Clientes *cliente, double quantia);
+
 // Gera um codigo unico para um novo Cliente
 int generateidCliente(Clientes *inicio);
 
