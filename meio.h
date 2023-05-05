@@ -2,12 +2,14 @@
 #define PROJECT_MEIO_H      //Guarda de Ficheiro
 
 #include "clientes.h"
+#include "grafo.h"
 
 
 typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
     int codigo;             //Codigo unico para identificar cada meio
     char tipo[MAX_CODE];    //Nome do tipo de transporte
     int bateria;            //Percentagem de Bateria do meio
+    char geocode[MAX_GEOCODE];            //Codigo que permite saber a localizaçao do meio
     float autonomia;        //Autonomia do meio
     float custo;            //custo por km do meio
     int idaluger;           //id do cliente que tem o meio alugado
@@ -16,13 +18,15 @@ typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
 
 
 // Inserção de um novo registo
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo,int idaluguer); 
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo, int idaluguer,char geocode[]); 
 
 // Funçao para ler os dados do cliente e de seguida envia-los a funçao "inserirMeio"
-void lerDadosMeio(Meio** inicio);
+void lerDadosMeio(Meio** inicio, VerticeList *v);
 
 // Determinar existência do 'codigo' na lista ligada 'inicio'
 int existeMeio(Meio* inicio, int codigo); 
+
+char* localatual(Meio* inicio, int codigo);
 
 // Retorna o Numerode leios livres
 int NumMeiosLivres(Meio* inicio);

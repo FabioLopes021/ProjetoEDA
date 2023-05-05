@@ -1,4 +1,5 @@
 #include "meio.h"
+#include "grafo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +15,7 @@
  * @param aut Autonomia do meio a ser inserido
  * @param custo Custo por Km do meio a ser inserido
  */
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo,int idaluguer){
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo, int idaluguer, char geocode[]){
     Meio *new;
     
     new = (Meio *) malloc(sizeof(Meio));
@@ -25,6 +26,7 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
     new->autonomia = aut;
     new->custo = custo;
     new->idaluger = idaluguer;
+    strcpy(new->geocode, geocode);
 
     new->next = (*inicio);
     (*inicio) = new;
@@ -36,11 +38,13 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
  * 
  * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
  */
-void lerDadosMeio(Meio** inicio){
+void lerDadosMeio(Meio** inicio, VerticeList *v){
     char tipo[MAX_NAME];
-    int cod = 0,i = 0, bat;
+    char geocode[MAX_GEOCODE];
+    int cod = 0,i = 0, bat, vertice, ver, teste;
     float aut, custo;
 
+    strcpy(geocode, "");
     clearbuffer();
 
     generico();
@@ -59,8 +63,26 @@ void lerDadosMeio(Meio** inicio){
 
     printf("Indique o custo por km do meio: ");
     scanf("%f", &custo);
+
+    ver = printGeocodeVertice(v);
+    printf("testar meio sem localizaçao 1 para continuar sem localizaçao");
+    scanf("%d", &teste);
+    clearbuffer();
+    if (ver == 1 && teste != 1){
+        int i = 0;
+        do{
+            if (i == 0)
+                printf("Indique a localizaçao do meio: ");
+            else
+                printf("Indique uma localizaçao valida: ");
+            scanf("%d", &vertice);
+            i++;
+        }while(geocodePorVertice(v, vertice, geocode) != 1);
+    }else{
+        printf("De momento nao existe nenhuma localizaçao adicionada, o meio ira ser registado sem localizaçao.\n");
+    }
     
-    inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, 0);
+    inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, 0, geocode);
 }
 
 
@@ -79,6 +101,18 @@ int existeMeio(Meio* inicio, int codigo){
     return existeMeio(inicio->next, codigo);
 }
 
+
+char* localatual(Meio* inicio, int codigo){
+    if (inicio == NULL)
+        return "";
+
+    while(inicio->codigo != codigo){
+        inicio = inicio->next;
+    }
+
+    return inicio->geocode;
+}
+
 /**
  * @brief Funçao verifica o numero de meios livres
  * 
@@ -92,7 +126,9 @@ int NumMeiosLivres(Meio* inicio){
         return 0;
 
     while (inicio != NULL){
-        count ++;
+        if(inicio->idaluger == 0 && strcmp(inicio->geocode, "") != 0){
+            count ++;
+        }
         inicio = inicio->next;
     }
     
@@ -111,7 +147,7 @@ int meioLivre(Meio* inicio, int codigo){
         return 0;
 
     if (inicio->codigo == codigo){
-        if (inicio->idaluger == 0)
+        if (inicio->idaluger == 0 && strcmp(inicio->geocode, "") != 0)
             return 1;
         else 
             return 0;
@@ -163,10 +199,11 @@ int listarMeios(Meio* inicio, int i){
     
     if (i == 0){
         printf(" -------------------------------------------------------------------\n");
-        printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
+        printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |  Local(Km)  |\n");
         printf("|-------------------------------------------------------------------|\n");
     }
-    printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+    printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia
+    , inicio->custo);
     
 
     listarMeios(inicio->next, ++i);
@@ -188,7 +225,7 @@ int listarMeiosLivres(Meio* inicio, int i){
     }
         
 
-    if (inicio->idaluger == 0){
+    if ((inicio->idaluger == 0) && (strcmp(inicio->geocode,"") != 0)){
         if (i == 0){
             printf(" -------------------------------------------------------------------\n");
             printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
@@ -416,9 +453,9 @@ void readMeios(Meio **inicio){
     FILE* fp;
     int cod, bat,idaluguer;
     float aut, custo;
-    char tipo[MAX_CODE];
+    char tipo[MAX_CODE], geocode[MAX_GEOCODE];
     char line[1024];
-	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6;
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7;
 
     fp = fopen("meios.txt","r");
 
@@ -431,6 +468,7 @@ void readMeios(Meio **inicio){
 			campo4 = strtok(NULL, ";");
 			campo5 = strtok(NULL, ";");
 			campo6 = strtok(NULL, ";");
+			campo7 = strtok(NULL, ";");
 
 			cod = atoi(campo1);
 			bat = atoi(campo2);
@@ -438,9 +476,10 @@ void readMeios(Meio **inicio){
 			custo = atof(campo4);
             idaluguer = atoi(campo5);
             strcpy(tipo, campo6);
-            tipo[strlen(tipo) - 1] = '\0';
+            strcpy(geocode, campo7);
+            geocode[strlen(geocode) - 1] = '\0';
 
-            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat, idaluguer);
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat, idaluguer, geocode);
 		}
 		fclose(fp);
 	}
@@ -462,7 +501,7 @@ void guardarMeios(Meio* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%f;%f;%d;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->idaluger, inicio->tipo);
+        fprintf(fp,"%d;%d;%f;%f;%d;%s;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode);
         inicio = inicio->next;
         }
 
@@ -517,9 +556,8 @@ void lerMeioBin(Meio **inicio){
 
        while (fread(new, sizeof(Meio), 1, fp) == 1) {
             if(new != NULL){
-                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->custo, new->idaluger);
+                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->custo, new->idaluger, new->geocode);
             }
-             
         }
         free(new);
         fclose(fp);
@@ -546,7 +584,11 @@ int ordenarMeios(Meio **inicio){
 
     prev = (*inicio);
     firstnode = prev->next;
-    secondnode = firstnode->next;
+    if(firstnode != NULL){
+        secondnode = firstnode->next;
+    }else
+        secondnode = NULL;
+    
 
     if( firstnode == NULL){
         return 0;

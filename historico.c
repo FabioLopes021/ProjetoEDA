@@ -22,7 +22,7 @@ void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double cust
     (*inicio) = new;
 }
 
-void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo){
+void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, char localinicial[]){
     Historico *new;
     time_t t = time(NULL);
     
@@ -34,6 +34,7 @@ void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo){
     new->Custo = custo;
     new->custoFinal = 0;
     new->inicio = *localtime(&t);
+    strcpy(new->localinicial, localinicial);
 
     new->next = (*inicio);
     (*inicio) = new;    

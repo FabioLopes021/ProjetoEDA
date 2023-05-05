@@ -10,6 +10,7 @@
 #define MAX_EMAIL 60        //Define o limite Maximo para os emails
 #define MIN_NAME 2          //Define o limite Minimo para a alteraçao dos dados de qualquer conta ou meio
 #define MAX_CODE 50         //Define o limite Maximo para o nome do tipo de transporte
+#define MAX_GEOCODE 40
 
 #include "gestores.h"
 #include "clientes.h"

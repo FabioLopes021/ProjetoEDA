@@ -29,14 +29,15 @@ int main(){
 
 
     //Carregar dados dos ficheiros txt
-    //readMeios(&h);
+    readGrafo(&v);
+    readMeios(&h);
     //readClientes(&c);
     //readGestores(&g);
     readHistorico(&p);
-    readGrafo(&v);
+    
 
     //Carregar dados dos ficheiros bin
-    lerMeioBin(&h);
+    //lerMeioBin(&h);
     lerGestoresBin(&g);
     lerCLientesBin(&c);
     //lerHistoricoBin(&p);
@@ -81,10 +82,10 @@ int main(){
                                                     printf("\nIndique um codigo valido:");
                                                 scanf("%d", &id);
                                                 i++;
-                                            }while((existeMeio(h, id) == 1) && (meioLivre(h, id) == 0));
+                                            }while((existeMeio(h, id) == 1) && (meioLivre(h, id) == 1));
                                             alugarMeio(h, loginc->id, id);
                                             custoh = custoMeio(h, id);
-                                            inserirHistoricoInicio(&p, loginc->id, id, custoh);
+                                            inserirHistoricoInicio(&p, loginc->id, id, custoh, localatual(h, id));
                                             EsperarQuePrimaEnter();
                                             id = 0;
                                         }else{
@@ -199,7 +200,7 @@ int main(){
                                 
                                 switch(menug){
                                     case 1:     //Adicionar meios
-                                        lerDadosMeio(&h);
+                                        lerDadosMeio(&h, v);
                                         break;
                                     case 2:     //Consultar historico
                                         imprimirHistorico(p);
@@ -377,11 +378,12 @@ int main(){
     //Guardar dados em ficheiro
     //guardarGestores(g);
     //guardarClientes(c);
-    //guardarMeios(h);
+    guardarMeios(h);
     guardarHistorico(p);
+    guardarGrafo(v);
 
     //Guardar dados em ficheiro binario
-    guardarMeioBin(h);
+    //guardarMeioBin(h);
     guardarClientesBin(c);
     guardarGestoresBin(g);
     //guardarHistoricoBin(p);

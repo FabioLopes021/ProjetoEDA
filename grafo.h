@@ -4,6 +4,7 @@
 #include "helper.h"
 
 
+
 typedef struct xAdjacente
 {
     int vertice;
@@ -13,6 +14,7 @@ typedef struct xAdjacente
 
 typedef struct xVertices{
     int vertice;
+    char geocode[MAX_GEOCODE];
     Adjacente *adj;
     struct xVertices *next;
 } VerticeList;
@@ -21,7 +23,7 @@ typedef struct xVertices{
 const char* NOME_PONTOS[] = { "Campo da Feira","A minha farmacia","Estatua do Bombeiro", "Pingo Doce", "Mercadona", "Digibarcelos", "Retail Parque"
 , "Mc Donalds's", "Alcaides de Faria" };
 
-int adicionarVertice(VerticeList **v, int idvertice);
+int adicionarVertice(VerticeList **v, int idvertice, char geocode[]);
 
 int adicionarAresta(VerticeList *v, int inicio, int fim, float peso);
 
@@ -31,7 +33,11 @@ int printGrafo(VerticeList *v);
 
 int printGrafoNomes(VerticeList *v);
 
+int printGeocodeVertice(VerticeList *v);
+
 int numVertices(VerticeList  *v);
+
+int geocodePorVertice(VerticeList  *v, int vertice, char *geocode);
 
 int visitado(int sequencia[],int pos, int id);
 

@@ -5,7 +5,7 @@
 
 
 
-int adicionarVertice(VerticeList **v, int idvertice){
+int adicionarVertice(VerticeList **v, int idvertice, char geocode[]){
 
     if (existeVertice(*v, idvertice) == 1)
         return 0;
@@ -14,18 +14,17 @@ int adicionarVertice(VerticeList **v, int idvertice){
     VerticeList *aux = *v;
 
     new->vertice = idvertice;
+    strcpy(new->geocode, geocode);
+    new->adj = NULL;
+    new->next = NULL;
 
     if (*v == NULL){
         *v = new;
-        new->adj = NULL;
-        new->next = NULL;
     }
     else{
         while(aux->next != NULL)
             aux = aux->next;
         aux->next = new;
-        new->adj = NULL;
-        new->next = NULL;
     }
 
     return 1;
@@ -47,7 +46,7 @@ int adicionarAresta(VerticeList *v, int inicio, int fim, float peso){
     new->peso = peso;
     new->vertice = fim;
     new->next = NULL;
-
+    
     if(v->adj != NULL){
         Adjacente *aux = v->adj;    
         while(aux->next != NULL){
@@ -83,6 +82,29 @@ int printGrafo(VerticeList *v){
 
     printf("-----------Grafo-------------\n");
     while(v != NULL){
+        printf("Vertice: %d", v->vertice);
+        aux = v->adj;
+        while(aux != NULL){
+            printf("-> %d", aux->vertice);
+            aux = aux->next;
+        }
+        printf(";\n");
+        v = v->next;
+    }
+
+    return 1;
+}
+
+
+int printGrafoNomes(VerticeList *v){
+
+    if(v == NULL)
+        return 0;
+
+    Adjacente *aux;
+
+    printf("-----------Grafo-------------\n");
+    while(v != NULL){
         printf("Vertice: %s", NOME_PONTOS[v->vertice]);
         aux = v->adj;
         while(aux != NULL){
@@ -93,6 +115,21 @@ int printGrafo(VerticeList *v){
         v = v->next;
     }
 
+    return 1;
+}
+
+
+int printGeocodeVertice(VerticeList *v){
+    if (v == NULL)
+        return 0;
+    
+    printf("Localizaçoes\n");
+    while (v != NULL)
+    {
+        printf("vertice: %d -> %s\n", v->vertice, NOME_PONTOS[v->vertice]);
+        v = v->next;
+    }
+    
     return 1;
 }
 
@@ -109,6 +146,20 @@ int numVertices(VerticeList  *v){
     }
 
     return i;
+}
+
+int geocodePorVertice(VerticeList  *v, int vertice, char *geocode){
+    if(v == NULL)
+        return 0;
+    while(v != NULL){
+        if (v->vertice == vertice){
+            strcpy(geocode, v->geocode);
+            return 1;
+        }
+        v = v->next;
+    }
+
+    return 0;
 }
 
 // Determinar se vértice 'id' já foi visitado
@@ -147,10 +198,11 @@ void listarCaminhos(VerticeList *v, int origem, int destino){
   listarCaminhosAux(v,origem,destino,sequencia,0,0);
 }
 
+
 void readGrafo(VerticeList** v){
     FILE* fp;
-    char line[1024];
-    int listVertice, i, aux,j;
+    char line[1024], geocode[MAX_GEOCODE];
+    int listVertice, i, aux,j,z;
     float aux1;
 	char* campo1, * campo2;
 
@@ -162,9 +214,15 @@ void readGrafo(VerticeList** v){
 
             campo1 = strtok(line, ";");
             if (j == 0){
+                z = 1;
                 while(campo1 != NULL){
-                    listVertice = atoi(campo1);
-                    adicionarVertice(&(*v), listVertice);    
+                    if(z % 2 == 1){
+                        listVertice = atoi(campo1);
+                    }else{
+                        strcpy(geocode, campo1);
+                        adicionarVertice(&(*v), listVertice, geocode);    
+                    }   
+                    z++;
                     campo1 = strtok(NULL, ";");
                 }
             }else{
@@ -203,7 +261,7 @@ void guardarGrafo(VerticeList* v){
     if (fp!=NULL){      
 
         while(v != NULL){  
-            fprintf(fp,"%d;", v->vertice);
+            fprintf(fp,"%d;%s;", v->vertice, v->geocode);
             v = v->next;
         }
         fprintf(fp,"\n");
