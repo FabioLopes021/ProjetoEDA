@@ -15,12 +15,17 @@ int adicionarVertice(VerticeList **v, int idvertice){
 
     new->vertice = idvertice;
 
-    if (*v == NULL)
+    if (*v == NULL){
         *v = new;
+        new->adj = NULL;
+        new->next = NULL;
+    }
     else{
         while(aux->next != NULL)
             aux = aux->next;
         aux->next = new;
+        new->adj = NULL;
+        new->next = NULL;
     }
 
     return 1;
@@ -41,6 +46,7 @@ int adicionarAresta(VerticeList *v, int inicio, int fim, float peso){
     Adjacente *new = (Adjacente*)malloc(sizeof(Adjacente));
     new->peso = peso;
     new->vertice = fim;
+    new->next = NULL;
 
     if(v->adj != NULL){
         Adjacente *aux = v->adj;    
@@ -77,10 +83,10 @@ int printGrafo(VerticeList *v){
 
     printf("-----------Grafo-------------\n");
     while(v != NULL){
-        printf("Vertice: %d", v->vertice);
+        printf("Vertice: %s", NOME_PONTOS[v->vertice]);
         aux = v->adj;
         while(aux != NULL){
-            printf("-> %d", aux->vertice);
+            printf("-> %s", NOME_PONTOS[aux->vertice]);
             aux = aux->next;
         }
         printf(";\n");

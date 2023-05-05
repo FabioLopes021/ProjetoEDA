@@ -10,12 +10,14 @@
 #include "gestores.c"
 #include "historico.h"
 #include "historico.c"
-
+#include "grafo.h"
+#include "grafo.c"
 
 
 int main(){
     Historico *p = NULL;
     Meio *h = NULL;
+    VerticeList *v = NULL; 
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
@@ -31,6 +33,7 @@ int main(){
     //readClientes(&c);
     //readGestores(&g);
     readHistorico(&p);
+    readGrafo(&v);
 
     //Carregar dados dos ficheiros bin
     lerMeioBin(&h);
@@ -39,6 +42,8 @@ int main(){
     //lerHistoricoBin(&p);
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
+    printGrafo(v);
+    EsperarQuePrimaEnter();
     //Estrutura do programa
     do{
         menu1 = menu();     //Receber opçao do utilizador
