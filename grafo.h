@@ -39,6 +39,8 @@ int numVertices(VerticeList  *v);
 
 int geocodePorVertice(VerticeList  *v, int vertice, char *geocode);
 
+int verticePorGeocode(VerticeList  *v, int *vertice, char geocode[]);
+
 int visitado(int sequencia[],int pos, int id);
 
 void listarCaminhosAux(VerticeList *v, int origem, int destino, int sequencia[], int posicao, int pesoTotal);

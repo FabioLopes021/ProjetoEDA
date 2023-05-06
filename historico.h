@@ -15,13 +15,33 @@ typedef struct xhistorico{       // Declaraçao da estrutura de Clientes
 } Historico;
 
 
-void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, struct tm start, struct tm end);
+
+void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, char localinicial[], char localfinal[], struct tm start, struct tm end);
+void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, char localinicial[]);
+int inserirHistoricoFinal(Historico* inicio, int ide, char localfinal[]);
+Historico *removerHistorico(Historico **inicio, int id, int i);
+int existeHistorico(Historico* inicio, int id);
+double calculoCustoTotal(Historico *entrada, int ide);
+int idEntrada(Historico *entrada, int idm);
+int generateidHistorico(Historico *inicio);
+int imprimirHistorico(Historico *inicio,VerticeList *v);
+int imprimirHistoricoCliente(Historico *inicio,VerticeList *v, int id);
+int numEntradasCliente(Historico *inicio, int id);
+void readHistorico(Historico **inicio);
+void guardarHistorico(Historico* inicio);
+void lerHistoricoBin(Historico **inicio);
+void guardarHistoricoBin(Historico *inicio);
+
+
+
+/*
+void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, char localinicial[], char localfinal[], struct tm start, struct tm end){;
 
 // Inserção inicio de aluguer
 void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, char localinicial[]);
 
 // Inserção final de aluguer
-int inserirHistoricoFinal(Historico* inicio, int ide);
+int inserirHistoricoFinal(Historico* inicio, int ide, char localfinal[]);
 
 // Remover uma entrada a partir do seu ID
 Historico *removerHistorico(Historico **inicio, int id, int i);
@@ -54,5 +74,8 @@ void lerHistoricoBin(Historico **inicio);
 
 // Carrega para memoria os dados do Historico guardados num ficheiro binario
 void guardarHistoricoBin(Historico *inicio);
+*/
+
+
 
 #endif //final da guarda de ficheiro

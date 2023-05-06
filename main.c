@@ -21,10 +21,10 @@ int main(){
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0, ident;
+    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0, ident, aux;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
-    char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD];
+    char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD], locfinal[MAX_GEOCODE], locinicializacao[MAX_GEOCODE];
     float saldo, autonomia, custo, custoh;
 
 
@@ -82,11 +82,15 @@ int main(){
                                                     printf("\nIndique um codigo valido:");
                                                 scanf("%d", &id);
                                                 i++;
-                                            }while((existeMeio(h, id) == 1) && (meioLivre(h, id) == 1));
-                                            alugarMeio(h, loginc->id, id);
-                                            custoh = custoMeio(h, id);
-                                            inserirHistoricoInicio(&p, loginc->id, id, custoh, localatual(h, id));
-                                            EsperarQuePrimaEnter();
+                                            }while((existeMeio(h, id) == 0) || (meioLivre(h, id) == 0));
+                                            if(custoMeio(h, id) < loginc->saldo){
+                                                alugarMeio(h, loginc->id, id);
+                                                custoh = custoMeio(h, id);
+                                                inserirHistoricoInicio(&p, loginc->id, id, custoh, localatual(h, id));
+                                                EsperarQuePrimaEnter();
+                                            }else
+                                                printf("Nao é possivel alugar o meio indicado pois nao tem dinheiro suficiente.");
+                                            
                                             id = 0;
                                         }else{
                                             printf("Nao existem meios disponiveis\n");
@@ -107,12 +111,20 @@ int main(){
                                                 scanf("%d", &id);
                                                 i++;
                                             }while((meioAlugado(h, id, loginc->id) == 0));
+                                            strcpy(locfinal, "");
+                                            aux = lerVertice(v, locfinal);
                                             ident = idEntrada(p, id);
-                                            inserirHistoricoFinal(p, ident);
+                                            inserirHistoricoFinal(p, ident, locfinal);
                                             terminarAluguer(h,id);
                                             pagamento(loginc, calculoCustoTotal(p, ident));
+                                            if (aux == 1){
+                                                atuallizarLocalizacao(h, v, id, locfinal);
+                                                printf("Aluguer terminado com sucesso.\n");
+                                            }else
+                                                printf("Ocorreu um erro, aluguer terminado sem localizaçao final.\n");
                                             EsperarQuePrimaEnter();
                                         }
+                                        aux = 0;
                                         num = 0;
                                         id = 0;                                        
                                         break;
@@ -176,7 +188,7 @@ int main(){
                                         menuc = 0;
                                         break;
                                     case 7:
-                                        imprimirHistoricoCliente(p, loginc->id);
+                                        imprimirHistoricoCliente(p, v, loginc->id);
                                         EsperarQuePrimaEnter();
                                         break;
                                     case 0:
@@ -203,7 +215,7 @@ int main(){
                                         lerDadosMeio(&h, v);
                                         break;
                                     case 2:     //Consultar historico
-                                        imprimirHistorico(p);
+                                        imprimirHistorico(p, v);
                                         EsperarQuePrimaEnter();
                                         break;
                                     case 3:     //Estatisticas
@@ -216,7 +228,7 @@ int main(){
                                         do{
                                             count = 0;
                                             generico();
-                                            listarMeios(h, 0);
+                                            listarMeios(h, v, 0);
                                             do{
                                                 if(count == 0)  
                                                     printf("\nIndique o meio que deseja alterar:");
@@ -301,7 +313,7 @@ int main(){
                                         break;
                                     case 7:     // remover meio
                                         i = 0;
-                                        listarMeios(h, 0);
+                                        listarMeios(h, v, 0);
                                         do{
                                             if(i == 0)
                                                 printf("\nIndique um codigo para o meio:");
@@ -329,8 +341,35 @@ int main(){
                                         break;
                                     case 11:    //Listar Meios
                                         generico();
-                                        listarMeios(h,0);
+                                        listarMeios(h, v, 0);
                                         EsperarQuePrimaEnter();
+                                        break;
+                                    case 12:    //Inicializar meio sem localizaçao
+                                        generico();
+                                        i = 0;
+                                        if(NumMeiosSemLocalizacao(h) != 0){
+                                            listarMeiosSemLocalizacao(h, 0);
+                                            do{
+                                                if(i == 0)
+                                                    printf("\nIndique um codigo para o meio:");
+                                                if(i > 0)
+                                                    printf("\nIndique um codigo valido:");
+                                                scanf("%d", &id);
+                                                i++;
+                                            }while(meioSemLocalizacao(h, id) != 1);
+                                            strcpy(locinicializacao, "");
+                                            aux = lerVertice(v, locinicializacao);
+                                            if (aux == 1){
+                                                atuallizarLocalizacao(h, v, id, locinicializacao);
+                                                printf("Localizaçao adcionada com sucesso.\n");
+                                            }else
+                                                printf("Ocorreu um erro, meio continua sem localizaçao.\n");
+                                            EsperarQuePrimaEnter();
+                                            id = 0;
+                                        }else{
+                                            printf("Nao existem meios disponiveis\n");
+                                            EsperarQuePrimaEnter();
+                                        }
                                         break;
                                     case 0:     //Logout
                                         generico();

@@ -1,2 +1,2 @@
-2;99;450.000000;99.000000;0;Bicicleta;
-1;100;250.000000;100.000000;0;Trotinete;newest.senses.taster
+2;99;450.00;0.30;0;Bicicleta;
+1;100;250.00;0.20;0;Trotinete;newest.senses.taster

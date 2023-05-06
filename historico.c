@@ -3,9 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include "historico.h"
+#include "grafo.h"
 
-
-void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, struct tm start, struct tm end){
+void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, char localinicial[], char localfinal[], struct tm start, struct tm end){
     Historico *new;
 
     new = (Historico *) malloc(sizeof(Historico));
@@ -17,6 +17,8 @@ void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double cust
     new->Custo = custo;
     new->inicio = start;
     new->fim = end;
+    strcpy(new->localinicial, localinicial);
+    strcpy(new->localfinal, localfinal);
 
     new->next = (*inicio);
     (*inicio) = new;
@@ -41,7 +43,7 @@ void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, c
 }
 
 
-int inserirHistoricoFinal(Historico* inicio, int ide){
+int inserirHistoricoFinal(Historico* inicio, int ide, char localfinal[]){
     time_t t = time(NULL);
     double custof;    
 
@@ -52,7 +54,8 @@ int inserirHistoricoFinal(Historico* inicio, int ide){
         inicio = inicio->next;
 
     inicio->fim = *localtime(&t);
-    inicio->custoFinal = calculoCustoTotal(inicio, ide); 
+    inicio->custoFinal = calculoCustoTotal(inicio, ide);
+    strcpy(inicio->localfinal, localfinal);
 
     return 1;     
 }
@@ -139,7 +142,7 @@ int generateidHistorico(Historico *inicio){
     return ++max;
 }
 
-int imprimirHistorico(Historico *inicio){
+int imprimirHistorico(Historico *inicio,VerticeList *v){
 
     if(!inicio)
         return 0;
@@ -150,6 +153,8 @@ int imprimirHistorico(Historico *inicio){
         printf("ID Historico: %d\n", inicio->id);
         printf("ID Cliente: %d\n", inicio->idCliente);
         printf("ID Meio: %d\n", inicio->idMeio);
+        printf("Local inicio: %s\n", NOME_PONTOS[auxprinthistorico(v, inicio->localinicial)]);
+        printf("Local final: %s\n", NOME_PONTOS[auxprinthistorico(v, inicio->localfinal)]);
         printf("Inicio do aluguer: %02d/%02d/%04d %02d:%02d:%02d\n", 
             inicio->inicio.tm_mday, inicio->inicio.tm_mon + 1, inicio->inicio.tm_year + 1900,
             inicio->inicio.tm_hour, inicio->inicio.tm_min, inicio->inicio.tm_sec);
@@ -167,7 +172,7 @@ int imprimirHistorico(Historico *inicio){
     return 1;
 }
 
-int imprimirHistoricoCliente(Historico *inicio, int id){
+int imprimirHistoricoCliente(Historico *inicio,VerticeList *v, int id){
     if(!inicio)
         return 0;
 
@@ -178,6 +183,8 @@ int imprimirHistoricoCliente(Historico *inicio, int id){
             printf("ID Historico: %d\n", inicio->id);
             printf("ID Cliente: %d\n", inicio->idCliente);
             printf("ID Meio: %d\n", inicio->idMeio);
+            printf("Local inicio: %s\n", NOME_PONTOS[auxprinthistorico(v, inicio->localinicial)]);
+            printf("Local final: %s\n", NOME_PONTOS[auxprinthistorico(v, inicio->localfinal)]);
             printf("Inicio do aluguer: %02d/%02d/%04d %02d:%02d:%02d\n", 
                 inicio->inicio.tm_mday, inicio->inicio.tm_mon + 1, inicio->inicio.tm_year + 1900,
                 inicio->inicio.tm_hour, inicio->inicio.tm_min, inicio->inicio.tm_sec);
@@ -222,8 +229,8 @@ void readHistorico(Historico **inicio){
     char teste[20];
     struct tm start;
     struct tm end;
-    char line[1024];
-	char* campo1, * campo2, * campo3, * campo4, * campo5;
+    char line[1024], localinicial[MAX_GEOCODE], localfinal[MAX_GEOCODE];
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7;
     char *campoi1, *campoi2, *campoi3, *campoi4, *campoi5, *campoi6, *campoi7, *campoi8, *campoi9, *campoi10;// *campoi11; 
     char *campof1, *campof2, *campof3, *campof4, *campof5, *campof6, *campof7, *campof8, *campof9, *campof10;// *campof11; 
     start = *localtime(&t);
@@ -239,6 +246,8 @@ void readHistorico(Historico **inicio){
 			campo3 = strtok(NULL, ";");
 			campo4 = strtok(NULL, ";");
 			campo5 = strtok(NULL, ";");
+			campo6 = strtok(NULL, ";");
+			campo7 = strtok(NULL, ";");
 			campoi1 = strtok(NULL, ";");
 			campoi2 = strtok(NULL, ";");
 			campoi3 = strtok(NULL, ";");
@@ -267,6 +276,8 @@ void readHistorico(Historico **inicio){
             idm = atoi(campo3);
             custo = atof(campo4);
             custofinal = atof(campo5);
+            strcpy(localinicial, campo6);
+            strcpy(localfinal, campo7);
 			start.tm_hour = atoi(campoi1); 
 			start.tm_isdst = atoi(campoi2); 
 			start.tm_mday = atoi(campoi3); 
@@ -290,7 +301,7 @@ void readHistorico(Historico **inicio){
 			end.tm_year = atoi(campof9); 
 			end.tm_gmtoff = atol(campof10);
 			
-            inserirHistorico(&(*inicio), idc, idm, id, custofinal, custo, start, end);
+            inserirHistorico(&(*inicio), idc, idm, id, custofinal, custo, localinicial, localfinal, start, end);
 		}
 		fclose(fp);
 	}
@@ -310,7 +321,7 @@ void guardarHistorico(Historico* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%d;%.2f;%.2f", inicio->id, inicio->idCliente, inicio->idMeio, inicio->Custo, inicio->custoFinal); 
+        fprintf(fp,"%d;%d;%d;%.2f;%.2f;%s;%s", inicio->id, inicio->idCliente, inicio->idMeio, inicio->Custo, inicio->custoFinal, inicio->localinicial, inicio->localfinal); 
         fprintf(fp,";%d;%d;%d;%d;%d;%d;%d;%d;%d;%ld", inicio->inicio.tm_hour, inicio->inicio.tm_isdst, inicio->inicio.tm_mday
         , inicio->inicio.tm_min, inicio->inicio.tm_mon, inicio->inicio.tm_sec, inicio->inicio.tm_wday, inicio->inicio.tm_yday, inicio->inicio.tm_year,
          inicio->inicio.tm_gmtoff);
@@ -343,7 +354,7 @@ void lerHistoricoBin(Historico **inicio){
 
        while (fread(new, sizeof(Historico), 1, fp) == 1) {
             if(new != NULL){
-                inserirHistorico(&(*inicio), new->idCliente, new->idMeio, new->id, new->custoFinal, new->Custo, new->inicio, new->fim);
+                inserirHistorico(&(*inicio), new->idCliente, new->idMeio, new->id, new->custoFinal, new->Custo, new->localinicial, new->localfinal, new->inicio, new->fim);
             }
              
         }

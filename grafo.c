@@ -59,6 +59,30 @@ int adicionarAresta(VerticeList *v, int inicio, int fim, float peso){
     return 1;
 }
 
+int lerVertice(VerticeList *v, char *geocode){
+    int i = 0, vertice;
+    char aux[MAX_GEOCODE];
+
+
+    if (v == NULL){
+        printf("De momento nao existe nenhuma localizaçao adicionada.\n");
+        return 0;
+    }
+        
+    printGrafoNomes(v);
+    do{
+        if (i == 0)
+            printf("Indique a localizaçao do meio: ");
+        else
+            printf("Indique uma localizaçao valida: ");
+        scanf("%d", &vertice);
+        i++;
+    }while(geocodePorVertice(v, vertice, aux) != 1);
+    
+    strcpy(geocode, aux);
+    return 1;
+}
+
 
 int existeVertice(VerticeList *v, int idvertice){
     if (v == NULL)
@@ -148,6 +172,7 @@ int numVertices(VerticeList  *v){
     return i;
 }
 
+// Retorna o geocode do vertice ao qual corresponde o id
 int geocodePorVertice(VerticeList  *v, int vertice, char *geocode){
     if(v == NULL)
         return 0;
@@ -161,6 +186,37 @@ int geocodePorVertice(VerticeList  *v, int vertice, char *geocode){
 
     return 0;
 }
+
+// Retorna o id do vertice ao qual corresponde o geocode
+int verticePorGeocode(VerticeList  *v, int *vertice, char geocode[]){
+    if(v == NULL)
+        return 0;
+
+    while(v != NULL){
+        if (strcmp(geocode, v->geocode) == 0){
+            *vertice = v->vertice;
+            return 1;
+        }
+        v = v->next;
+    }
+
+    return 0;
+}
+
+int auxprinthistorico(VerticeList *v, char geocode[]){
+    if(v == NULL)
+        return -1;
+
+    while(v != NULL){
+        if (strcmp(geocode, v->geocode) == 0){
+            return v->vertice;
+        }
+        v = v->next;
+    }
+
+    return -1;
+}
+
 
 // Determinar se vértice 'id' já foi visitado
 int visitado(int sequencia[],int pos, int id){

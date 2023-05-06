@@ -113,6 +113,19 @@ char* localatual(Meio* inicio, int codigo){
     return inicio->geocode;
 }
 
+int atuallizarLocalizacao(Meio* inicio, VerticeList *v, int codigo, char novolocal[]){
+
+    if (inicio == NULL)
+        return 0;
+    
+    while(inicio->codigo != codigo){
+        inicio = inicio->next;
+    }
+    
+    strcpy(inicio->geocode, novolocal);
+    return 1;
+}
+
 /**
  * @brief Funçao verifica o numero de meios livres
  * 
@@ -135,6 +148,24 @@ int NumMeiosLivres(Meio* inicio){
     return count;
 }
 
+
+int NumMeiosSemLocalizacao(Meio* inicio){
+    int count = 0;
+
+    if (!inicio)
+        return 0;
+
+    while (inicio != NULL){
+        if(inicio->idaluger == 0 && strcmp(inicio->geocode, "") == 0){
+            count ++;
+        }
+        inicio = inicio->next;
+    }
+    
+    return count;
+}
+
+
 /**
  * @brief Funçao que verifica se um meio esta livre
  * 
@@ -154,6 +185,21 @@ int meioLivre(Meio* inicio, int codigo){
     }
         
     return meioLivre(inicio->next, codigo);
+}
+
+
+int meioSemLocalizacao(Meio* inicio, int codigo){
+    if (!inicio)
+        return 0;
+
+    if (inicio->codigo == codigo){
+        if (inicio->idaluger == 0 && strcmp(inicio->geocode, "") == 0)
+            return 1;
+        else 
+            return 0;
+    }
+        
+    return meioSemLocalizacao(inicio->next, codigo);
 }
 
 
@@ -188,7 +234,7 @@ int meioAlugado(Meio* inicio, int codigo, int idCliente){
  * @param i contador da funçao
  * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
  */
-int listarMeios(Meio* inicio, int i){
+int listarMeios(Meio* inicio, VerticeList *v, int i){
 
     if (!inicio){
         printf(" -------------------------------------------------------------------\n");
@@ -196,17 +242,22 @@ int listarMeios(Meio* inicio, int i){
     }
         
 
-    
     if (i == 0){
         printf(" -------------------------------------------------------------------\n");
-        printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |  Local(Km)  |\n");
+        printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min)  |  Local  |\n");
         printf("|-------------------------------------------------------------------|\n");
     }
-    printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia
+    if(auxprinthistorico(v, inicio->geocode) == -1){
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |---------------|\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia
     , inicio->custo);
+    }else{
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-15s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia
+    , inicio->custo, NOME_PONTOS[auxprinthistorico(v, inicio->geocode)]);
+    }
+    
     
 
-    listarMeios(inicio->next, ++i);
+    listarMeios(inicio->next, v, ++i);
 }
 
 
@@ -236,6 +287,28 @@ int listarMeiosLivres(Meio* inicio, int i){
     }
     
     listarMeiosLivres(inicio->next, i);
+}
+
+
+int listarMeiosSemLocalizacao(Meio* inicio, int i){
+    if (!inicio){
+        printf(" -------------------------------------------------------------------\n");
+        return 0;
+    }
+        
+
+    if ((inicio->idaluger == 0) && (strcmp(inicio->geocode,"") == 0)){
+        if (i == 0){
+            printf(" -------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min)  |  Local  |\n");
+            printf("|-------------------------------------------------------------------|\n");
+        }
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |---------------|\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia
+    , inicio->custo);
+        i++;
+    }
+    
+    listarMeiosSemLocalizacao(inicio->next, i);
 }
 
 
@@ -479,7 +552,7 @@ void readMeios(Meio **inicio){
             strcpy(geocode, campo7);
             geocode[strlen(geocode) - 1] = '\0';
 
-            inserirMeio(&(*inicio), cod, tipo, bat, aut, bat, idaluguer, geocode);
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, idaluguer, geocode);
 		}
 		fclose(fp);
 	}
@@ -501,7 +574,7 @@ void guardarMeios(Meio* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%f;%f;%d;%s;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode);
+        fprintf(fp,"%d;%d;%.2f;%.2f;%d;%s;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode);
         inicio = inicio->next;
         }
 

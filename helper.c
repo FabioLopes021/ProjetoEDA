@@ -109,11 +109,12 @@ int menucGestores(){
         printf("| 9 - Consultar dados conta    |\n");
         printf("| 10 - Imprimir lista clientes |\n");
         printf("| 11 - Imprimir lista Meios    |\n");
+        printf("| 12 - Inicializar loc meios   |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 11);
+    }while(opc < 0 || opc > 12);
 
     return opc;
 }

@@ -28,20 +28,27 @@ int existeMeio(Meio* inicio, int codigo);
 
 char* localatual(Meio* inicio, int codigo);
 
-// Retorna o Numerode leios livres
+// Retorna o Numero de leios livres
 int NumMeiosLivres(Meio* inicio);
+
+// Retorna o Numero de leios sem localizaçao
+int NumMeiosSemLocalizacao(Meio* inicio);
 
 // Verifica se um meio esta livre ou alugado
 int meioLivre(Meio* inicio, int codigo);
+
+int meioSemLocalizacao(Meio* inicio, int codigo);
 
 // Verifica se um meio esta alugado a um determinado Cliente
 int meioAlugado(Meio* inicio, int codigo, int idCliente);
 
 // listar na consola o conteúdo da lista ligada
-int listarMeios(Meio* inicio, int i);
+int listarMeios(Meio* inicio, VerticeList *v, int i);
 
 // Listar na consola os meios livres
 int listarMeiosLivres(Meio* inicio, int i);
+
+int listarMeiosSemLocalizacao(Meio* inicio, int i);
 
 // listar na consola os meios alugados por um determinado utilizador, retorna ainda o numero de meios alugados pelo mesmo
 int listarMeiosAlugados(Meio* inicio, int idCliente, int i);
