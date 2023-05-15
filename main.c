@@ -44,6 +44,7 @@ int main(){
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
     printGrafo(v);
+    menorCaminho(v,3,0);
     EsperarQuePrimaEnter();
     //Estrutura do programa
     do{

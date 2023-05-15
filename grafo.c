@@ -346,7 +346,7 @@ int* contruirCaminho(AuxCaminho *caminho, int destino){
         atual = caminho[atual].anterior;
         i++;
     }
-
+    printf("%d", atual);
     return aux;
 }
 

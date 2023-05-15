@@ -14,7 +14,7 @@ typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
     float custo;            //custo por km do meio
     int idaluger;           //id do cliente que tem o meio alugado
     struct xMeio *next;     //Next node
-} Meio;                     
+} Meio;
 
 
 // Inserção de um novo registo
