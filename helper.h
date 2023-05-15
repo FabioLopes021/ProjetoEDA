@@ -11,6 +11,8 @@
 #define MIN_NAME 2          //Define o limite Minimo para a alteraçao dos dados de qualquer conta ou meio
 #define MAX_CODE 50         //Define o limite Maximo para o nome do tipo de transporte
 #define MAX_GEOCODE 40
+#define INFINITO 9999999    // Define o "infinito", neste caso um valor muito alto para a inicializaçao do algoritmo de Dijkstra
+
 
 #include "gestores.h"
 #include "clientes.h"

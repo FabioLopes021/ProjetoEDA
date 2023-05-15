@@ -254,6 +254,145 @@ void listarCaminhos(VerticeList *v, int origem, int destino){
   listarCaminhosAux(v,origem,destino,sequencia,0,0);
 }
 
+void inicializararray(AuxCaminho a[], int max){
+
+    for(int i = 0; i < max; i++){
+        a[i].anterior = -1;
+        a[i].menor = INFINITO;
+        a[i].vertice = -1;
+        a[i].visitado = 0;
+    }
+}
+
+
+int adicionaPesos(VerticeList *v, AuxCaminho *caminho, int vertice, int numvertices, float peso){
+    Adjacente *aux;
+    int count = 0;
+
+    if ( v == NULL)
+        return 0;
+    
+    while( v != NULL && v->vertice != vertice)
+        v = v->next;
+
+    aux = v->adj;
+
+    while(aux != NULL){
+        if ((peso + aux->peso) < caminho[aux->vertice].menor){
+            caminho[aux->vertice].menor = peso + aux->peso;
+            caminho[aux->vertice].anterior = vertice;
+            count++;
+        }
+
+        aux = aux->next;
+    }
+    
+    if(count == 0)
+        return 0;
+    else
+        return 1;
+}
+
+int escolherProximo(AuxCaminho *caminho, int numVertices, int atual,  int *anterior, float *peso){
+    int aux = INFINITO, vertice = -1,s = 0;
+
+    for(int i = 0; i < numVertices; i++){
+        if ((caminho[i].menor < aux) && (caminho[i].visitado != 1)){
+            aux = caminho[i].menor;
+            vertice = i;
+            s = 0;
+        }else{
+            if((caminho[i].menor <= aux) && (atual != caminho[i].anterior) && (caminho[i].visitado != 1)){
+                vertice = i;
+                
+                s = 1;
+            }
+        }
+    }
+
+    
+    if (s == 0){
+        *anterior = caminho[vertice].anterior;
+    }
+    
+    *peso = aux;
+    return vertice;
+}
+
+
+int numVerticesViagem(AuxCaminho *caminho, int destino){
+    int i = 0, atual = destino;
+
+    while(caminho[atual].anterior != -2){
+        atual = caminho[atual].anterior;
+        i++;
+    }
+
+    return i;
+}
+
+int* contruirCaminho(AuxCaminho *caminho, int destino){
+    int numLocais, atual = destino, *aux, i = 0;
+
+    numLocais = numVerticesViagem(caminho, destino);
+
+    aux = malloc(sizeof(int) * numLocais);
+
+    printf("Teste caminho mais curto fabio:\n");
+    printf("caminho: ");
+    while(caminho[atual].anterior != -2){
+        aux[i] = atual;
+        printf("%d-", atual);
+        atual = caminho[atual].anterior;
+        i++;
+    }
+
+    return aux;
+}
+
+
+int menorCaminho(VerticeList *v, int origem, int destino){
+    AuxCaminho *a = NULL;
+    int aux, i = 0, atual, anterior, ver = 1, *ret = NULL;
+    float peso = 0;
+
+    if (v == NULL)
+        return 0;
+    
+    aux = numVertices(v);
+    a = malloc(sizeof(AuxCaminho) * aux);
+
+    for(int j = 0; j < aux; j++){
+        a[j].anterior = -1;
+        a[j].menor = INFINITO;
+        a[j].vertice = j;
+        a[j].visitado = 0;
+    }
+
+    a[origem].visitado = 1;
+    a[origem].anterior = -2;
+    a[origem].menor = 0;
+
+    atual = origem;
+    while( atual != destino && atual != -1){
+        ver = adicionaPesos(v, a, atual, aux, peso);
+        anterior = atual;
+        atual = escolherProximo(a, aux, atual, &anterior, &peso);
+        a[atual].anterior = anterior;
+        a[atual].visitado = 1;
+    }
+
+    /*
+    if (ver == 0){
+        free(a);
+        return 0;
+    }
+    */
+    ret = contruirCaminho(a, destino);
+    printf("\nPeso total: %.2f", peso);
+    return 1;
+}
+
 
 void readGrafo(VerticeList** v){
     FILE* fp;

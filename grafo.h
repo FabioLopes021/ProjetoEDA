@@ -19,6 +19,11 @@ typedef struct xVertices{
     struct xVertices *next;
 } VerticeList;
 
+typedef struct xAuxCaminho{
+    int vertice, visitado, anterior;
+    float menor;
+} AuxCaminho;
+
 
 const char* NOME_PONTOS[] = { "Campo da Feira","A minha farmacia","Estatua do Bombeiro", "Pingo Doce", "Mercadona", "Digibarcelos", "Retail Parque"
 , "Mc Donalds's", "Alcaides de Faria" };
@@ -46,6 +51,18 @@ int visitado(int sequencia[],int pos, int id);
 void listarCaminhosAux(VerticeList *v, int origem, int destino, int sequencia[], int posicao, int pesoTotal);
 
 void listarCaminhos(VerticeList *v, int origem, int destino);
+
+void inicializararray(AuxCaminho a[], int max);
+
+int adicionaPesos(VerticeList *v, AuxCaminho *caminho, int vertice, int numvertices, float peso);
+
+int escolherProximo(AuxCaminho *caminho, int numVertices, int atual,  int *anterior, float *peso);
+
+int numVerticesViagem(AuxCaminho *caminho, int destino);
+
+int* contruirCaminho(AuxCaminho *caminho, int destino);
+
+int menorCaminho(VerticeList *v, int origem, int destino);
 
 void readGrafo(VerticeList** v);
 
