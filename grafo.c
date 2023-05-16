@@ -304,7 +304,6 @@ int escolherProximo(AuxCaminho *caminho, int numVertices, int atual,  int *anter
         }else{
             if((caminho[i].menor <= aux) && (atual != caminho[i].anterior) && (caminho[i].visitado != 1)){
                 vertice = i;
-                
                 s = 1;
             }
         }
@@ -382,12 +381,12 @@ int menorCaminho(VerticeList *v, int origem, int destino){
         a[atual].visitado = 1;
     }
 
-    /*
+    
     if (ver == 0){
         free(a);
         return 0;
     }
-    */
+
     ret = contruirCaminho(a, destino);
     printf("\nPeso total: %.2f", peso);
     return 1;

@@ -517,6 +517,21 @@ float custoMeio(Meio *inicio, int id){
     return 0;
 }
 
+
+/* float CalculoAutonomia(Meio *inicio, int id){
+    float calc;
+
+    if (!inicio)
+        return 0;
+
+    while(inicio->codigo != id){
+            inicio = inicio->next;
+    }
+
+    calc = inicio->bateria * ;
+} */
+
+
 /**
  * @brief Funçao para carregar os Meios e os seus dados do ficheiro 
  * 
