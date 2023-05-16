@@ -10,7 +10,7 @@ typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
     char tipo[MAX_CODE];    //Nome do tipo de transporte
     int bateria;            //Percentagem de Bateria do meio
     char geocode[MAX_GEOCODE];            //Codigo que permite saber a localizaçao do meio
-    float autonomia;        //Autonomia do meio
+    float autonomia, autonomiaMax;        //Autonomia do meio
     float custo;            //custo por km do meio
     int idaluger;           //id do cliente que tem o meio alugado
     struct xMeio *next;     //Next node
@@ -18,10 +18,16 @@ typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
 
 
 // Inserção de um novo registo
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo, int idaluguer,char geocode[]); 
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[]); 
 
 // Funçao para ler os dados do cliente e de seguida envia-los a funçao "inserirMeio"
 void lerDadosMeio(Meio** inicio, VerticeList *v);
+
+//
+int AtualizarBateria(Meio *inicio, int id , float distPrec);
+
+//
+float CalculoBateria(float autonomiaMax, float autonomia );
 
 // Determinar existência do 'codigo' na lista ligada 'inicio'
 int existeMeio(Meio* inicio, int codigo); 
