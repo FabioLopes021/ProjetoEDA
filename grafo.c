@@ -350,13 +350,13 @@ int* contruirCaminho(AuxCaminho *caminho, int destino){
 }
 
 
-int menorCaminho(VerticeList *v, int origem, int destino){
+float menorCaminho(VerticeList *v, int origem, int destino){
     AuxCaminho *a = NULL;
     int aux, i = 0, atual, anterior, ver = 1, *ret = NULL;
     float peso = 0;
 
     if (v == NULL)
-        return 0;
+        return -1;
     
     aux = numVertices(v);
     a = malloc(sizeof(AuxCaminho) * aux);
@@ -381,15 +381,11 @@ int menorCaminho(VerticeList *v, int origem, int destino){
         a[atual].visitado = 1;
     }
 
-    
-    if (ver == 0){
-        free(a);
-        return 0;
-    }
+    ret = contruirCaminho(a,destino);
 
-    ret = contruirCaminho(a, destino);
-    printf("\nPeso total: %.2f", peso);
-    return 1;
+    free(a);
+
+    return peso;
 }
 
 

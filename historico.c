@@ -114,6 +114,22 @@ double calculoCustoTotal(Historico *entrada, int ide){
     return min * entrada->Custo;
 }
 
+
+float calculoDist(Historico *entrada, VerticeList *v, int ide){
+    int inicial, final;
+
+    if (entrada == NULL)
+        return -1;
+
+    while(entrada != NULL && entrada->id != ide)
+        entrada = entrada->next;
+
+    verticePorGeocode(v, &inicial, entrada->localinicial);
+    verticePorGeocode(v, &final, entrada->localfinal);
+
+    return menorCaminho(v, inicial, final);
+}
+
 int idEntrada(Historico *entrada, int idm){
     if(!entrada)
         return 0;

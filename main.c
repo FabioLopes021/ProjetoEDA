@@ -25,7 +25,7 @@ int main(){
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD], locfinal[MAX_GEOCODE], locinicializacao[MAX_GEOCODE];
-    float saldo, autonomia, custo, custoh;
+    float saldo, autonomia, custo, custoh, testeteste;
 
 
     //Carregar dados dos ficheiros txt
@@ -44,7 +44,8 @@ int main(){
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
     printGrafo(v);
-    menorCaminho(v,3,0);
+    testeteste = menorCaminho(v,0,5);
+    printf("\n\nteste de distancia: %.2f\n\n", testeteste);
     EsperarQuePrimaEnter();
     //Estrutura do programa
     do{
@@ -118,6 +119,8 @@ int main(){
                                             inserirHistoricoFinal(p, ident, locfinal);
                                             terminarAluguer(h,id);
                                             pagamento(loginc, calculoCustoTotal(p, ident));
+                                            AtualizarBateria(h, id, calculoDist( p, v, ident));
+                                            AtualizarAutonomia(h, id,calculoDist( p, v, ident));
                                             if (aux == 1){
                                                 atuallizarLocalizacao(h, v, id, locfinal);
                                                 printf("Aluguer terminado com sucesso.\n");

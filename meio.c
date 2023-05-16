@@ -85,9 +85,21 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
         printf("De momento nao existe nenhuma localizaçao adicionada, o meio ira ser registado sem localizaçao.\n");
     }
     
-    inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, 0, geocode);
+    inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, 0, geocode);
 }
 
+
+int AtualizarAutonomia(Meio *inicio, int id , float distPrec){
+    if(!inicio)
+        return 0;
+
+    while(inicio->codigo != id)
+        inicio = inicio->next;
+    
+    inicio->autonomia -= distPrec;
+
+    return 1; 
+}
 
 int AtualizarBateria(Meio *inicio, int id , float distPrec){
     if(!inicio)
@@ -104,7 +116,7 @@ int AtualizarBateria(Meio *inicio, int id , float distPrec){
 
 float CalculoBateria(float autonomiaMax, float autonomia ){
     
-    return 100 * autonomiaMax / autonomia; 
+    return 100 * autonomia / autonomiaMax; 
 }
 
 /**
@@ -484,7 +496,6 @@ void alterarAutonomia(Meio *inicio, float aut, int id){
 }
 
 
-
 /**
  * @brief Funçao para alterar o custo do meio
  * 
@@ -539,20 +550,6 @@ float custoMeio(Meio *inicio, int id){
 }
 
 
-/* float CalculoAutonomia(Meio *inicio, int id){
-    float calc;
-
-    if (!inicio)
-        return 0;
-
-    while(inicio->codigo != id){
-            inicio = inicio->next;
-    }
-
-    calc = inicio->bateria * ;
-} */
-
-
 /**
  * @brief Funçao para carregar os Meios e os seus dados do ficheiro 
  * 
@@ -561,10 +558,10 @@ float custoMeio(Meio *inicio, int id){
 void readMeios(Meio **inicio){
     FILE* fp;
     int cod, bat,idaluguer;
-    float aut, custo;
+    float aut, autMax, custo;
     char tipo[MAX_CODE], geocode[MAX_GEOCODE];
     char line[1024];
-	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7;
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7, * campo8;
 
     fp = fopen("meios.txt","r");
 
@@ -578,17 +575,19 @@ void readMeios(Meio **inicio){
 			campo5 = strtok(NULL, ";");
 			campo6 = strtok(NULL, ";");
 			campo7 = strtok(NULL, ";");
+			campo8 = strtok(NULL, ";");
 
 			cod = atoi(campo1);
 			bat = atoi(campo2);
 			aut = atof(campo3);
-			custo = atof(campo4);
-            idaluguer = atoi(campo5);
-            strcpy(tipo, campo6);
-            strcpy(geocode, campo7);
+			autMax = atof(campo4);
+			custo = atof(campo5);
+            idaluguer = atoi(campo6);
+            strcpy(tipo, campo7);
+            strcpy(geocode, campo8);
             geocode[strlen(geocode) - 1] = '\0';
 
-            inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, idaluguer, geocode);
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, idaluguer, geocode);
 		}
 		fclose(fp);
 	}

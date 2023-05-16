@@ -22,6 +22,7 @@ int inserirHistoricoFinal(Historico* inicio, int ide, char localfinal[]);
 Historico *removerHistorico(Historico **inicio, int id, int i);
 int existeHistorico(Historico* inicio, int id);
 double calculoCustoTotal(Historico *entrada, int ide);
+float calculoDist(Historico *entrada, VerticeList *v, int ide);
 int idEntrada(Historico *entrada, int idm);
 int generateidHistorico(Historico *inicio);
 int imprimirHistorico(Historico *inicio,VerticeList *v);

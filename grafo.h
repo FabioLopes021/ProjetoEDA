@@ -62,7 +62,7 @@ int numVerticesViagem(AuxCaminho *caminho, int destino);
 
 int* contruirCaminho(AuxCaminho *caminho, int destino);
 
-int menorCaminho(VerticeList *v, int origem, int destino);
+float menorCaminho(VerticeList *v, int origem, int destino);
 
 void readGrafo(VerticeList** v);
 
