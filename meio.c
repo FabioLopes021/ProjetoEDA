@@ -15,7 +15,7 @@
  * @param aut Autonomia do meio a ser inserido
  * @param custo Custo por Km do meio a ser inserido
  */
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float custo, int idaluguer, char geocode[]){
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[]){
     Meio *new;
     
     new = (Meio *) malloc(sizeof(Meio));
@@ -24,6 +24,7 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
     strcpy(new->tipo, tipo);
     new->bateria = bat;
     new->autonomia = aut;
+    new->autonomiaMax = autMax;
     new->custo = custo;
     new->idaluger = idaluguer;
     strcpy(new->geocode, geocode);
@@ -42,7 +43,7 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
     char tipo[MAX_NAME];
     char geocode[MAX_GEOCODE];
     int cod = 0,i = 0, bat, vertice, ver, teste;
-    float aut, custo;
+    float aut, custo, autMax;
 
     strcpy(geocode, "");
     clearbuffer();
@@ -55,11 +56,13 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
 
     cod = genereateCodigo(*inicio);
 
-    printf("Indique a bateria do meio: ");
-    scanf("%d", &bat);
+    printf("Indique a autonomia maxima do meio: ");
+    scanf("%f", &autMax);
 
-    printf("Indique a autonomia do meio: ");
+    printf("Indique a autonomia atual do meio: ");
     scanf("%f", &aut);
+
+    bat = CalculoBateria(autMax, aut);
 
     printf("Indique o custo por km do meio: ");
     scanf("%f", &custo);
@@ -85,6 +88,24 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
     inserirMeio(&(*inicio), cod, tipo, bat, aut, custo, 0, geocode);
 }
 
+
+int AtualizarBateria(Meio *inicio, int id , float distPrec){
+    if(!inicio)
+        return 0;
+
+    while(inicio->codigo != id)
+        inicio = inicio->next;
+    
+    inicio->bateria = CalculoBateria(inicio->autonomiaMax, inicio->autonomia - distPrec);
+
+    return 1; 
+}
+
+
+float CalculoBateria(float autonomiaMax, float autonomia ){
+    
+    return 100 * autonomiaMax / autonomia; 
+}
 
 /**
  * @brief Funçao que verifica se um determinado Meio existe
@@ -574,7 +595,7 @@ void guardarMeios(Meio* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%.2f;%.2f;%d;%s;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode);
+        fprintf(fp,"%d;%d;%.2f;%.2f;%.2f;%d;%s;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->autonomiaMax, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode);
         inicio = inicio->next;
         }
 
@@ -629,7 +650,7 @@ void lerMeioBin(Meio **inicio){
 
        while (fread(new, sizeof(Meio), 1, fp) == 1) {
             if(new != NULL){
-                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->custo, new->idaluger, new->geocode);
+                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->autonomiaMax, new->custo, new->idaluger, new->geocode);
             }
         }
         free(new);
@@ -640,6 +661,8 @@ void lerMeioBin(Meio **inicio){
         printf("Erro ao abrir ficheiro binario\n");
     }
 }
+
+
 
 /**
  * @brief Funçao que ordena a lista ligada dos Meios por ordem decrescente de autonomia
