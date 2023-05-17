@@ -83,6 +83,29 @@ int lerVertice(VerticeList *v, char *geocode){
     return 1;
 }
 
+int lerVerticePessoa(VerticeList *v){
+    int i = 0, vertice;
+    char aux[MAX_GEOCODE];
+
+
+    if (v == NULL){
+        printf("De momento nao existe nenhuma localizaçao adicionada.\n");
+        return -1;
+    }
+        
+    printGrafoNomes(v);
+    do{
+        if (i == 0)
+            printf("Indique a localizaçao do meio: ");
+        else
+            printf("Indique uma localizaçao valida: ");
+        scanf("%d", &vertice);
+        i++;
+    }while(geocodePorVertice(v, vertice, aux) != 1);
+    
+
+    return vertice;
+}
 
 int existeVertice(VerticeList *v, int idvertice){
     if (v == NULL)
@@ -176,6 +199,7 @@ int numVertices(VerticeList  *v){
 int geocodePorVertice(VerticeList  *v, int vertice, char *geocode){
     if(v == NULL)
         return 0;
+
     while(v != NULL){
         if (v->vertice == vertice){
             strcpy(geocode, v->geocode);

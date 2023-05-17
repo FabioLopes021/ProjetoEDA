@@ -68,7 +68,7 @@ void readGrafo(VerticeList** v);
 
 void guardarGrafo(VerticeList* v);
 
-
+int lerVerticePessoa(VerticeList *v);
 
 
 
