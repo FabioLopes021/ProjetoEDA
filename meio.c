@@ -476,7 +476,6 @@ void alterarBateria(Meio *inicio, int bat, int id){
     if (bat > 0 && bat < 100){
         inicio->bateria = bat;
     }
-
 }
 
 
