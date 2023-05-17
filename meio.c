@@ -374,6 +374,47 @@ int listarMeiosAlugados(Meio* inicio, int idCliente, int i){
 }
 
 
+int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
+    int aux, *a, i, vertice;
+
+    if (!inicio)
+        return 0;
+        
+    aux = numVertices(v);
+
+    a = malloc(sizeof(float)*aux);
+
+    for(i = 0; i < aux; i++){
+        a[i] = -1;
+    }
+
+    for(i = 0; i < aux; i++){
+        if(i != origem)
+            a[i] = menorCaminho(v, origem, i);
+        else
+            a[i] = 0;
+    }
+
+    i = 0;
+
+    while( inicio != NULL){
+        if(i== 0){
+            printf(" -------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min)  |  Local  |\n");
+            printf("|-------------------------------------------------------------------|\n");
+        }
+        verticePorGeocode(v,&vertice, inicio->geocode);
+        if( a[vertice] < raio && a[vertice] != -1)
+            printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+        inicio = inicio->next;
+        i++;
+    }
+
+    free(a);
+    return 1;
+}
+
+
 /**
  * @brief Funçao para remover um determinado Meio
  * 

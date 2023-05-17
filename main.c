@@ -25,7 +25,7 @@ int main(){
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD], locfinal[MAX_GEOCODE], locinicializacao[MAX_GEOCODE];
-    float saldo, autonomia, custo, custoh, testeteste;
+    float saldo, autonomia, custo, custoh;
 
 
     //Carregar dados dos ficheiros txt
@@ -37,15 +37,13 @@ int main(){
     
 
     //Carregar dados dos ficheiros bin
-    //lerMeioBin(&h);
+    //lerMeioBin(&h)
     lerGestoresBin(&g);
     lerCLientesBin(&c);
     //lerHistoricoBin(&p);
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
     printGrafo(v);
-    testeteste = menorCaminho(v,0,5);
-    printf("\n\nteste de distancia: %.2f\n\n", testeteste);
     EsperarQuePrimaEnter();
     //Estrutura do programa
     do{
@@ -193,6 +191,21 @@ int main(){
                                         break;
                                     case 7:
                                         imprimirHistoricoCliente(p, v, loginc->id);
+                                        EsperarQuePrimaEnter();
+                                        break;
+                                    case 8:
+                                        if(NumMeiosLivres(h) != 0){
+                                            aux = lerVerticePessoa(v);
+                                            if(aux != -1){
+                                                float raio;
+                                                printf("Indique o raio em que deseja procurar: ");
+                                                scanf("%f", &raio);
+                                                listarMeiosRaio(h,v,aux,raio);
+                                            }
+                                        }else{
+                                            printf("Nao existem meios disponiveis");
+                                        }
+                                        aux = 0;
                                         EsperarQuePrimaEnter();
                                         break;
                                     case 0:
