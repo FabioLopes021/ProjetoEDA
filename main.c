@@ -384,7 +384,7 @@ int main(){
                                             EsperarQuePrimaEnter();
                                             id = 0;
                                         }else{
-                                            printf("Nao existem meios disponiveis\n");
+                                            printf("Nao existem meios sem localizaçao\n");
                                             EsperarQuePrimaEnter();
                                         }
                                         break;

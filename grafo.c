@@ -93,7 +93,7 @@ int lerVerticePessoa(VerticeList *v){
         return -1;
     }
         
-    printGrafoNomes(v);
+    printVertices(v);
     do{
         if (i == 0)
             printf("Indique a localizaçao do meio: ");
@@ -142,6 +142,20 @@ int printGrafo(VerticeList *v){
     return 1;
 }
 
+int printVertices(VerticeList *v){
+
+    if(v == NULL)
+        return 0;
+
+    printf("-----------Grafo-------------\n");
+    while(v != NULL){
+        printf("Vertice %d: %s\n", v->vertice, NOME_PONTOS[v->vertice]);
+        v = v->next;
+    }
+    printf("-----------------------------\n");
+
+    return 1;
+}
 
 int printGrafoNomes(VerticeList *v){
 
@@ -405,7 +419,7 @@ float menorCaminho(VerticeList *v, int origem, int destino){
         a[atual].visitado = 1;
     }
 
-    ret = contruirCaminho(a,destino);
+    //ret = contruirCaminho(a,destino);
 
     free(a);
 

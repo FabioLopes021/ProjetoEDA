@@ -375,7 +375,9 @@ int listarMeiosAlugados(Meio* inicio, int idCliente, int i){
 
 
 int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
-    int aux, *a, i, vertice;
+    int aux, *a, i, j = 0, vertice;
+    float  aux1 = INFINITO;
+    Meio *lista = inicio;
 
     if (!inicio)
         return 0;
@@ -396,19 +398,32 @@ int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
     }
 
     i = 0;
+    while(lista != NULL){
+        verticePorGeocode(v,&vertice, lista->geocode);
+        if(a[vertice] <= raio && a[vertice] != -1)
+            j++;
+        if(a[vertice] < aux1)
+            aux1 = a[vertice];
+        lista = lista->next;
+    }
 
-    while( inicio != NULL){
+    if( j > 0){
+        while( inicio != NULL){
         if(i== 0){
             printf(" -------------------------------------------------------------------\n");
             printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min)  |  Local  |\n");
             printf("|-------------------------------------------------------------------|\n");
         }
         verticePorGeocode(v,&vertice, inicio->geocode);
-        if( a[vertice] < raio && a[vertice] != -1)
+        if( a[vertice] <= raio && a[vertice] != -1)
             printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
         inicio = inicio->next;
         i++;
+        }
+    }else{
+        printf("De momento nao existem meios no raio indicado, o meio mais proximo esta a %.2f m\n", aux1);
     }
+    
 
     free(a);
     return 1;
