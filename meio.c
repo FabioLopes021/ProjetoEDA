@@ -301,25 +301,26 @@ int listarMeios(Meio* inicio, VerticeList *v, int i){
  * @param i contador da funçao 
  * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
  */
-int listarMeiosLivres(Meio* inicio, int i){
+int listarMeiosLivres(Meio* inicio, VerticeList *v, int i){
 
     if (!inicio){
-        printf(" -------------------------------------------------------------------\n");
+        printf(" -------------------------------------------------------------------------------------------------\n");
         return 0;
     }
         
 
     if ((inicio->idaluger == 0) && (strcmp(inicio->geocode,"") != 0)){
         if (i == 0){
-            printf(" -------------------------------------------------------------------\n");
-            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
-            printf("|-------------------------------------------------------------------|\n");
+            printf(" -------------------------------------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min) |             Local           |\n");
+            printf("|-------------------------------------------------------------------------------------------------|\n");
         }
-        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
+        NOME_PONTOS[auxPrintMeios(v,inicio)]);
         i++;
     }
     
-    listarMeiosLivres(inicio->next, i);
+    listarMeiosLivres(inicio->next, v, i);
 }
 
 
@@ -353,24 +354,40 @@ int listarMeiosSemLocalizacao(Meio* inicio, int i){
  * @param i contador da funçao 
  * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
  */
-int listarMeiosAlugados(Meio* inicio, int idCliente, int i){
+int listarMeiosAlugados(Meio* inicio, VerticeList *v, int idCliente, int i){
 
     if (!inicio){
-        printf(" -------------------------------------------------------------------\n");
+        printf(" -------------------------------------------------------------------------------------------------\n");
         return i;
     }
         
     if(inicio->idaluger == idCliente){
         if (i == 0){
-            printf(" -------------------------------------------------------------------\n");
-            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(Km)  |\n");
-            printf("|-------------------------------------------------------------------|\n");
+            printf(" -------------------------------------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min) |             Local           |\n");
+            printf("|-------------------------------------------------------------------------------------------------|\n");
         }
-        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
+        NOME_PONTOS[auxPrintMeios(v,inicio)]);
         i++;
     }
     
-    listarMeiosAlugados(inicio->next, idCliente, i);
+    listarMeiosAlugados(inicio->next,v , idCliente, i);
+}
+
+int auxPrintMeios(VerticeList *v, Meio * inicio){
+    if(v == NULL)
+        return -1;
+
+
+    while(v != NULL){
+        if (strcmp(v->geocode, inicio->geocode) == 0){
+            return v->vertice;
+        }
+        v = v->next;
+    }
+
+    return -1;
 }
 
 
@@ -410,16 +427,18 @@ int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
     if( j > 0){
         while( inicio != NULL){
         if(i== 0){
-            printf(" -------------------------------------------------------------------\n");
-            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min)  |  Local  |\n");
-            printf("|-------------------------------------------------------------------|\n");
+            printf(" -------------------------------------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min) |             Local           |\n");
+            printf("|-------------------------------------------------------------------------------------------------|\n");
         }
         verticePorGeocode(v,&vertice, inicio->geocode);
         if( a[vertice] <= raio && a[vertice] != -1)
-            printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo);
+            printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
+            NOME_PONTOS[auxPrintMeios(v,inicio)]);
         inicio = inicio->next;
         i++;
         }
+        printf(" -------------------------------------------------------------------------------------------------\n");
     }else{
         printf("De momento nao existem meios no raio indicado, o meio mais proximo esta a %.2f m\n", aux1);
     }

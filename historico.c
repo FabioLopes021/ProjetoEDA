@@ -238,55 +238,33 @@ int numEntradasCliente(Historico *inicio, int id){
 
 void readHistorico(Historico **inicio){
     FILE* fp;
-    time_t t = time(NULL);
     int id, idc, idm;
     float custo;
     double custofinal;
-    char teste[20];
+    char teste[50];
     struct tm start;
     struct tm end;
     char line[1024], localinicial[MAX_GEOCODE], localfinal[MAX_GEOCODE];
-	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7;
-    char *campoi1, *campoi2, *campoi3, *campoi4, *campoi5, *campoi6, *campoi7, *campoi8, *campoi9, *campoi10;// *campoi11; 
-    char *campof1, *campof2, *campof3, *campof4, *campof5, *campof6, *campof7, *campof8, *campof9, *campof10;// *campof11; 
-    start = *localtime(&t);
-    end = *localtime(&t);
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7, *campo8, *campo9, *aux = NULL;
+    time_t tempoinic, tempofinal;
     
     fp = fopen("hist.txt","r");
+    //fp = fopen("teste.txt","r");
+
 
     if (fp != NULL) {
 		while (fgets(line, sizeof(line), fp)) {
 
-			campo1 = strtok(line, ";");
+            campo1 = strtok(line, ";");
 			campo2 = strtok(NULL, ";");
 			campo3 = strtok(NULL, ";");
 			campo4 = strtok(NULL, ";");
 			campo5 = strtok(NULL, ";");
 			campo6 = strtok(NULL, ";");
 			campo7 = strtok(NULL, ";");
-			campoi1 = strtok(NULL, ";");
-			campoi2 = strtok(NULL, ";");
-			campoi3 = strtok(NULL, ";");
-			campoi4 = strtok(NULL, ";");
-			campoi5 = strtok(NULL, ";");
-			campoi6 = strtok(NULL, ";");
-			campoi7 = strtok(NULL, ";");
-			campoi8 = strtok(NULL, ";");
-			campoi9 = strtok(NULL, ";");
-			campoi10 = strtok(NULL, ";");
-			//campoi11 = strtok(NULL, ";");
-            campof1 = strtok(NULL, ";");
-			campof2 = strtok(NULL, ";");
-			campof3 = strtok(NULL, ";");
-			campof4 = strtok(NULL, ";");
-			campof5 = strtok(NULL, ";");
-			campof6 = strtok(NULL, ";");
-			campof7 = strtok(NULL, ";");
-			campof8 = strtok(NULL, ";");
-			campof9 = strtok(NULL, ";");
-			campof10 = strtok(NULL, ";");
-			//campof11 = strtok(NULL, ";");
-            
+			campo8 = strtok(NULL, ";");
+			campo9 = strtok(NULL, ";");
+
             id = atoi(campo1);
             idc = atoi(campo2);
             idm = atoi(campo3);
@@ -294,28 +272,13 @@ void readHistorico(Historico **inicio){
             custofinal = atof(campo5);
             strcpy(localinicial, campo6);
             strcpy(localfinal, campo7);
-			start.tm_hour = atoi(campoi1); 
-			start.tm_isdst = atoi(campoi2); 
-			start.tm_mday = atoi(campoi3); 
-			start.tm_min = atoi(campoi4); 
-			start.tm_mon = atoi(campoi5); 
-			start.tm_sec = atoi(campoi6); 
-			start.tm_wday = atoi(campoi7); 
-			start.tm_yday = atoi(campoi8); 
-			start.tm_year = atoi(campoi9); 
-			start.tm_gmtoff = atol(campoi10);
+            tempoinic = strtol(campo8,&aux,10);
+            aux = NULL;
+            tempofinal = strtol(campo9,&aux,10);
 
+            start = *localtime(&tempoinic);
+            end = *localtime(&tempofinal);
 
-			end.tm_hour = atoi(campof1); 
-			end.tm_isdst = atoi(campof2); 
-			end.tm_mday = atoi(campof3); 
-			end.tm_min = atoi(campof4); 
-			end.tm_mon = atoi(campof5); 
-			end.tm_sec = atoi(campof6); 
-			end.tm_wday = atoi(campof7); 
-			end.tm_yday = atoi(campof8); 
-			end.tm_year = atoi(campof9); 
-			end.tm_gmtoff = atol(campof10);
 			
             inserirHistorico(&(*inicio), idc, idm, id, custofinal, custo, localinicial, localfinal, start, end);
 		}
@@ -323,7 +286,7 @@ void readHistorico(Historico **inicio){
 	}
 	else {
 		printf("Erro ao abrir o ficheiro");
-	}
+	} 
 
 }
 
@@ -331,21 +294,17 @@ void readHistorico(Historico **inicio){
 
 void guardarHistorico(Historico* inicio){
     FILE* fp;
+    time_t timeinit, fim;
 
     fp = fopen("hist.txt","w");
 
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%d;%.2f;%.2f;%s;%s", inicio->id, inicio->idCliente, inicio->idMeio, inicio->Custo, inicio->custoFinal, inicio->localinicial, inicio->localfinal); 
-        fprintf(fp,";%d;%d;%d;%d;%d;%d;%d;%d;%d;%ld", inicio->inicio.tm_hour, inicio->inicio.tm_isdst, inicio->inicio.tm_mday
-        , inicio->inicio.tm_min, inicio->inicio.tm_mon, inicio->inicio.tm_sec, inicio->inicio.tm_wday, inicio->inicio.tm_yday, inicio->inicio.tm_year,
-         inicio->inicio.tm_gmtoff);
-        //fprintf(fp,"%s;", inicio->inicio.tm_zone);
-        fprintf(fp,";%d;%d;%d;%d;%d;%d;%d;%d;%d;%ld\n", inicio->fim.tm_hour, inicio->fim.tm_isdst, inicio->fim.tm_mday
-        , inicio->fim.tm_min, inicio->fim.tm_mon, inicio->fim.tm_sec, inicio->fim.tm_wday, inicio->fim.tm_yday, inicio->fim.tm_year,
-         inicio->fim.tm_gmtoff);
-        //fprintf(fp,"%s\n", inicio->fim.tm_zone);
+        timeinit = mktime(&(inicio->inicio));
+        fim = mktime(&(inicio->fim));
+        fprintf(fp,"%d;%d;%d;%.2f;%.2f;%s;%s;", inicio->id, inicio->idCliente, inicio->idMeio, inicio->Custo, inicio->custoFinal, inicio->localinicial, inicio->localfinal); 
+        fprintf(fp,"%ld;%ld\n", timeinit, fim);
         inicio = inicio->next;
         }
         

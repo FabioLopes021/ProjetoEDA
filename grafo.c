@@ -256,6 +256,7 @@ int auxprinthistorico(VerticeList *v, char geocode[]){
 }
 
 
+
 // Determinar se vértice 'id' já foi visitado
 int visitado(int sequencia[],int pos, int id){
   int i;

@@ -74,7 +74,7 @@ int main(){
                                         i = 0;
                                         ordenarMeios(&h);
                                         if(NumMeiosLivres(h) != 0){
-                                            listarMeiosLivres(h, 0);
+                                            listarMeiosLivres(h, v, 0);
                                             do{
                                                 if(i == 0)
                                                     printf("\nIndique um codigo para o meio:");
@@ -98,7 +98,7 @@ int main(){
                                         }
                                         break;
                                     case 2:     //Terminar aluguer 
-                                        num = listarMeiosAlugados(h, loginc->id, 0);
+                                        num = listarMeiosAlugados( h, v , loginc->id, 0);
                                         if (num == 0){
                                             printf("\nEste utilizador nao tem meios alugados\n");
                                         }else{

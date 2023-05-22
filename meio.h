@@ -52,12 +52,12 @@ int meioAlugado(Meio* inicio, int codigo, int idCliente);
 int listarMeios(Meio* inicio, VerticeList *v, int i);
 
 // Listar na consola os meios livres
-int listarMeiosLivres(Meio* inicio, int i);
+int listarMeiosLivres(Meio* inicio, VerticeList *v, int i);
 
 int listarMeiosSemLocalizacao(Meio* inicio, int i);
 
 // listar na consola os meios alugados por um determinado utilizador, retorna ainda o numero de meios alugados pelo mesmo
-int listarMeiosAlugados(Meio* inicio, int idCliente, int i);
+int listarMeiosAlugados(Meio* inicio, VerticeList *v, int idCliente, int i);
 
 // Remover um meio a partir do seu código
 Meio *removerMeio(Meio **inicio, int adr, int i);
