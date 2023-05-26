@@ -7,6 +7,7 @@
 
 typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
     int codigo;             //Codigo unico para identificar cada meio
+    int metrosQ;           //Numero de metros quadrados que o meios ocupa (importate para a recolha dos meios)
     char tipo[MAX_CODE];    //Nome do tipo de transporte
     int bateria;            //Percentagem de Bateria do meio
     char geocode[MAX_GEOCODE];            //Codigo que permite saber a localizaçao do meio
@@ -18,7 +19,7 @@ typedef struct xMeio{       //Declaraçao da estrutura de Meios de Transporte
 
 
 // Inserção de um novo registo
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[]); 
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[], int metrosQ); 
 
 // Funçao para ler os dados do cliente e de seguida envia-los a funçao "inserirMeio"
 void lerDadosMeio(Meio** inicio, VerticeList *v);

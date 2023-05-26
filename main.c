@@ -92,7 +92,6 @@ int main(){
                                                 printf("Nao é possivel alugar o meio indicado pois nao tem dinheiro suficiente.");
                                             
                                             id = 0;
-                                        }else{
                                             printf("Nao existem meios disponiveis\n");
                                             EsperarQuePrimaEnter();
                                         }

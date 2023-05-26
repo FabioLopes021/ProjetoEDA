@@ -15,7 +15,7 @@
  * @param aut Autonomia do meio a ser inserido
  * @param custo Custo por Km do meio a ser inserido
  */
-void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[]){
+void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[], int metrosQ){
     Meio *new;
     
     new = (Meio *) malloc(sizeof(Meio));
@@ -27,6 +27,7 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
     new->autonomiaMax = autMax;
     new->custo = custo;
     new->idaluger = idaluguer;
+    new->metrosQ = metrosQ;
     strcpy(new->geocode, geocode);
 
     new->next = (*inicio);
@@ -42,7 +43,7 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
 void lerDadosMeio(Meio** inicio, VerticeList *v){
     char tipo[MAX_NAME];
     char geocode[MAX_GEOCODE];
-    int cod = 0,i = 0, bat, vertice, ver, teste;
+    int cod = 0,i = 0, bat, vertice, ver, teste, metQuad;
     float aut, custo, autMax;
 
     strcpy(geocode, "");
@@ -55,6 +56,9 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
     tipo[strlen(tipo)-1] = '\0';
 
     cod = genereateCodigo(*inicio);
+
+    printf("Indique o numero de metros quadrados que o meio ocupa (inteiro): ");
+    scanf("%d", &metQuad);
 
     printf("Indique a autonomia maxima do meio: ");
     scanf("%f", &autMax);
@@ -85,7 +89,7 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
         printf("De momento nao existe nenhuma localizaçao adicionada, o meio ira ser registado sem localizaçao.\n");
     }
     
-    inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, 0, geocode);
+    inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, 0, geocode, metQuad);
 }
 
 
@@ -315,8 +319,8 @@ int listarMeiosLivres(Meio* inicio, VerticeList *v, int i){
             printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min) |             Local           |\n");
             printf("|-------------------------------------------------------------------------------------------------|\n");
         }
-        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
-        NOME_PONTOS[auxPrintMeios(v,inicio)]);
+        printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  | %d\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
+        NOME_PONTOS[auxPrintMeios(v,inicio)], inicio->metrosQ);
         i++;
     }
     
@@ -631,11 +635,11 @@ float custoMeio(Meio *inicio, int id){
  */
 void readMeios(Meio **inicio){
     FILE* fp;
-    int cod, bat,idaluguer;
+    int cod, bat,idaluguer, metQuad;
     float aut, autMax, custo;
     char tipo[MAX_CODE], geocode[MAX_GEOCODE];
     char line[1024];
-	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7, * campo8;
+	char* campo1, * campo2, * campo3, * campo4, * campo5, * campo6, * campo7, * campo8, * campo9;
 
     fp = fopen("meios.txt","r");
 
@@ -650,6 +654,7 @@ void readMeios(Meio **inicio){
 			campo6 = strtok(NULL, ";");
 			campo7 = strtok(NULL, ";");
 			campo8 = strtok(NULL, ";");
+			campo9 = strtok(NULL, ";");
 
 			cod = atoi(campo1);
 			bat = atoi(campo2);
@@ -659,9 +664,10 @@ void readMeios(Meio **inicio){
             idaluguer = atoi(campo6);
             strcpy(tipo, campo7);
             strcpy(geocode, campo8);
-            geocode[strlen(geocode) - 1] = '\0';
+            metQuad = atoi(campo9);
+            //geocode[strlen(geocode) - 1] = '\0';
 
-            inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, idaluguer, geocode);
+            inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, idaluguer, geocode, metQuad);
 		}
 		fclose(fp);
 	}
@@ -738,7 +744,7 @@ void lerMeioBin(Meio **inicio){
 
        while (fread(new, sizeof(Meio), 1, fp) == 1) {
             if(new != NULL){
-                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->autonomiaMax, new->custo, new->idaluger, new->geocode);
+                inserirMeio(&(*inicio), new->codigo, new->tipo, new->bateria, new->autonomia, new->autonomiaMax, new->custo, new->idaluger, new->geocode, new->metrosQ);
             }
         }
         free(new);

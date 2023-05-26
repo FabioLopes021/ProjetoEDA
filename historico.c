@@ -241,7 +241,6 @@ void readHistorico(Historico **inicio){
     int id, idc, idm;
     float custo;
     double custofinal;
-    char teste[50];
     struct tm start;
     struct tm end;
     char line[1024], localinicial[MAX_GEOCODE], localfinal[MAX_GEOCODE];
@@ -249,7 +248,6 @@ void readHistorico(Historico **inicio){
     time_t tempoinic, tempofinal;
     
     fp = fopen("hist.txt","r");
-    //fp = fopen("teste.txt","r");
 
 
     if (fp != NULL) {
