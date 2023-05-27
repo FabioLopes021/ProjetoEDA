@@ -20,7 +20,7 @@ typedef struct xVertices{
 } VerticeList;
 
 typedef struct xAuxCaminho{
-    int vertice, visitado, anterior;
+    int vertice, visitado, anterior, carga, numMeios, *idmeios;
     float menor;
 } AuxCaminho;
 

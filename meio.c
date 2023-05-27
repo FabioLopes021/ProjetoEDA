@@ -832,3 +832,17 @@ int ordenarMeios(Meio **inicio){
     }
     return 1;
 }
+
+
+int cargaPorId(Meio *inicio, int id){
+    if(inicio == NULL)
+        return INFINITO;
+
+    while(inicio != NULL){
+        if(inicio->codigo == id)
+            break;
+        inicio = inicio->next;
+    }
+
+    return inicio->metrosQ;
+}
