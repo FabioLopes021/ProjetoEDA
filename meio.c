@@ -6,17 +6,20 @@
 
 
 
-/// @brief 
-/// @param inicio 
-/// @param cod 
-/// @param tipo 
-/// @param bat 
-/// @param aut 
-/// @param autMax 
-/// @param custo 
-/// @param idaluguer 
-/// @param geocode 
-/// @param metrosQ 
+/**
+ * @brief Insere um novo meio no início da lista ligada de meios.
+ *
+ * @param inicio Apontador para o apontador do início da lista de meios.
+ * @param cod Código do meio.
+ * @param tipo Tipo do meio.
+ * @param bat Bateria do meio.
+ * @param aut Autonomia atual do meio.
+ * @param autMax Autonomia máxima do meio.
+ * @param custo Custo por quilômetro do meio.
+ * @param idaluguer ID do aluguer associado ao meio.
+ * @param geocode Geocode do meio.
+ * @param metrosQ Número de metros quadrados ocupados pelo meio.
+ */
 void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[], int metrosQ){
     Meio *new;
     
@@ -37,10 +40,12 @@ void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, floa
 }
 
 
+
 /**
- * @brief Funçao para ler os dados de um Meio e inseri-lo na lista ligada dos Meios
- * 
- * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ * @brief Lê os dados de um novo meio a partir da entrada do utilizador e o insere na lista ligada.
+ *
+ * @param inicio Apontador para o apontador do início da lista de meios.
+ * @param v apontador para a lista de vértices.
  */
 void lerDadosMeio(Meio** inicio, VerticeList *v){
     char tipo[MAX_NAME];
@@ -94,6 +99,17 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
     inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, 0, geocode, metQuad);
 }
 
+
+
+/**
+ * @brief Recarrega a bateria de um meio específico e atualiza sua localização para um posto de carregamento.
+ *
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param v Apontador para a lista ligada de vértices.
+ * @param idmeio ID do meio a ser recarregado.
+ * @param verticePosto ID do vértice do posto de carregamento.
+ * @return int Retorna 1 se o meio foi encontrado e recarregado, 0 caso contrário.
+ */
 int recarregarMeios(Meio *inicio, VerticeList *v, int idmeio, int verticePosto){
     Meio *aux = inicio;
     char geocode[MAX_GEOCODE];
@@ -116,6 +132,15 @@ int recarregarMeios(Meio *inicio, VerticeList *v, int idmeio, int verticePosto){
     return 1;
 }
 
+
+/**
+ * @brief Atualiza a autonomia de um meio após um aluger.
+ *
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param id ID do meio a ser atualizado.
+ * @param distPrec Distância percorrida na operação.
+ * @return int Retorna 1 se o meio foi encontrado e a autonomia atualizada, 0 caso contrário.
+ */
 int AtualizarAutonomia(Meio *inicio, int id , float distPrec){
     if(!inicio)
         return 0;
@@ -128,6 +153,15 @@ int AtualizarAutonomia(Meio *inicio, int id , float distPrec){
     return 1; 
 }
 
+
+/**
+ * @brief Atualiza a porcentagem de bateria de um meio após um aluguer.
+ *
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param id ID do meio a ser atualizado.
+ * @param distPrec Distância percorrida na operação.
+ * @return int Retorna 1 se o meio foi encontrado e a bateria atualizada, 0 caso contrário.
+ */
 int AtualizarBateria(Meio *inicio, int id , float distPrec){
     if(!inicio)
         return 0;
@@ -141,6 +175,13 @@ int AtualizarBateria(Meio *inicio, int id , float distPrec){
 }
 
 
+/**
+ * @brief Calcula a porcentagem de bateria com base na autonomia atual e máxima.
+ *
+ * @param autonomiaMax Autonomia máxima do meio.
+ * @param autonomia Autonomia atual do meio.
+ * @return float Porcentagem de bateria.
+ */
 float CalculoBateria(float autonomiaMax, float autonomia ){
     
     return 100 * autonomia / autonomiaMax; 
@@ -162,6 +203,13 @@ int existeMeio(Meio* inicio, int codigo){
 }
 
 
+/**
+ * @brief Retorna a localização atual de um meio com base no seu código.
+ *
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param codigo Código do meio.
+ * @return char* Geocode da localização atual do meio.
+ */
 char* localatual(Meio* inicio, int codigo){
     if (inicio == NULL)
         return "";
@@ -173,6 +221,16 @@ char* localatual(Meio* inicio, int codigo){
     return inicio->geocode;
 }
 
+
+/**
+ * @brief Atualiza a localização de um meio com base no seu código.
+ *
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param v Apontador para a lista ligada de vértices.
+ * @param codigo Código do meio.
+ * @param novolocal Nova localização do meio.
+ * @return int Retorna 1 se o meio foi encontrado e a localização atualizada, 0 caso contrário.
+ */
 int atuallizarLocalizacao(Meio* inicio, VerticeList *v, int codigo, char novolocal[]){
 
     if (inicio == NULL)
@@ -208,7 +266,16 @@ int NumMeiosLivres(Meio* inicio){
     return count;
 }
 
-
+/**
+ * @brief Conta o número de meios sem localização.
+ * 
+ * Esta função percorre a lista ligada de meios e conta o número de meios
+ * que não possuem uma localização atribuída (geocode é uma string vazia)
+ * e que não estão atualmente em uso (idaluger é 0).
+ * 
+ * @param inicio Apontador para o início da lista ligada.
+ * @return O número de meios sem localização.
+ */
 int NumMeiosSemLocalizacao(Meio* inicio){
     int count = 0;
 
@@ -247,7 +314,17 @@ int meioLivre(Meio* inicio, int codigo){
     return meioLivre(inicio->next, codigo);
 }
 
-
+/**
+ * @brief Verifica se um determinado meio não possui localização atribuída.
+ * 
+ * Esta função percorre a lista ligada de meios e verifica se o meio com o
+ * código especificado não possui uma localização atribuída (geocode é uma
+ * string vazia) e não está atualmente em uso (idaluger é 0).
+ * 
+ * @param inicio Apontador para o início da lista ligada.
+ * @param codigo Código do meio a ser verificado.
+ * @return 1 se o meio não possui localização atribuída, 0 caso contrário.
+ */
 int meioSemLocalizacao(Meio* inicio, int codigo){
     if (!inicio)
         return 0;
@@ -268,7 +345,7 @@ int meioSemLocalizacao(Meio* inicio, int codigo){
  * 
  * @param inicio Apontador para o inicio da lista ligada
  * @param codigo Codigo do meio a verificar
- * @param ver Cliente a verificar
+ * @param idCliente Id do cliente a verificar
  * @return int retorna 1 se o Meio estiver alugado ao cliente, 0 caso contrario
  */
 int meioAlugado(Meio* inicio, int codigo, int idCliente){
@@ -288,11 +365,12 @@ int meioAlugado(Meio* inicio, int codigo, int idCliente){
 
 
 /**
- * @brief Funçao que lista todos os meios
+ * @brief Lista os meios disponíveis e as suas informações.
  * 
- * @param inicio Apontador para o inicio da lista ligada
- * @param i contador da funçao
- * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
+ * 
+ * @param inicio Apontador para o início da lista ligada.
+ * @param v Apontador para a lista ligada de vértices contendo as informações de localização.
+ * @param i Valor auxiliar para controlar a exibição do cabeçalho da tabela.
  */
 int listarMeios(Meio* inicio, VerticeList *v, int i){
 
@@ -322,11 +400,12 @@ int listarMeios(Meio* inicio, VerticeList *v, int i){
 
 
 /**
- * @brief Funçao que lista todos os meios livres
+ * @brief Lista os meios livres e as suas informações.
  * 
- * @param inicio Apontador para o inicio da lista ligada
- * @param i contador da funçao 
- * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
+ * 
+ * @param inicio Apontador para o início da lista ligada.
+ * @param v Apontador para a lista ligada de vértices contendo as informações de localização.
+ * @param i Valor auxiliar para controlar a exibição do cabeçalho da tabela.
  */
 int listarMeiosLivres(Meio* inicio, VerticeList *v, int i){
 
@@ -351,6 +430,13 @@ int listarMeiosLivres(Meio* inicio, VerticeList *v, int i){
 }
 
 
+/**
+ * @brief Lista os meios sem localização e as suas informações.
+ * 
+ * 
+ * @param inicio Apontador para o início da lista ligada.
+ * @param i Valor auxiliar para controlar a exibição do cabeçalho da tabela.
+ */
 int listarMeiosSemLocalizacao(Meio* inicio, int i){
     if (!inicio){
         printf(" -------------------------------------------------------------------\n");
@@ -374,12 +460,14 @@ int listarMeiosSemLocalizacao(Meio* inicio, int i){
 
 
 /**
- * @brief Funçao que lista todos os meios alugados a um determinado cliente
+ * @brief Lista os meios alugados por um determinado cliente e as suas informações.
  * 
- * @param inicio Apontador para o inicio da lista ligada
- * @param c Cliente a ser verificado
- * @param i contador da funçao 
- * @return int retorna 0 quando atingir o fim da lista ou se a mesma se encontrar vazia
+ * 
+ * @param inicio Apontador para o início da lista ligada.
+ * @param v Apontador para a lista de vértices contendo as informações de localização.
+ * @param idCliente Identificador do cliente.
+ * @param i Valor auxiliar para controlar a exibição do cabeçalho da tabela.
+ * @return O número total de meios alugados pelo cliente.
  */
 int listarMeiosAlugados(Meio* inicio, VerticeList *v, int idCliente, int i){
 
@@ -402,6 +490,15 @@ int listarMeiosAlugados(Meio* inicio, VerticeList *v, int idCliente, int i){
     listarMeiosAlugados(inicio->next,v , idCliente, i);
 }
 
+
+/**
+ * @brief Obtém o vértice correspondente ao geocode do meio na lista de vértices.
+ * 
+ * 
+ * @param v Apontador para a lista ligada de vértices.
+ * @param inicio Apontador para o meio cujo geocode será pesquisado.
+ * @return O número do vértice correspondente ao geocode do meio, ou -1 se não encontrado.
+ */
 int auxPrintMeios(VerticeList *v, Meio * inicio){
     if(v == NULL)
         return -1;
@@ -417,7 +514,17 @@ int auxPrintMeios(VerticeList *v, Meio * inicio){
     return -1;
 }
 
-
+/**
+ * @brief Lista os meios dentro de um determinado raio a partir de um vértice de origem.
+ * 
+ * 
+ * @param inicio Aopntador para o início da lista ligada de meios.
+ * @param v Aopntador para a lista ligada de vértices contendo as informações de localização.
+ * @param origem O número do vértice de origem.
+ * @param raio O raio máximo para inclusão dos meios na lista.
+ * @param tipomeio O tipo de meio para filtrar os resultados.
+ * @return 1 se houver meios dentro do raio e do tipo especificado, 0 caso contrário.
+ */
 int listarDeterminadosMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio, char tipomeio[]){
     int aux, *a, i, j = 0, vertice;
     float  aux1 = INFINITO;
@@ -476,6 +583,16 @@ int listarDeterminadosMeiosRaio(Meio* inicio, VerticeList *v, int origem, float 
 }
 
 
+/**
+ * @brief Lista os meios dentro de um determinado raio a partir de um vértice de origem.
+ * 
+ * 
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param v Apontador para a lista de vértices contendo as informações de localização.
+ * @param origem O número do vértice de origem.
+ * @param raio O raio máximo para inclusão dos meios na lista.
+ * @return 1 se houver meios dentro do raio, 0 caso contrário.
+ */
 int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
     int aux, *a, i, j = 0, vertice;
     float  aux1 = INFINITO;
@@ -533,6 +650,15 @@ int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
     return 1;
 }
 
+/**
+ * @brief Lista os meios disponíveis num determinado local.
+ * 
+ * 
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param v Apontador para a lista ligada de vértices contendo as informações de localização.
+ * @param local O número do vértice correspondente ao local.
+ * @return 1 se houver meios no local, 0 caso contrário.
+ */
 int listarMeiosLocal(Meio* inicio, VerticeList *v, int local){
     int i = 0,j = 0, vertice;
     Meio *lista = inicio;
@@ -733,6 +859,14 @@ int genereateCodigo(Meio *inicio){
     return ++max;
 }
 
+
+/**
+ * @brief Retorna o custo de um meio específico.
+ * 
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param id O código do meio.
+ * @return float O custo do meio especificado. Retorna 0 se o meio não for encontrado.
+ */
 float custoMeio(Meio *inicio, int id){
     if (!inicio)
         return 0;
@@ -951,7 +1085,13 @@ int ordenarMeios(Meio **inicio){
     return 1;
 }
 
-
+/**
+ * @brief Retorna a carga de um meio específico.
+ * 
+ * @param inicio Apontador para o início da lista ligada de meios.
+ * @param id O código do meio.
+ * @return int A carga do meio especificado. Retorna INFINITO se o meio não for encontrado.
+ */
 int cargaPorId(Meio *inicio, int id){
     if(inicio == NULL)
         return INFINITO;

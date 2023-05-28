@@ -5,6 +5,21 @@
 #include "historico.h"
 #include "grafo.h"
 
+
+/**
+ * @brief Insere um novo registo de histórico no início da lista ligada.
+ *
+ * @param inicio Apontador para o ponteiro do início da lista ligada.
+ * @param idc ID do cliente.
+ * @param idm ID do meio de transporte.
+ * @param ide ID do histórico.
+ * @param custof Custo final.
+ * @param custo Custo.
+ * @param localinicial Local inicial.
+ * @param localfinal Local final.
+ * @param start Struct contendo o horário de início.
+ * @param end Struct contendo o horário de fim.
+ */
 void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double custof, float custo, char localinicial[], char localfinal[], struct tm start, struct tm end){
     Historico *new;
 
@@ -24,6 +39,16 @@ void inserirHistorico(Historico** inicio, int idc, int idm, int ide, double cust
     (*inicio) = new;
 }
 
+
+/**
+ * @brief Insere um novo registo de histórico no início da lista ligada (apenas com os dados de inicio do aluguer).
+ *
+ * @param inicio apontador para o apontador do início da lista ligada.
+ * @param idc ID do cliente.
+ * @param idm ID do meio de transporte.
+ * @param custo Custo.
+ * @param localinicial Local inicial.
+ */
 void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, char localinicial[]){
     Historico *new;
     time_t t = time(NULL);
@@ -43,6 +68,15 @@ void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, c
 }
 
 
+/**
+ * @brief Insere o local final e calcula o custo final de um registro de histórico.
+ *
+ * @param inicio Apontador para o início da lista ligada.
+ * @param ide ID do histórico.
+ * @param localfinal Local final.
+ *
+ * @return 1 se o registro de histórico for encontrado e atualizado com sucesso, 0 caso contrário.
+ */
 int inserirHistoricoFinal(Historico* inicio, int ide, char localfinal[]){
     time_t t = time(NULL);
     double custof;    
@@ -60,6 +94,15 @@ int inserirHistoricoFinal(Historico* inicio, int ide, char localfinal[]){
     return 1;     
 }
 
+/**
+ * @brief Remove um registro de histórico da lista ligada.
+ *
+ * @param inicio Apontador para o apontador do início da lista ligada.
+ * @param id ID do histórico a ser removido.
+ * @param i Variável auxiliar para controle recursivo.
+ *
+ * @return Apontador para o início da lista após a remoção.
+ */
 Historico *removerHistorico(Historico **inicio, int id, int i){
     Historico *aux;
 
@@ -88,6 +131,15 @@ Historico *removerHistorico(Historico **inicio, int id, int i){
     }
 }
 
+
+/**
+ * @brief Verifica se um registro de histórico com o ID especificado existe na lista.
+ *
+ * @param inicio Apontador para o início da lista ligada.
+ * @param id ID do histórico a ser verificado.
+ *
+ * @return 1 se o registro de histórico existe, 0 caso contrário.
+ */
 int existeHistorico(Historico* inicio, int id){
     if (!inicio)
         return 0;
@@ -97,6 +149,15 @@ int existeHistorico(Historico* inicio, int id){
     return existeHistorico(inicio->next, id);
 }
 
+
+/**
+ * @brief Calcula o custo total de um registro de histórico com base no tempo de início e fim.
+ *
+ * @param entrada Apontador para a lista ligada do historico.
+ * @param ide ID do histórico.
+ *
+ * @return Custo total do registro de histórico.
+ */
 double calculoCustoTotal(Historico *entrada, int ide){
     double seg, min;
     time_t startTime, endTime;
@@ -115,6 +176,16 @@ double calculoCustoTotal(Historico *entrada, int ide){
 }
 
 
+
+/**
+ * @brief Calcula a distância entre dois pontos de um registro de histórico.
+ *
+ * @param entrada Apontador para a lista ligada do historico.
+ * @param v Apontador para a lista ligada de vértices.
+ * @param ide ID do histórico.
+ *
+ * @return A distância entre os pontos de início e fim do registro de histórico.
+ */
 float calculoDist(Historico *entrada, VerticeList *v, int ide){
     int inicial, final;
 
@@ -130,6 +201,14 @@ float calculoDist(Historico *entrada, VerticeList *v, int ide){
     return menorCaminho(v, inicial, final);
 }
 
+/**
+ * @brief Obtém o ID de um registro de histórico com base no ID do meio.
+ *
+ * @param entrada Apontador para o início da lista ligada de históricos.
+ * @param idm ID do meio.
+ *
+ * @return O ID do histórico correspondente ao ID do meio, se existir. Caso contrário, retorna 0.
+ */
 int idEntrada(Historico *entrada, int idm){
     if(!entrada)
         return 0;
@@ -143,6 +222,13 @@ int idEntrada(Historico *entrada, int idm){
     return 0;
 }
 
+/**
+ * @brief Gera um novo ID para um registro de histórico.
+ *
+ * @param inicio Apontador para o início da lista ligada de históricos.
+ *
+ * @return O novo ID gerado para o histórico.
+ */
 int generateidHistorico(Historico *inicio){
     int max = 1;
 
@@ -158,6 +244,15 @@ int generateidHistorico(Historico *inicio){
     return ++max;
 }
 
+
+/**
+ * @brief Imprime todos os registros de histórico.
+ *
+ * @param inicio Apontadro para o início da lista ligada do histórico.
+ * @param v Apontador para a lista ligada de vértices.
+ *
+ * @return 1 se houver registros de histórico para imprimir, 0 caso contrário.
+ */
 int imprimirHistorico(Historico *inicio,VerticeList *v){
 
     if(!inicio)
@@ -188,6 +283,16 @@ int imprimirHistorico(Historico *inicio,VerticeList *v){
     return 1;
 }
 
+
+/**
+ * @brief Imprime os registros de histórico de um cliente específico.
+ *
+ * @param inicio Apontador para o início da lista ligada do histórico.
+ * @param v Apontador para a lista ligada de vértices.
+ * @param id ID do cliente.
+ *
+ * @return 1 se houver registros de histórico do cliente para imprimir, 0 caso contrário.
+ */
 int imprimirHistoricoCliente(Historico *inicio,VerticeList *v, int id){
     if(!inicio)
         return 0;
@@ -220,6 +325,16 @@ int imprimirHistoricoCliente(Historico *inicio,VerticeList *v, int id){
     return 1;
 }
 
+
+
+/**
+ * @brief Obtém o número de registros de histórico associados a um cliente específico.
+ *
+ * @param inicio Apontadro para o início da lista ligada do histórico.
+ * @param id ID do cliente.
+ *
+ * @return O número de registros de histórico associados ao cliente.
+ */
 int numEntradasCliente(Historico *inicio, int id){
     int i = 0;
 
@@ -236,6 +351,12 @@ int numEntradasCliente(Historico *inicio, int id){
     return i;
 }
 
+
+/**
+ * @brief Lê os registros de histórico de um ficheiro txt e os insere na lista ligada.
+ *
+ * @param inicio Apontador para o apontador do início da lista ligada do histórico.
+ */
 void readHistorico(Historico **inicio){
     FILE* fp;
     int id, idc, idm;
@@ -289,7 +410,11 @@ void readHistorico(Historico **inicio){
 }
 
 
-
+/**
+ * @brief guarda os registros de histórico da lista ligada num ficheiro txt.
+ *
+ * @param inicio Apontador para o início da lista ligada do histórico.
+ */
 void guardarHistorico(Historico* inicio){
     FILE* fp;
     time_t timeinit, fim;
@@ -314,7 +439,11 @@ void guardarHistorico(Historico* inicio){
 }
 
 
-
+/**
+ * @brief Lê os registros de histórico de um arquivo binário e os insere na lista ligada.
+ *
+ * @param inicio Apontador para o apontador do início da lista de históricos.
+ */
 void lerHistoricoBin(Historico **inicio){
     FILE *fp;
     Historico *new;
@@ -341,7 +470,11 @@ void lerHistoricoBin(Historico **inicio){
 }
 
 
-
+/**
+ * @brief Guarda os registros de histórico da lista ligada num ficheiro binário.
+ *
+ * @param inicio Apontador para o início da lista ligada de históricos.
+ */
 void guardarHistoricoBin(Historico *inicio){
     FILE *fp;
 

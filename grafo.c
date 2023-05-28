@@ -4,8 +4,16 @@
 #include "grafo.h"
 #include "meio.h"
 
-int adicionarVertice(VerticeList **v, int idvertice, char geocode[], char nome[])
-{
+/**
+ * @brief Adiciona um novo vértice à lista ligada do grafo.
+ *
+ * @param v Apontador para o apontador da lista ligada de vértices.
+ * @param idvertice ID do vértice a ser adicionado.
+ * @param geocode geocode do vértice.
+ * @param nome Nome do vértice.
+ * @return 1 se o vértice for adicionado com sucesso, 0 caso contrário.
+ */
+int adicionarVertice(VerticeList **v, int idvertice, char geocode[], char nome[]){
 
     if (existeVertice(*v, idvertice) == 1)
         return 0;
@@ -33,6 +41,16 @@ int adicionarVertice(VerticeList **v, int idvertice, char geocode[], char nome[]
     return 1;
 }
 
+
+/**
+ * @brief Adiciona uma nova aresta ao grafo.
+ *
+ * @param v Apontador para a lista encadeada de vértices.
+ * @param inicio ID do vértice de origem da aresta.
+ * @param fim ID do vértice de destino da aresta.
+ * @param peso Peso da aresta.
+ * @return 1 se a aresta for adicionada com sucesso, 0 caso contrário.
+ */
 int adicionarAresta(VerticeList *v, int inicio, int fim, float peso)
 {
 
@@ -68,6 +86,14 @@ int adicionarAresta(VerticeList *v, int inicio, int fim, float peso)
     return 1;
 }
 
+
+/**
+ * @brief Função para ajudar o utlizador a indicar um vertice.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param geocode geocode do vértice a ser lido.
+ * @return 1 se o vértice for lido com sucesso, 0 caso contrário.
+ */
 int lerVertice(VerticeList *v, char *geocode)
 {
     int i = 0, vertice;
@@ -94,6 +120,13 @@ int lerVertice(VerticeList *v, char *geocode)
     return 1;
 }
 
+
+/**
+ * @brief Função para ajudar o utlizador a indicar um vertice.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @return O ID do vértice lido.
+ */
 int lerVerticePessoa(VerticeList *v)
 {
     int i = 0, vertice;
@@ -119,6 +152,12 @@ int lerVerticePessoa(VerticeList *v)
     return vertice;
 }
 
+
+/**
+ * @brief Lê os dados de um novo vértice a ser adicionado ao grafo.
+ *
+ * @param v Apontador para o apontador da lista ligada de vértices.
+ */
 void lerDadosVertice(VerticeList **v){
     char nome[MAX_NAME];
     char geocode[MAX_GEOCODE];
@@ -144,6 +183,12 @@ void lerDadosVertice(VerticeList **v){
     adicionarVertice(&(*v),codigo, geocode,nome);
 }
 
+
+/**
+ * @brief Lê os dados de uma nova aresta a ser adicionada ao grafo.
+ * 
+ * @param v Ponteiro para a lista encadeada de vértices.
+ */
 void lerDadosAresta(VerticeList *v){
     int verticeo,verticed, codigo, i, dist;
     
@@ -192,9 +237,15 @@ void lerDadosAresta(VerticeList *v){
     }else{
         printf("Nao é possivel adicionar duas vezes a mesma aresta.\n");
     }
-
 }
 
+
+/**
+ * @brief Gera um novo ID para um novo vértice do grafo.
+ *
+ * @param inicio Apontador para o início da lista ligada de vértices.
+ * @return O novo ID gerado.
+ */
 int gerarIdVertice(VerticeList *inicio){
     int max = 0;
 
@@ -211,6 +262,14 @@ int gerarIdVertice(VerticeList *inicio){
     return ++max;
 }
 
+
+/**
+ * @brief Verifica se um vértice com o ID fornecido existe no grafo.
+ *
+ * @param v Apontador para a lista Ligada de vértices.
+ * @param idvertice O ID do vértice a ser verificado.
+ * @return 1 se o vértice existe, 0 caso contrário, ou 2 se a lista estiver vazia.
+ */
 int existeVertice(VerticeList *v, int idvertice)
 {
     if (v == NULL)
@@ -226,6 +285,15 @@ int existeVertice(VerticeList *v, int idvertice)
     return 0;
 }
 
+
+/**
+ * @brief Verifica se uma aresta entre dois vértices existe na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param verticeO O ID do vértice de origem.
+ * @param verticeD O ID do vértice de destino.
+ * @return 1 se a aresta existe, 0 caso contrário, ou 2 se a lista estiver vazia.
+ */
 int existeAresta(VerticeList *v, int verticeO, int verticeD){
     Adjacente *aux;
 
@@ -249,6 +317,13 @@ int existeAresta(VerticeList *v, int verticeO, int verticeD){
     return 0;
 }
 
+
+/**
+ * @brief Imprime o grafo representado pela lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @return 1 se a impressão foi bem-sucedida, 0 se a lista estiver vazia.
+ */
 int printGrafo(VerticeList *v)
 {
 
@@ -274,6 +349,13 @@ int printGrafo(VerticeList *v)
     return 1;
 }
 
+
+/**
+ * @brief Imprime os vértices presentes na lista Ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @return 1 se a impressão foi bem-sucedida, 0 se a lista estiver vazia.
+ */
 int printVertices(VerticeList *v)
 {
 
@@ -291,6 +373,13 @@ int printVertices(VerticeList *v)
     return 1;
 }
 
+
+/**
+ * @brief Imprime o grafo representado pela lista ligada de vértices, usando os nomes dos pontos em vez dos IDs.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @return 1 se a impressão foi bem-sucedida, 0 se a lista estiver vazia.
+ */
 int printGrafoNomes(VerticeList *v)
 {
 
@@ -316,6 +405,13 @@ int printGrafoNomes(VerticeList *v)
     return 1;
 }
 
+
+/**
+ * @brief Imprime o geocode de cada vértice na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @return 1 se a impressão foi bem-sucedida, 0 se a lista estiver vazia.
+ */
 int printGeocodeVertice(VerticeList *v)
 {
     if (v == NULL)
@@ -331,6 +427,13 @@ int printGeocodeVertice(VerticeList *v)
     return 1;
 }
 
+
+/**
+ * @brief Retorna o número de vértices na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @return O número de vértices.
+ */
 int numVertices(VerticeList *v)
 {
     int i = 0;
@@ -347,7 +450,14 @@ int numVertices(VerticeList *v)
     return i;
 }
 
-// Retorna o geocode do vertice ao qual corresponde o id
+/**
+ * @brief Retorna o geocode de um vértice específico na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param vertice O ID do vértice.
+ * @param geocode O apontador para a string onde o geocode será armazenado.
+ * @return 1 se o vértice foi encontrado e o geocode foi copiado com sucesso, 0 caso contrário.
+ */
 int geocodePorVertice(VerticeList *v, int vertice, char *geocode)
 {
     if (v == NULL)
@@ -366,7 +476,15 @@ int geocodePorVertice(VerticeList *v, int vertice, char *geocode)
     return 0;
 }
 
-// Retorna o id do vertice ao qual corresponde o geocode
+
+/**
+ * @brief Retorna o ID do vértice associado a um geocode específico na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param vertice O apontador para a variável onde o ID do vértice será armazenado.
+ * @param geocode O geocode a ser pesquisado.
+ * @return 1 se o geocode foi encontrado e o ID do vértice foi armazenado com sucesso, 0 caso contrário.
+ */
 int verticePorGeocode(VerticeList *v, int *vertice, char geocode[])
 {
     if (v == NULL)
@@ -385,6 +503,14 @@ int verticePorGeocode(VerticeList *v, int *vertice, char geocode[])
     return 0;
 }
 
+
+/**
+ * @brief Retorna o ID do vértice associado a um geocode específico na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param geocode O geocode a ser pesquisado.
+ * @return O ID do vértice se o geocode foi encontrado, -1 caso contrário.
+ */
 int auxprinthistorico(VerticeList *v, char geocode[])
 {
     if (v == NULL)
@@ -402,51 +528,13 @@ int auxprinthistorico(VerticeList *v, char geocode[])
     return -1;
 }
 
-// Determinar se vértice 'id' já foi visitado
-int visitado(int sequencia[], int pos, int id)
-{
-    int i;
-    for (i = 0; i < pos; i++)
-        if (sequencia[i] == id)
-            return (1);
-    return (0);
-}
 
-// Listar os caminhos existentes entre dois vértices passados
-// por parâmetro
-void listarCaminhosAux(VerticeList *v, int origem, int destino, int sequencia[], int posicao, int pesoTotal)
-{
-    int i;
-    VerticeList *head = v;
-    Adjacente *aux;
-    sequencia[posicao] = origem;
-    if (origem == destino)
-    {
-        for (i = 0; i < posicao; i++)
-            printf("%d->", sequencia[i]); // escrita de um caminho
-        printf("%d (%d)\n", destino, pesoTotal);
-    }
-    else
-    {
-        while (v->vertice != origem && v != NULL)
-            v = v->next;
-        aux = v->adj;
-        while (aux != NULL)
-        {
-            if (!visitado(sequencia, posicao, aux->vertice))
-                listarCaminhosAux(head, aux->vertice, destino, sequencia, posicao + 1,
-                pesoTotal + aux->peso);
-            aux = aux->next;
-        }
-    }
-}
-
-void listarCaminhos(VerticeList *v, int origem, int destino)
-{
-    int sequencia[numVertices(v)];
-    listarCaminhosAux(v, origem, destino, sequencia, 0, 0);
-}
-
+/**
+ * @brief Inicializa um array de estruturas AuxCaminho.
+ *
+ * @param a O array de AuxCaminho.
+ * @param max O tamanho máximo do array.
+ */
 void inicializararray(AuxCaminho a[], int max)
 {
 
@@ -459,6 +547,16 @@ void inicializararray(AuxCaminho a[], int max)
     }
 }
 
+/**
+ * @brief Adiciona pesos aos caminhos na lista ligada de vértices.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param caminho O array de AuxCaminho.
+ * @param vertice O ID do vértice.
+ * @param numvertices O número total de vértices.
+ * @param peso O peso a ser adicionado.
+ * @return 0 se nenhum peso foi adicionado, 1 caso contrário.
+ */
 int adicionaPesos(VerticeList *v, AuxCaminho *caminho, int vertice, int numvertices, float peso)
 {
     Adjacente *aux;
@@ -490,6 +588,17 @@ int adicionaPesos(VerticeList *v, AuxCaminho *caminho, int vertice, int numverti
         return 1;
 }
 
+
+/**
+ * @brief Escolhe o próximo vértice a ser visitado com base nos pesos dos caminhos.
+ *
+ * @param caminho O array de AuxCaminho.
+ * @param numVertices O número total de vértices.
+ * @param atual O ID do vértice atual.
+ * @param anterior O apontador para a variável onde o ID do vértice anterior será armazenado.
+ * @param peso O apontador para a variável onde o peso do caminho será armazenado.
+ * @return O ID do próximo vértice a ser visitado.
+ */
 int escolherProximo(AuxCaminho *caminho, int numVertices, int atual, int *anterior, float *peso)
 {
     int aux = INFINITO, vertice = -1, s = 0;
@@ -521,6 +630,13 @@ int escolherProximo(AuxCaminho *caminho, int numVertices, int atual, int *anteri
     return vertice;
 }
 
+/**
+ * @brief Calcula o número de vértices no caminho de um determinado destino.
+ *
+ * @param caminho O array de AuxCaminho.
+ * @param destino O ID do vértice destino.
+ * @return O número de vértices no caminho até o destino.
+ */
 int numVerticesViagem(AuxCaminho *caminho, int destino)
 {
     int i = 0, atual = destino;
@@ -534,6 +650,14 @@ int numVerticesViagem(AuxCaminho *caminho, int destino)
     return i;
 }
 
+
+/**
+ * @brief Constrói um caminho a partir do array de AuxCaminho e um destino.
+ *
+ * @param caminho O array de AuxCaminho.
+ * @param destino O ID do vértice destino.
+ * @return Um apontador para o array contendo o caminho.
+ */
 int *contruirCaminho(AuxCaminho *caminho, int destino)
 {
     int numLocais, atual = destino, *aux, i = 0;
@@ -542,7 +666,6 @@ int *contruirCaminho(AuxCaminho *caminho, int destino)
 
     aux = malloc(sizeof(int) * numLocais);
 
-    printf("Teste caminho mais curto fabio:\n");
     printf("caminho: ");
     while (caminho[atual].anterior != -2)
     {
@@ -555,6 +678,15 @@ int *contruirCaminho(AuxCaminho *caminho, int destino)
     return aux;
 }
 
+
+/**
+ * @brief Calcula o menor caminho entre dois vértices em um grafo.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ * @param origem O ID do vértice de origem.
+ * @param destino O ID do vértice de destino.
+ * @return O menor peso do caminho entre os vértices. Retorna -1 se a lista de vértices for nula.
+ */
 float menorCaminho(VerticeList *v, int origem, int destino)
 {
     AuxCaminho *a = NULL;
@@ -597,6 +729,17 @@ float menorCaminho(VerticeList *v, int origem, int destino)
 }
 
 
+
+/**
+ * @brief Verifica se a carga de um vértice excede a capacidade máxima e encontra o primeiro meio de transporte disponível para reduzir a carga.
+ *
+ * @param Vertices O array de AuxCaminho.
+ * @param inicio O apontador para a lista ligada de Meio.
+ * @param capacidadeMaxima A capacidade máxima permitida.
+ * @param verticeAux O ID do vértice.
+ * @param verifica O apontador para a variável onde o ID do meio de transporte será armazenado.
+ * @return 0 se a carga exceder a capacidade máxima, 1 caso contrário.
+ */
 int auxVerificaCargas(AuxCaminho *Vertices, Meio *inicio, int capacidadeMaxima, int verticeAux, int *verifica){
     int ver = 0;
 
@@ -615,7 +758,19 @@ int auxVerificaCargas(AuxCaminho *Vertices, Meio *inicio, int capacidadeMaxima, 
 }
 
 
-
+/**
+ * @brief Encontra o próximo ponto de coleta (pickup) com base nas restrições de carga e menor distância.
+ *
+ * @param inicio O apontador para a lista ligada de Meio.
+ * @param v O apontador para a lista ligada de vértices.
+ * @param vertices O array de AuxCaminho.
+ * @param pontoAtual O ID do ponto atual.
+ * @param capacidadeMaxima A capacidade máxima permitida.
+ * @param verticesComMeios O array contendo os IDs dos vértices com meios de transporte disponíveis.
+ * @param numVerticesComMeios O número de vértices com meios de transporte disponíveis.
+ * @param verifica O apontador para a variável onde o ID do meio de transporte será armazenado.
+ * @return O ID do próximo ponto de coleta.
+ */
 int encontrarProximoPickup(Meio *inicio,VerticeList *v, AuxCaminho *vertices, int pontoAtual, int capacidadeMaxima, int *verticesComMeios, int numVerticesComMeios, int *verifica) {
     int proximoPonto = -1;
     float menorDistancia = INFINITO;
@@ -635,7 +790,14 @@ int encontrarProximoPickup(Meio *inicio,VerticeList *v, AuxCaminho *vertices, in
     return proximoPonto;
 }
 
-
+/**
+ * @brief Inicializa o array de AuxCaminho para o algoritmo de busca do menor caminho.
+ *
+ * @param v O apontador para a lista ligada de vértices.
+ * @param inicio O apontador para a lista ligada de Meio.
+ * @param caminho O array de AuxCaminho.
+ * @return 1 se a inicialização for bem-sucedida.
+ */
 int startxCaminho(VerticeList *v, Meio *inicio,AuxCaminho caminho[]){
     VerticeList *aux = v;
     int count;
@@ -671,7 +833,12 @@ int startxCaminho(VerticeList *v, Meio *inicio,AuxCaminho caminho[]){
 }
 
 
-
+/**
+ * @brief Executa o algoritmo de rota de recolha.
+ *
+ * @param v O apontador para a lista ligada de vértices.
+ * @param inicio O apontador para a lista ligada de Meio.
+ */
 void rotaRecolha(VerticeList *v,Meio *inicio) {
     int capaciadeMaxima = 10, verifica, aux;
     int pontoAtual = 4, maxNumMeios = 0, numColunas = 1;
@@ -819,6 +986,11 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
 }
 
 
+/**
+ * @brief Lê um grafo de um ficheiro txt e cria uma lista de vértices.
+ *
+ * @param v apontador para a lista ligada de vértices.
+ */
 void readGrafo(VerticeList **v)
 {
     FILE *fp;
@@ -891,6 +1063,11 @@ void readGrafo(VerticeList **v)
     }
 }
 
+/**
+ * @brief Guarda o grafo num ficheiro txt.
+ *
+ * @param v Apontador para a lista ligada de vértices.
+ */
 void guardarGrafo(VerticeList *v)
 {
     FILE *fp;
@@ -926,9 +1103,9 @@ void guardarGrafo(VerticeList *v)
 
 
 /**
- * @brief Funçao para guardar os Meios e os seus dados num ficheiro binario
- * 
- * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ * @brief Guarda a lista ligada de vértices de um grafo num ficheiro binário.
+ *
+ * @param vertices Apontador para a lista ligada de vértices.
  */
 void guardarGrafoBin(VerticeList *vertices){
     FILE *fp, *fp1;
@@ -975,9 +1152,9 @@ void guardarGrafoBin(VerticeList *vertices){
 
 
 /**
- * @brief Funçao para carregar os cliente e os seus dados do ficheiro binario
- * 
- * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ * @brief Lê a lista ligada de vértices de um grafo de um ficheiro binário.
+ *
+ * @param inicio Apontador para a lista ligada de vértices.
  */
 void lerGrafoBin(VerticeList **inicio){
     FILE *fp, *fp1;

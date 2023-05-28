@@ -175,11 +175,12 @@ int existeClienteEmail(Clientes* inicio, char email[]){
     return existeClienteEmail(inicio->next, email);
 }
 
+
 /**
  * @brief Funçao para remover um determinado Cliente
  * 
  * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Clientes
- * @param NIF NIF do cliete a ser removido
+ * @param id ID do cliente a ser removido
  * @param i contador para a funçao
  * @return Clientes* retorna o endereço do cliente seguinte ao cliente removido da lista, NULL caso o mesmo n seja encontrado
  */

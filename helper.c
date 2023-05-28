@@ -230,7 +230,11 @@ int menuAlterarDadosMeio(){
 
 }
 
-
+/**
+ * @brief Função que apresenta o menu de estatisticas
+ * 
+ * @return int int retorna a opçao escolhida pelo utilizador
+ */
 int menuEstatisticas(){
     int opc;
 
@@ -243,7 +247,7 @@ int menuEstatisticas(){
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 4);
+    }while(opc < 0 || opc > 2);
 
     return opc;
 
@@ -264,6 +268,10 @@ void generico(){
 }
 
 
+/**
+ * @brief Funçao para limpar o buffer de entrada
+ * 
+ */
 void clearbuffer(){
     int c;
 
@@ -310,7 +318,13 @@ void encriptPassword(char *password){
 }
 
 
-
+/**
+ * @brief Retorna o meio mais alugado com base nos dados do histórico.
+ *
+ * @param entrada apontado para a lista ligada do histórico.
+ * @param inicio apontador para a lista ligada de meios.
+ * @return 1 se a função for executada com sucesso, 0 caso contrário.
+ */
 int meioMaisAlugado(Historico *entrada, Meio *inicio){
     int numMeios = 0, count = 0, saveid = -1, savenum, alugueres = 0, empate = 0;
     int *array;
@@ -370,7 +384,14 @@ int meioMaisAlugado(Historico *entrada, Meio *inicio){
 
 
 
-
+/**
+ * @brief Retorna o meio com a maior distância percorrida com base nos dados do histórico.
+ *
+ * @param entrada apontado para a lista ligada do histórico.
+ * @param inicio apontador para a lista ligada de meios.
+ * @param v Apontador para a lista ligada do grafo.
+ * @return 1 se a função for executada com sucesso, 0 caso contrário.
+ */
 int meioMaisDistancia(Historico *entrada, Meio *inicio, VerticeList *v){
     int numMeios = 0, count = 0, saveid = -1, empate = 0;
     float *array, savedist, distancia = 0;
