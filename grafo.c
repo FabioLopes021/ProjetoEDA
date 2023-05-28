@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "grafo.h"
+#include "meio.h"
 
 int adicionarVertice(VerticeList **v, int idvertice, char geocode[])
 {
@@ -47,6 +48,7 @@ int adicionarAresta(VerticeList *v, int inicio, int fim, float peso)
 
     Adjacente *new = (Adjacente *)malloc(sizeof(Adjacente));
     new->peso = peso;
+    new->origem = inicio;
     new->vertice = fim;
     new->next = NULL;
 
@@ -106,7 +108,7 @@ int lerVerticePessoa(VerticeList *v)
     do
     {
         if (i == 0)
-            printf("Indique a localizaçao do meio: ");
+            printf("Indique a sua localizaçao: ");
         else
             printf("Indique uma localizaçao valida: ");
         scanf("%d", &vertice);
@@ -478,6 +480,208 @@ float menorCaminho(VerticeList *v, int origem, int destino)
     return peso;
 }
 
+
+int auxVerificaCargas(AuxCaminho *Vertices, Meio *inicio, int capacidadeMaxima, int verticeAux, int *verifica){
+    int ver = 0;
+
+    if(Vertices[verticeAux].carga > capacidadeMaxima){
+        for (int i = 0; i < Vertices[verticeAux].numMeios; i++){
+            if( cargaPorId(inicio, Vertices[verticeAux].idmeios[i]) < capacidadeMaxima){
+                ver = 1;
+                *verifica = Vertices[verticeAux].idmeios[i];
+            }
+                
+        }
+        return ver;
+    }else
+        *verifica = -1;
+        return 1;
+
+}
+
+
+
+int encontrarProximoPickup(Meio *inicio,VerticeList *v, AuxCaminho *vertices, int pontoAtual, int capacidadeMaxima, int *verticesComMeios, int numVerticesComMeios, int *verifica) {
+    int proximoPonto = -1;
+    float menorDistancia = INFINITO;
+
+    for (int i = 0; i < numVerticesComMeios; i++) {
+        int verticeAux = verticesComMeios[i];
+
+        if (vertices[verticeAux].visitado == 0 && auxVerificaCargas(vertices, inicio, capacidadeMaxima, verticeAux, verifica)) {
+            float distancia = menorCaminho(v, pontoAtual, verticeAux);
+            if (distancia < menorDistancia) {
+                menorDistancia = distancia;
+                proximoPonto = verticeAux;
+            }
+        }
+    }
+
+    return proximoPonto;
+}
+
+
+int startxCaminho(VerticeList *v, Meio *inicio,AuxCaminho caminho[]){
+    VerticeList *aux = v;
+    int count;
+
+    while(aux != NULL){
+        caminho[aux->vertice].vertice = aux->vertice;
+        caminho[aux->vertice].anterior = -2;
+        caminho[aux->vertice].carga = 0;
+        caminho[aux->vertice].menor = INFINITO;
+        caminho[aux->vertice].visitado = 0;
+        caminho[aux->vertice].numMeios = 0;
+        caminho[aux->vertice].idmeios = NULL;
+        aux = aux->next;
+    }
+    count = 0;
+    while(inicio != NULL){
+        if(inicio->bateria < 50){
+            int aux;
+            verticePorGeocode(v,&aux,inicio->geocode);
+            caminho[aux].carga += inicio->metrosQ;
+            caminho[aux].numMeios++;
+            if(caminho[aux].numMeios == 1)
+                caminho[aux].idmeios = malloc(sizeof(int) * caminho[aux].numMeios);
+            else
+                caminho[aux].idmeios = realloc(caminho[aux].idmeios, sizeof(int) * caminho[aux].numMeios);
+            caminho[aux].idmeios[caminho[aux].numMeios - 1] = inicio->codigo;
+        }
+
+        inicio = inicio->next;
+    }
+
+    return 1;
+}
+
+
+
+void rotaRecolha(VerticeList *v,Meio *inicio) {
+    int capaciadeMaxima = 10, verifica, aux;
+    int pontoAtual = 4, maxNumMeios = 0, numColunas = 1;
+    int pontosRecolhidos = 0;
+    float distanciaTotal = 0.0;
+    int numVert = numVertices(v);
+    int numVerticesComMeios = 0;
+    AuxCaminho *Vertices;
+    int **caminho;
+
+    Vertices = malloc(sizeof(AuxCaminho) * numVert);
+    
+    
+    startxCaminho(v,inicio,Vertices);
+
+    for(int i = 0; i < numVert; i++){
+        if(Vertices[i].carga > 0)
+            numVerticesComMeios++;
+    }
+
+    int *VerticesComMeios = malloc(sizeof(int) * numVerticesComMeios);
+
+    for(int i = 0, j = 0; i < numVert; i++){
+        if(Vertices[i].carga > 0){
+            VerticesComMeios[j] = i;
+            j++;
+        }
+    }
+    for(int i = 0; i < numVert; i++){
+        if(maxNumMeios < Vertices[i].numMeios)
+            maxNumMeios = Vertices[i].numMeios;
+    }
+
+    caminho = (int **)malloc( sizeof(int *) * numColunas);
+    for(int i = 0; i < numColunas; i++){
+        caminho[i] = malloc(sizeof(int) * maxNumMeios + 1);
+    }
+    
+    for(int i = 0; i < numColunas; i++){
+        for(int j = 1; j < maxNumMeios + 1; j++){
+            caminho[i][j] = 0;
+        }
+    }
+
+    caminho[0][numColunas -1] = pontoAtual;
+
+    while(pontosRecolhidos < numVerticesComMeios){
+        if (pontosRecolhidos != 0){
+            distanciaTotal += menorCaminho(v, pontoAtual, 4);
+            capaciadeMaxima = 10;
+            pontoAtual = 4;
+            numColunas++;
+            caminho = realloc(caminho, sizeof(int *) * numColunas);
+            caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
+            caminho[numColunas-1][0] = pontoAtual;
+            for(int i = 1; i < maxNumMeios + 1; i++){
+                caminho[numColunas-1][i] = 0;
+            }
+        }
+        while (pontosRecolhidos < numVerticesComMeios) {
+        int proximoPonto = encontrarProximoPickup(inicio, v, Vertices, pontoAtual, capaciadeMaxima, VerticesComMeios, numVerticesComMeios, &verifica);
+
+        if (proximoPonto == -1) {
+            break;
+        }
+
+        if(verifica == -1){
+            distanciaTotal += menorCaminho(v, pontoAtual, proximoPonto);
+            capaciadeMaxima -= Vertices[proximoPonto].carga;
+            Vertices[proximoPonto].visitado = 1;
+            pontosRecolhidos++;
+            numColunas++;
+            caminho = realloc(caminho, sizeof(int *) * numColunas);
+            caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
+            //caminho[0][numColunas-1] = proximoPonto;
+            caminho[numColunas-1][0] = proximoPonto;
+            aux = 0;
+            for(int i = 1; i < maxNumMeios + 1; i++){ // esta a aceder a memoria nao alocada 
+                if(aux < Vertices[proximoPonto].numMeios){
+                    caminho[numColunas-1][i] = Vertices[proximoPonto].idmeios[aux];
+                }else
+                    caminho[numColunas-1][i] = 0;
+                aux++;
+            }
+        }else{
+            distanciaTotal += menorCaminho(v,pontoAtual,proximoPonto);
+            capaciadeMaxima -= cargaPorId(inicio,verifica);
+            Vertices[proximoPonto].carga -= cargaPorId(inicio,verifica);
+            numColunas++;
+            caminho = realloc(caminho, sizeof(int *) * numColunas);
+            caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
+            //caminho[0][numColunas-1] = proximoPonto;
+            caminho[numColunas-1][0] = proximoPonto;
+            for(int i = 1; i < maxNumMeios + 1; i++){
+                if( i == 0)
+                    caminho[numColunas-1][i] = verifica;
+                else
+                    caminho[numColunas-1][i] = 0;
+            }
+        }
+
+
+        printf("Vertice visitado: %d\n", Vertices[proximoPonto].vertice);
+        printf("Carga carregada no vertice: %d\n", Vertices[proximoPonto].carga);
+
+        pontoAtual = proximoPonto;
+    }
+    }
+    printf("Teste ao contruir caminho: \n");
+    for(int i = 0; i < numColunas; i++){
+        printf("Vertice visitado: %d - Meios carregados: ", caminho[i][0]);
+        for(int j = 1; j < maxNumMeios + 1; j++){
+            if(caminho[i][j] != 0){
+                printf("%d ", caminho[j][i]);
+            }
+                
+        }
+        printf("\n");
+    }
+
+    printf("Distancia total percorrida: %.2f\n", distanciaTotal);
+    printf("Pontos de recolha visitados: %d\n", pontosRecolhidos);
+}
+
+
 void readGrafo(VerticeList **v)
 {
     FILE *fp;
@@ -579,142 +783,101 @@ void guardarGrafo(VerticeList *v)
 }
 
 
-int auxVerificaCargas(AuxCaminho *Vertices, Meio *inicio, int capacidadeMaxima, int verticeAux, int *verifica){
-    int ver = 0;
+/**
+ * @brief Funçao para guardar os Meios e os seus dados num ficheiro binario
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ */
+void guardarGrafoBin(VerticeList *vertices){
+    FILE *fp, *fp1;
+    VerticeList *inicio = vertices;
+    Adjacente *aux;
 
-    if(Vertices[verticeAux].carga > capacidadeMaxima){
-        for (int i = 0; i < Vertices[verticeAux].numMeios; i++){
-            if( cargaPorId(inicio, Vertices[verticeAux].idmeios[i]) < capacidadeMaxima){
-                ver = 1;
-                *verifica = Vertices[verticeAux].idmeios[i];
+    fp = fopen("vertices.bin", "wb");
+    fp1 = fopen("arestas.bin", "wb");
+
+    if(fp != NULL){
+
+        while (inicio != NULL) {
+            fwrite(inicio, sizeof(VerticeList), 1, fp);
+            inicio = inicio->next;
+        }
+
+        fclose(fp);
+
+        printf("Vertices guardados em binario com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario dos vertices\n");
+    }
+
+    inicio = vertices;
+
+    if(fp1 != NULL){
+
+        while(inicio != NULL){
+            aux = inicio->adj;
+            while (aux != NULL){
+                fwrite(aux,sizeof(Adjacente), 1, fp1);
+                aux = aux->next;
             }
-                
+            inicio = inicio->next;
         }
-        return ver;
-    }else
-        *verifica = -1;
-        return 1;
 
+        fclose(fp1);
+
+        printf("Adjacentes guardados em binario com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario das arestas\n");
+    }
 }
 
 
-
-int encontrarProximoPickup(Meio *inicio,VerticeList *v, AuxCaminho *vertices, int pontoAtual, int capacidadeMaxima, int *verticesComMeios, int numVerticesComMeios, int *verifica) {
-    int proximoPonto = -1;
-    float menorDistancia = INFINITO;
-
-    for (int i = 0; i < numVerticesComMeios; i++) {
-        int verticeAux = verticesComMeios[i];
-
-        if (vertices[verticeAux].visitado == 0 && auxVerificaCargas(vertices, inicio, capacidadeMaxima, verticeAux, verifica)) {
-            float distancia = menorCaminho(v, pontoAtual, verticeAux);
-            if (distancia < menorDistancia) {
-                menorDistancia = distancia;
-                proximoPonto = verticeAux;
-            }
-        }
-    }
-
-    return proximoPonto;
-}
+/**
+ * @brief Funçao para carregar os cliente e os seus dados do ficheiro binario
+ * 
+ * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
+ */
+void lerGrafoBin(VerticeList **inicio){
+    FILE *fp, *fp1;
+    VerticeList *new;
+    Adjacente *new1;
 
 
-int startxCaminho(VerticeList *v, Meio *inicio,AuxCaminho caminho[]){
-    VerticeList *aux = v;
-    int count;
-
-    while(aux != NULL){
-        caminho[aux->vertice].vertice = aux->vertice;
-        caminho[aux->vertice].anterior = -2;
-        caminho[aux->vertice].carga = 0;
-        caminho[aux->vertice].menor = INFINITO;
-        caminho[aux->vertice].visitado = 0;
-        caminho[aux->vertice].numMeios = 0;
-        caminho[aux->vertice].idmeios = NULL;
-        aux = aux->next;
-    }
-    count = 0;
-    while(inicio != NULL){
-        if(inicio->bateria < 50){
-            int aux;
-            verticePorGeocode(v,&aux,inicio->geocode);
-            caminho[aux].carga += inicio->metrosQ;
-            caminho[aux].numMeios++;
-            if(caminho[aux].numMeios == 1)
-                caminho[aux].idmeios = malloc(sizeof(int) * caminho[aux].numMeios);
-            else
-                caminho[aux].idmeios = realloc(caminho[aux].idmeios, sizeof(int) * caminho[aux].numMeios);
-            caminho[aux].idmeios[caminho[aux].numMeios - 1] = inicio->codigo;
-        }
-
-        inicio = inicio->next;
-    }
-
-    return 1;
-}
-
-
-
-void rotaRecolha(VerticeList *v,Meio *inicio) {
-    int capaciadeMaxima = 10, verifica;
-    int pontoAtual = 4;
-    int pontosRecolhidos = 0;
-    float distanciaTotal = 0.0;
-    int numVert = numVertices(v);
-    int numVerticesComMeios = 0;
-    AuxCaminho *Vertices;
-
-    Vertices = malloc(sizeof(AuxCaminho) * numVert);
-
-    startxCaminho(v,inicio,Vertices);
-
-    for(int i = 0; i < numVert; i++){
-        if(Vertices[i].carga > 0)
-            numVerticesComMeios++;
-    }
-
-    int *VerticesComMeios = malloc(sizeof(int) * numVerticesComMeios);
-
-    for(int i = 0, j = 0; i < numVert; i++){
-        if(Vertices[i].carga > 0){
-            VerticesComMeios[j] = i;
-            j++;
-        }
-    }
+    new = (VerticeList *) malloc(sizeof(VerticeList));
+    new1 = (Adjacente *) malloc(sizeof(Adjacente));
     
-    while(pontosRecolhidos < numVerticesComMeios){
-        if (pontosRecolhidos != 0){
-            distanciaTotal += menorCaminho(v, pontoAtual, 4);
-            capaciadeMaxima = 10;
-            pontoAtual = 4;
+    fp = fopen("vertices.bin", "rb");
+    fp1 = fopen("arestas.bin", "rb");
+
+    if(fp != NULL){
+
+       while (fread(new, sizeof(VerticeList), 1, fp) == 1) {
+            if(new != NULL){
+                adicionarVertice(&(*inicio), new->vertice, new->geocode);             
+            }
         }
-        while (pontosRecolhidos < numVerticesComMeios) {
-        int proximoPonto = encontrarProximoPickup(inicio, v, Vertices, pontoAtual, capaciadeMaxima, VerticesComMeios, numVerticesComMeios, &verifica);
+        free(new);
+        fclose(fp);
 
-        if (proximoPonto == -1) {
-            break;
-        }
-
-        if(verifica == -1){
-            distanciaTotal += menorCaminho(v, pontoAtual, proximoPonto);
-            capaciadeMaxima -= Vertices[proximoPonto].carga;
-            Vertices[proximoPonto].visitado = 1;
-            pontosRecolhidos++;
-        }else{
-            distanciaTotal += menorCaminho(v,pontoAtual,proximoPonto);
-            capaciadeMaxima -= cargaPorId(inicio,verifica);
-            Vertices[proximoPonto].carga -= cargaPorId(inicio,verifica);
-        }
-
-
-        printf("Vertice visitado: %d\n", Vertices[proximoPonto].vertice);
-        printf("Carga carregada no vertice: %d\n", Vertices[proximoPonto].carga);
-
-        pontoAtual = proximoPonto;
-    }
+        printf("Vertices binarios lidos com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario dos vertices\n");
     }
 
+    if(fp1 != NULL){
 
-    printf("Distancia total percorrida: %.2f\n", distanciaTotal);
-    printf("Pontos de recolha visitados: %d\n", pontosRecolhidos);
+       while (fread(new1, sizeof(Adjacente), 1, fp1) == 1) {
+            if(new1 != NULL){
+                adicionarAresta(*inicio, new1->origem, new1->vertice, new1->peso);     
+            }
+        }
+        free(new1);
+        fclose(fp1);
+
+        printf("Arestas binarias lidos com sucesso\n");
+    }else{
+        printf("Erro ao abrir ficheiro binario das arestas\n");
+    }
+
+
 }

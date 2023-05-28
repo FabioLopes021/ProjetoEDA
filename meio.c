@@ -395,6 +395,64 @@ int auxPrintMeios(VerticeList *v, Meio * inicio){
 }
 
 
+int listarDeterminadosMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio, char tipomeio[]){
+    int aux, *a, i, j = 0, vertice;
+    float  aux1 = INFINITO;
+    Meio *lista = inicio;
+
+    if (!inicio)
+        return 0;
+        
+    aux = numVertices(v);
+
+    a = malloc(sizeof(float)*aux);
+
+    for(i = 0; i < aux; i++){
+        a[i] = -1;
+    }
+
+    for(i = 0; i < aux; i++){
+        if(i != origem)
+            a[i] = menorCaminho(v, origem, i);
+        else
+            a[i] = 0;
+    }
+
+    i = 0;
+    while(lista != NULL){
+        verticePorGeocode(v,&vertice, lista->geocode);
+        if(a[vertice] <= raio && a[vertice] != -1 && (strcmp(tipomeio, lista->tipo) == 0))
+            j++;
+        if(a[vertice] < aux1)
+            aux1 = a[vertice];
+        lista = lista->next;
+    }
+
+    if( j > 0){
+        while( inicio != NULL){
+        if(i== 0){
+            printf(" -------------------------------------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min) |             Local           |\n");
+            printf("|-------------------------------------------------------------------------------------------------|\n");
+        }
+        verticePorGeocode(v,&vertice, inicio->geocode);
+        if( a[vertice] <= raio && a[vertice] != -1 && (strcmp(tipomeio, inicio->tipo) == 0))
+            printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
+            NOME_PONTOS[auxPrintMeios(v,inicio)]);
+        inicio = inicio->next;
+        i++;
+        }
+        printf(" -------------------------------------------------------------------------------------------------\n");
+    }else{
+        printf("De momento nao existe o meio escolhido no raio indicado");
+    }
+    
+
+    free(a);
+    return 1;
+}
+
+
 int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
     int aux, *a, i, j = 0, vertice;
     float  aux1 = INFINITO;
@@ -449,6 +507,43 @@ int listarMeiosRaio(Meio* inicio, VerticeList *v, int origem, float raio){
     
 
     free(a);
+    return 1;
+}
+
+int listarMeiosLocal(Meio* inicio, VerticeList *v, int local){
+    int i = 0,j = 0, vertice;
+    Meio *lista = inicio;
+
+    if (!inicio)
+        return 0;
+
+    
+    while(lista != NULL){
+        verticePorGeocode(v,&vertice, lista->geocode);
+        if(vertice == local)
+            j++;
+        lista = lista->next;
+    }
+
+    if( j > 0){
+        while( inicio != NULL){
+        if(i== 0){
+            printf(" -------------------------------------------------------------------------------------------------\n");
+            printf("|  codigo  |      Tipo      |  Bateria  |  Autonomia  |  Custo(min) |             Local           |\n");
+            printf("|-------------------------------------------------------------------------------------------------|\n");
+        }
+        verticePorGeocode(v,&vertice, inicio->geocode);
+        if( vertice == local)
+            printf("|    %-4d  |   %-9s    |    %-5d  |  %-9.2f  |  %-9.2f  |  %-25s  |\n", inicio->codigo, inicio->tipo, inicio->bateria, inicio->autonomia, inicio->custo,
+            NOME_PONTOS[auxPrintMeios(v,inicio)]);
+        inicio = inicio->next;
+        i++;
+        }
+        printf(" -------------------------------------------------------------------------------------------------\n");
+    }else{
+        printf("De momento nao existem meios no local escolhido\n" );
+    }
+    
     return 1;
 }
 
@@ -689,7 +784,7 @@ void guardarMeios(Meio* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        fprintf(fp,"%d;%d;%.2f;%.2f;%.2f;%d;%s;%s\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->autonomiaMax, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode);
+        fprintf(fp,"%d;%d;%.2f;%.2f;%.2f;%d;%s;%s;%d\n", inicio->codigo, inicio->bateria, inicio->autonomia, inicio->autonomiaMax, inicio->custo, inicio->idaluger, inicio->tipo, inicio->geocode, inicio->metrosQ);
         inicio = inicio->next;
         }
 

@@ -8,6 +8,7 @@
 typedef struct xAdjacente
 {
     int vertice;
+    int origem;
     float peso;
     struct xAdjacente *next;
 } Adjacente;

@@ -41,8 +41,12 @@ int main(){
     lerGestoresBin(&g);
     lerCLientesBin(&c);
     //lerHistoricoBin(&p);
+    //lerGrafoBin(&v);
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
+/*     printf("\nTeste a funçao do camiao: \n\n");
+    rotaRecolha(v,h); */
+
     printGrafo(v);
     EsperarQuePrimaEnter();
     //Estrutura do programa
@@ -194,12 +198,42 @@ int main(){
                                         break;
                                     case 8:
                                         if(NumMeiosLivres(h) != 0){
+                                            char tipoMeio[MAX_CODE];
+                                            aux = lerVerticePessoa(v);
+                                            if(aux != -1){
+                                                float raio;
+                                                printf("Indique o raio em que deseja procurar: ");
+                                                scanf("%f", &raio);
+                                                printf("Indique o tipo de meio que deseja procurar: ");
+                                                fscanf(stdin, "%s", tipoMeio);
+                                                listarDeterminadosMeiosRaio(h,v,aux,raio, tipoMeio);
+                                            }
+                                        }else{
+                                            printf("Nao existem meios disponiveis");
+                                        }
+                                        aux = 0;
+                                        EsperarQuePrimaEnter();
+                                        break;
+                                    case 9:
+                                        if(NumMeiosLivres(h) != 0){
                                             aux = lerVerticePessoa(v);
                                             if(aux != -1){
                                                 float raio;
                                                 printf("Indique o raio em que deseja procurar: ");
                                                 scanf("%f", &raio);
                                                 listarMeiosRaio(h,v,aux,raio);
+                                            }
+                                        }else{
+                                            printf("Nao existem meios disponiveis");
+                                        }
+                                        aux = 0;
+                                        EsperarQuePrimaEnter();
+                                        break;
+                                    case 10:
+                                        if(NumMeiosLivres(h) != 0){
+                                            aux = lerVerticePessoa(v);
+                                            if(aux != -1){
+                                                listarMeiosLocal(h,v,aux);
                                             }
                                         }else{
                                             printf("Nao existem meios disponiveis");
@@ -442,6 +476,7 @@ int main(){
     guardarClientesBin(c);
     guardarGestoresBin(g);
     //guardarHistoricoBin(p);
+    //guardarGrafoBin(v);
 
     return 1;
 }

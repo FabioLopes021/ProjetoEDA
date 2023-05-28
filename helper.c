@@ -77,12 +77,14 @@ int menuclientes(char nome[], float saldo){
         printf("| 5 - Consultar dados conta    |\n");
         printf("| 6 - Remover Conta            |\n");
         printf("| 7 - Consultar Historico      |\n");
-        printf("| 8 - mostrar meios raio       |\n");
+        printf("| 8 - mostrar det. Meios raio  |\n");
+        printf("| 9 - mostrar meios raio       |\n");
+        printf("| 10 - mostrar meios loc.      |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 8);
+    }while(opc < 0 || opc > 10);
 
     return opc;
 }
