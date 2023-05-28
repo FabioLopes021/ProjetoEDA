@@ -12,10 +12,13 @@
 #define MAX_CODE 50         //Define o limite Maximo para o nome do tipo de transporte
 #define MAX_GEOCODE 40
 #define INFINITO 9999999    // Define o "infinito", neste caso um valor muito alto para a inicializaçao do algoritmo de Dijkstra
+#define VERTICEDESCARGA 4
 
 
 #include "gestores.h"
 #include "clientes.h"
+#include "meio.h"
+#include "historico.h"
 
 // Verifica os dados de login e verifica qual a funçao necessaria chamar para a verificação dos dados
 int funcaoLogin(Clientes **inicio, Gestores **g, char password[], char email[], Clientes **logc, Gestores **logg);
@@ -41,6 +44,9 @@ int menuAlterarDadosGestor();
 // Imprime o menu de alteraçao de dados de Meios na consola
 int menuAlterarDadosMeio();
 
+//
+int menuEstatisticas();
+
 // Imprime um banner na consola
 void generico();
 
@@ -52,6 +58,8 @@ void EsperarQuePrimaEnter();
 
 // Encripta uma Password
 void encriptPassword(char *password);
+
+int meioMaisAlugado(Historico *entrada, Meio *inicio);
 
 
 #endif //final da guarda de ficheiro

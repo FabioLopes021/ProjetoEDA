@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "meio.h"
+#include "historico.h"
 
 
 /**
@@ -227,6 +229,25 @@ int menuAlterarDadosMeio(){
 }
 
 
+int menuEstatisticas(){
+    int opc;
+
+    generico();
+    do{
+        printf("\n ------------------------------\n");
+        printf("| 1 - Meio mais alugado        |\n");
+        printf("| 2 - Meio com mais distancia  |\n");
+        printf("| 3 - Meio mais caro           |\n");
+        printf("| 4 - Meio mais barato         |\n");
+        printf("| 0 - Voltar                   |\n");
+        printf(" ------------------------------\n");
+        printf("Opcao: ");
+        scanf("%d", &opc);
+    }while(opc < 0 || opc > 4);
+
+    return opc;
+
+}
 
 /**
  * @brief Função que limpa a consola e apresenta um banner
@@ -269,6 +290,7 @@ void EsperarQuePrimaEnter(){
     getchar();
 }
 
+
 /**
  * @brief Funçao para encriptar a password dos utilizadores
  * 
@@ -286,3 +308,123 @@ void encriptPassword(char *password){
         }
     }
 }
+
+
+
+int meioMaisAlugado(Historico *entrada, Meio *inicio){
+    int numMeios = 0, count = 0, saveid = -1, savenum, alugueres = 0, empate = 0;
+    int *array;
+    Meio *aux = inicio;
+
+
+    if (entrada == NULL){
+        printf("Nao existem dados para fazer esta verificaçao.\n");
+        return 0;
+    }
+
+    while(aux != NULL){
+        numMeios++;
+        aux = aux->next;
+    }
+
+    array = malloc(sizeof(int) * numMeios);
+
+    for(int i = 0; i < numMeios; i++){
+        array[i] = 0;
+    }
+
+    while(entrada != NULL){
+        array[entrada->idMeio - 1]++;
+        entrada = entrada->next;
+    }
+
+    for(int i = 0; i < numMeios; i++){
+        if(alugueres < array[i]){
+            alugueres = array[i];
+            saveid = i + 1;
+            savenum = array[i];
+            empate = 0;
+        }else{
+             if( alugueres == array[i])
+                empate = 1;
+        }
+
+    }
+
+    while(inicio != NULL){
+        if(inicio->codigo == saveid)
+            break;
+        inicio = inicio->next;
+    }
+
+    
+
+    if(empate == 0)
+        printf("O meio mais alugado é do tipo %s, e tem o id %d. (Meio alugado %d vezes)\n", inicio->tipo, inicio->codigo, array[inicio->codigo - 1]);
+    else
+        printf("Nao e possivel obter a resposta existem dois ou mais meios com o mesmo numero de alugueres.\n");
+
+    free(array);
+    return 1;
+}
+
+
+
+
+int meioMaisDistancia(Historico *entrada, Meio *inicio, VerticeList *v){
+    int numMeios = 0, count = 0, saveid = -1, empate = 0;
+    float *array, savedist, distancia = 0;
+    Meio *aux = inicio;
+    Historico *aux1 = entrada;
+
+
+    if (aux1 == NULL){
+        printf("Nao existem dados para fazer esta verificaçao.\n");
+        return 0;
+    }
+
+    while(aux != NULL){
+        numMeios++;
+        aux = aux->next;
+    }
+
+    array = malloc(sizeof(float) * numMeios);
+
+    for(int i = 0; i < numMeios; i++){
+        array[i] = 0;
+    }
+
+    while(aux1 != NULL){
+        array[aux1->idMeio - 1] += calculoDist(entrada,v,aux1->id);
+        aux1 = aux1->next;
+    }
+
+    for(int i = 0; i < numMeios; i++){
+        if(distancia < array[i]){
+            distancia = array[i];
+            saveid = i + 1;
+            savedist = array[i];
+            empate = 0;
+        }else{
+             if( distancia == array[i])
+                empate = 1;
+        }
+    }
+
+    while(inicio != NULL){
+        if(inicio->codigo == saveid)
+            break;
+        inicio = inicio->next;
+    }
+
+    
+
+    if(empate == 0)
+        printf("O meio com mais distancia precurrida é do tipo %s, e tem o id %d. (Distancia percurrida %.2f m)\n", inicio->tipo, inicio->codigo, array[inicio->codigo - 1]);
+    else
+        printf("Nao e possivel obter a resposta existem dois ou mais meios com a mesma distancia percurrida.\n");
+
+    free(array);
+    return 1;
+}
+

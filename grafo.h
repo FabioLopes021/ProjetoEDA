@@ -15,7 +15,7 @@ typedef struct xAdjacente
 
 typedef struct xVertices{
     int vertice;
-    char geocode[MAX_GEOCODE];
+    char geocode[MAX_GEOCODE], nome[MAX_NAME];
     Adjacente *adj;
     struct xVertices *next;
 } VerticeList;
@@ -29,7 +29,7 @@ typedef struct xAuxCaminho{
 const char* NOME_PONTOS[] = { "Campo da Feira","A minha farmacia","Estatua do Bombeiro", "Pingo Doce", "Mercadona", "Digibarcelos", "Retail Parque"
 , "Mc Donalds's", "Alcaides de Faria" };
 
-int adicionarVertice(VerticeList **v, int idvertice, char geocode[]);
+int adicionarVertice(VerticeList **v, int idvertice, char geocode[], char nome[]);
 
 int adicionarAresta(VerticeList *v, int inicio, int fim, float peso);
 

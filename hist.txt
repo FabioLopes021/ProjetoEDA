@@ -1,1 +1,2 @@
+2;1;2;0.33;0.02;ruled.managed.defender;machinery.whips.shopping;1685289214;1685289218
 1;1;3;0.99;1.29;machinery.whips.shopping;newest.senses.taster;1684265765;1684265843

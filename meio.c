@@ -5,16 +5,18 @@
 #include <string.h>
 
 
-/**
- * @brief Funçao para adicionar um novo Meio a lista ligada de Meios
- * 
- * @param inicio Apontador para a variavel que guarda o apontador para a cabeça da lista ligada dos Meios
- * @param cod Codigo do meio a ser inserido
- * @param tipo Tipo do meio a ser inserido
- * @param bat Bateria do meio a ser inserido
- * @param aut Autonomia do meio a ser inserido
- * @param custo Custo por Km do meio a ser inserido
- */
+
+/// @brief 
+/// @param inicio 
+/// @param cod 
+/// @param tipo 
+/// @param bat 
+/// @param aut 
+/// @param autMax 
+/// @param custo 
+/// @param idaluguer 
+/// @param geocode 
+/// @param metrosQ 
 void inserirMeio(Meio** inicio, int cod, char tipo[], float bat, float aut, float autMax, float custo, int idaluguer, char geocode[], int metrosQ){
     Meio *new;
     
@@ -92,6 +94,27 @@ void lerDadosMeio(Meio** inicio, VerticeList *v){
     inserirMeio(&(*inicio), cod, tipo, bat, aut, autMax, custo, 0, geocode, metQuad);
 }
 
+int recarregarMeios(Meio *inicio, VerticeList *v, int idmeio, int verticePosto){
+    Meio *aux = inicio;
+    char geocode[MAX_GEOCODE];
+
+    if (inicio == NULL)
+        return 0;
+
+    while( aux != NULL){
+        if(aux->codigo == idmeio)
+            break;
+        aux = aux->next;
+    }
+
+    geocodePorVertice(v, verticePosto, geocode);
+
+    aux->autonomia = aux->autonomiaMax;
+    aux->bateria = 100;
+    strcpy(aux->geocode, geocode);
+
+    return 1;
+}
 
 int AtualizarAutonomia(Meio *inicio, int id , float distPrec){
     if(!inicio)

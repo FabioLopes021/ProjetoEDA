@@ -21,7 +21,7 @@ int main(){
     Clientes *c = NULL, *loginc = NULL;
     Gestores *g = NULL, *loging = NULL;
     int logmenu = 0;
-    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0, ident, aux;
+    int menu1, menuc, menug, menuconta, id, num = 0, menualtc, menualtm, menualtg, bateria, idmeio, count, i = 0, ident, aux, menuestat;
     
     char nome[MAX_NAME], morada[MAX_MORADA], NIF[MAX_NIF], password[MAX_PASSWORD], email[MAX_EMAIL], tipo[MAX_CODE];
     char emaillog[MAX_EMAIL], passwordlog[MAX_PASSWORD], locfinal[MAX_GEOCODE], locinicializacao[MAX_GEOCODE];
@@ -47,7 +47,8 @@ int main(){
 /*     printf("\nTeste a funçao do camiao: \n\n");
     rotaRecolha(v,h); */
 
-    printGrafo(v);
+    generico();
+    rotaRecolha(v,h);
     EsperarQuePrimaEnter();
     //Estrutura do programa
     do{
@@ -91,14 +92,14 @@ int main(){
                                                 alugarMeio(h, loginc->id, id);
                                                 custoh = custoMeio(h, id);
                                                 inserirHistoricoInicio(&p, loginc->id, id, custoh, localatual(h, id));
-                                                EsperarQuePrimaEnter();
+                                                printf("Meio alugado com sucesso.\n");
                                             }else
                                                 printf("Nao é possivel alugar o meio indicado pois nao tem dinheiro suficiente.");
                                             
                                             id = 0;
+                                        }else
                                             printf("Nao existem meios disponiveis\n");
-                                            EsperarQuePrimaEnter();
-                                        }
+                                        EsperarQuePrimaEnter();
                                         break;
                                     case 2:     //Terminar aluguer 
                                         num = listarMeiosAlugados( h, v , loginc->id, 0);
@@ -269,8 +270,25 @@ int main(){
                                         EsperarQuePrimaEnter();
                                         break;
                                     case 3:     //Estatisticas
-                                        // Em desenvolvimento
-                                        break;
+                                        do{
+                                            menuestat = menuEstatisticas();
+                                            switch(menuestat){
+                                                case 1:     // Meio mais alugado
+                                                    meioMaisAlugado(p, h);
+                                                    break;
+                                                case 2:     // Meio com mais distancia
+                                                    meioMaisDistancia(p,h,v);
+                                                    break;
+                                                case 3:     // Alterar autonomia
+                                                    break;
+                                                case 4:     // Alterar custo
+                                                    break;
+                                                case 0:
+                                                    break;
+                                            }
+                                            EsperarQuePrimaEnter();
+                                        }while(menuestat != 0);                                
+                                        break; 
                                     case 4:     //Validaçoes
                                         // Em desenvolvimento
                                         break;

@@ -4,7 +4,7 @@
 #include "grafo.h"
 #include "meio.h"
 
-int adicionarVertice(VerticeList **v, int idvertice, char geocode[])
+int adicionarVertice(VerticeList **v, int idvertice, char geocode[], char nome[])
 {
 
     if (existeVertice(*v, idvertice) == 1)
@@ -15,6 +15,7 @@ int adicionarVertice(VerticeList **v, int idvertice, char geocode[])
 
     new->vertice = idvertice;
     strcpy(new->geocode, geocode);
+    strcpy(new->nome, nome);
     new->adj = NULL;
     new->next = NULL;
 
@@ -319,7 +320,7 @@ void listarCaminhosAux(VerticeList *v, int origem, int destino, int sequencia[],
         {
             if (!visitado(sequencia, posicao, aux->vertice))
                 listarCaminhosAux(head, aux->vertice, destino, sequencia, posicao + 1,
-                                  pesoTotal + aux->peso);
+                pesoTotal + aux->peso);
             aux = aux->next;
         }
     }
@@ -489,8 +490,7 @@ int auxVerificaCargas(AuxCaminho *Vertices, Meio *inicio, int capacidadeMaxima, 
             if( cargaPorId(inicio, Vertices[verticeAux].idmeios[i]) < capacidadeMaxima){
                 ver = 1;
                 *verifica = Vertices[verticeAux].idmeios[i];
-            }
-                
+            }    
         }
         return ver;
     }else
@@ -564,6 +564,7 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
     float distanciaTotal = 0.0;
     int numVert = numVertices(v);
     int numVerticesComMeios = 0;
+    int *reset, aux1 = 1, counter = 0;
     AuxCaminho *Vertices;
     int **caminho;
 
@@ -585,6 +586,7 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
             j++;
         }
     }
+
     for(int i = 0; i < numVert; i++){
         if(maxNumMeios < Vertices[i].numMeios)
             maxNumMeios = Vertices[i].numMeios;
@@ -597,7 +599,7 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
     
     for(int i = 0; i < numColunas; i++){
         for(int j = 1; j < maxNumMeios + 1; j++){
-            caminho[i][j] = 0;
+            caminho[i][j] = -2;
         }
     }
 
@@ -605,15 +607,15 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
 
     while(pontosRecolhidos < numVerticesComMeios){
         if (pontosRecolhidos != 0){
-            distanciaTotal += menorCaminho(v, pontoAtual, 4);
+            distanciaTotal += menorCaminho(v, pontoAtual, VERTICEDESCARGA);
             capaciadeMaxima = 10;
-            pontoAtual = 4;
+            pontoAtual = VERTICEDESCARGA;
             numColunas++;
             caminho = realloc(caminho, sizeof(int *) * numColunas);
             caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
             caminho[numColunas-1][0] = pontoAtual;
             for(int i = 1; i < maxNumMeios + 1; i++){
-                caminho[numColunas-1][i] = 0;
+                caminho[numColunas-1][i] = -2;
             }
         }
         while (pontosRecolhidos < numVerticesComMeios) {
@@ -631,14 +633,13 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
             numColunas++;
             caminho = realloc(caminho, sizeof(int *) * numColunas);
             caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
-            //caminho[0][numColunas-1] = proximoPonto;
             caminho[numColunas-1][0] = proximoPonto;
             aux = 0;
-            for(int i = 1; i < maxNumMeios + 1; i++){ // esta a aceder a memoria nao alocada 
+            for(int i = 1; i < maxNumMeios + 1; i++){ 
                 if(aux < Vertices[proximoPonto].numMeios){
                     caminho[numColunas-1][i] = Vertices[proximoPonto].idmeios[aux];
                 }else
-                    caminho[numColunas-1][i] = 0;
+                    caminho[numColunas-1][i] = -2;
                 aux++;
             }
         }else{
@@ -648,44 +649,67 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
             numColunas++;
             caminho = realloc(caminho, sizeof(int *) * numColunas);
             caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
-            //caminho[0][numColunas-1] = proximoPonto;
             caminho[numColunas-1][0] = proximoPonto;
             for(int i = 1; i < maxNumMeios + 1; i++){
                 if( i == 0)
                     caminho[numColunas-1][i] = verifica;
                 else
-                    caminho[numColunas-1][i] = 0;
+                    caminho[numColunas-1][i] = -2;
             }
         }
-
-
-        printf("Vertice visitado: %d\n", Vertices[proximoPonto].vertice);
-        printf("Carga carregada no vertice: %d\n", Vertices[proximoPonto].carga);
 
         pontoAtual = proximoPonto;
     }
     }
-    printf("Teste ao contruir caminho: \n");
+        numColunas++;
+        caminho = realloc(caminho, sizeof(int *) * numColunas);
+        caminho[numColunas -1] = malloc(sizeof(int) * maxNumMeios + 1);
+        caminho[numColunas-1][0] = VERTICEDESCARGA;
+        for(int i = 1; i < maxNumMeios + 1; i++){
+            caminho[numColunas-1][i] = -2;
+        }
+        distanciaTotal += menorCaminho(v,pontoAtual,VERTICEDESCARGA);
+
+    reset = malloc(sizeof(int) * aux1);
+
+    printf("Caminho: \n");
     for(int i = 0; i < numColunas; i++){
         printf("Vertice visitado: %d - Meios carregados: ", caminho[i][0]);
         for(int j = 1; j < maxNumMeios + 1; j++){
-            if(caminho[i][j] != 0){
-                printf("%d ", caminho[j][i]);
+            if(caminho[i][j] != -2){
+                printf("%d ", caminho[i][j]);
+                if(counter == 0){
+                    reset[aux1 - 1] = caminho[i][j];
+                    aux1++;
+                    counter++;
+                }else{
+                    reset = realloc(reset, sizeof(int) * aux1);
+                    reset[aux1 - 1] = caminho[i][j];
+                    aux1++;
+                    counter++;
+                }
             }
-                
         }
         printf("\n");
     }
 
+    printf("teste ao array dos meios: \n");
+    for(int i = 0; i < counter; i++){
+        recarregarMeios(inicio, v, reset[i], VERTICEDESCARGA);
+        printf("%d ", reset[i]);
+    }
+
     printf("Distancia total percorrida: %.2f\n", distanciaTotal);
     printf("Pontos de recolha visitados: %d\n", pontosRecolhidos);
+
+
 }
 
 
 void readGrafo(VerticeList **v)
 {
     FILE *fp;
-    char line[1024], geocode[MAX_GEOCODE];
+    char line[1024], geocode[MAX_GEOCODE], nome[MAX_NAME];
     int listVertice, i, aux, j, z;
     float aux1;
     char *campo1, *campo2;
@@ -704,16 +728,21 @@ void readGrafo(VerticeList **v)
                 z = 1;
                 while (campo1 != NULL)
                 {
-                    if (z % 2 == 1)
-                    {
+                    if(z == 1){
                         listVertice = atoi(campo1);
-                    }
-                    else
-                    {
+                        z++;
+                    }else{
+                        if(z == 2){
                         strcpy(geocode, campo1);
-                        adicionarVertice(&(*v), listVertice, geocode);
+                        z++;
+                        }else{
+                            if(z == 3){
+                            strcpy(nome,campo1);
+                            adicionarVertice(&(*v), listVertice, geocode, nome);
+                            z = 1;
+                            }
+                        }
                     }
-                    z++;
                     campo1 = strtok(NULL, ";");
                 }
             }
@@ -761,7 +790,7 @@ void guardarGrafo(VerticeList *v)
 
         while (v != NULL)
         {
-            fprintf(fp, "%d;%s;", v->vertice, v->geocode);
+            fprintf(fp, "%d;%s;%s", v->vertice, v->geocode, v->nome);
             v = v->next;
         }
         fprintf(fp, "\n");
@@ -853,7 +882,7 @@ void lerGrafoBin(VerticeList **inicio){
 
        while (fread(new, sizeof(VerticeList), 1, fp) == 1) {
             if(new != NULL){
-                adicionarVertice(&(*inicio), new->vertice, new->geocode);             
+                adicionarVertice(&(*inicio), new->vertice, new->geocode, new->nome);             
             }
         }
         free(new);
@@ -878,6 +907,4 @@ void lerGrafoBin(VerticeList **inicio){
     }else{
         printf("Erro ao abrir ficheiro binario das arestas\n");
     }
-
-
 }
