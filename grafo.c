@@ -79,7 +79,7 @@ int lerVertice(VerticeList *v, char *geocode)
         return 0;
     }
 
-    printGrafoNomes(v);
+    printVertices(v);
     do
     {
         if (i == 0)
@@ -119,6 +119,98 @@ int lerVerticePessoa(VerticeList *v)
     return vertice;
 }
 
+void lerDadosVertice(VerticeList **v){
+    char nome[MAX_NAME];
+    char geocode[MAX_GEOCODE];
+    int codigo;
+    
+    strcpy(geocode, "");
+    strcpy(nome, "");
+    clearbuffer();
+
+    generico();
+    printf("\n--------------- Adicionar Vertice ---------------\n");
+    printf("Indique o nome do vertice: ");
+    fgets(nome, MAX_NAME, stdin);
+    nome[strlen(nome)-1] = '\0';
+
+    printf("Indique o geocode do vertice (nome.nome.nome): ");
+    fgets(geocode, MAX_GEOCODE, stdin);
+    geocode[strlen(geocode)-1] = '\0';
+
+    
+    codigo = gerarIdVertice(*v);
+
+    adicionarVertice(&(*v),codigo, geocode,nome);
+}
+
+void lerDadosAresta(VerticeList *v){
+    int verticeo,verticed, codigo, i, dist;
+    
+    clearbuffer();
+
+    generico();
+    printVertices(v);
+    i = 0;
+    printf("\n--------------- Adicionar Aresta ---------------\n");
+    do{
+        if(i == 0)
+            printf("Indique o vertice de origem: ");
+        else
+            printf("Indique um vertice valido: ");
+        scanf("%d", &verticeo);
+        i++;
+    }while(existeVertice(v,verticeo) != 1);
+    
+    i = 0;
+
+    do{
+        if(i == 0)
+            printf("Indique o vertice de destino: ");
+        else
+            printf("Indique um vertice valido: ");
+        scanf("%d", &verticed);
+        i++;
+    }while(existeVertice(v,verticed) != 1);
+
+    i = 0;
+
+    do{
+        if(i == 0)
+            printf("Indique a distancia entre os dois vertices: ");
+        else
+            printf("Indique uma distancia valida: ");
+        scanf("%d", &dist);
+        i++;
+    }while(dist <= 0);
+
+    
+    codigo = gerarIdVertice(v);
+
+    if(existeAresta(v,verticeo,verticed) != 1 && (verticed != verticeo)){
+        adicionarAresta(v,verticeo,verticed,dist);
+    }else{
+        printf("Nao é possivel adicionar duas vezes a mesma aresta.\n");
+    }
+
+}
+
+int gerarIdVertice(VerticeList *inicio){
+    int max = 0;
+
+    if (!inicio)
+        return max;
+
+    while( inicio != NULL){
+        if (max < inicio->vertice)
+            max = inicio->vertice;
+
+        inicio = inicio->next;
+    }
+
+    return ++max;
+}
+
 int existeVertice(VerticeList *v, int idvertice)
 {
     if (v == NULL)
@@ -129,6 +221,29 @@ int existeVertice(VerticeList *v, int idvertice)
         if (v->vertice == idvertice)
             return 1;
         v = v->next;
+    }
+
+    return 0;
+}
+
+int existeAresta(VerticeList *v, int verticeO, int verticeD){
+    Adjacente *aux;
+
+    if (v == NULL)
+        return 2;
+
+    while (v != NULL){
+        if (v->vertice == verticeO){
+            aux = v->adj;
+            break;
+        }
+        v = v->next;
+    }
+
+    while(aux != NULL){
+        if(aux->vertice == verticeD)
+            return 1;
+        aux = aux->next;
     }
 
     return 0;
@@ -168,7 +283,7 @@ int printVertices(VerticeList *v)
     printf("-----------Grafo-------------\n");
     while (v != NULL)
     {
-        printf("Vertice %d: %s\n", v->vertice, NOME_PONTOS[v->vertice]);
+        printf("Vertice %d: %s\n", v->vertice, v->nome);
         v = v->next;
     }
     printf("-----------------------------\n");
@@ -693,16 +808,14 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
         printf("\n");
     }
 
-    printf("teste ao array dos meios: \n");
     for(int i = 0; i < counter; i++){
         recarregarMeios(inicio, v, reset[i], VERTICEDESCARGA);
-        printf("%d ", reset[i]);
     }
 
-    printf("Distancia total percorrida: %.2f\n", distanciaTotal);
+    printf("\n\nDistancia total percorrida: %.2f\n", distanciaTotal);
     printf("Pontos de recolha visitados: %d\n", pontosRecolhidos);
 
-
+    printf("\nMeios recolhidos com sucesso.\n");
 }
 
 

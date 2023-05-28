@@ -106,20 +106,22 @@ int menucGestores(){
         printf("| 1 - Adicionar meios          |\n");
         printf("| 2 - Consultar historico      |\n");
         printf("| 3 - Estatisticas             |\n");
-        printf("| 4 - Validaçoes               |\n");
-        printf("| 5 - Alterar meios            |\n");
-        printf("| 6 - Alterar dados            |\n");
-        printf("| 7 - Remover Meio             |\n");
-        printf("| 8 - Remover Conta            |\n");
-        printf("| 9 - Consultar dados conta    |\n");
-        printf("| 10 - Imprimir lista clientes |\n");
-        printf("| 11 - Imprimir lista Meios    |\n");
-        printf("| 12 - Inicializar loc meios   |\n");
+        printf("| 4 - Alterar meios            |\n");
+        printf("| 5 - Alterar dados            |\n");
+        printf("| 6 - Remover Meio             |\n");
+        printf("| 7 - Remover Conta            |\n");
+        printf("| 8 - Consultar dados conta    |\n");
+        printf("| 9 - Imprimir lista clientes  |\n");
+        printf("| 10 - Imprimir lista Meios    |\n");
+        printf("| 11 - Inicializar loc meios   |\n");
+        printf("| 12 - Adicionar localizaçao   |\n");
+        printf("| 13 - Adicionar aresta        |\n");
+        printf("| 14 - Funçao de recolha       |\n");
         printf("| 0 - Logout                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");
         scanf("%d", &opc);
-    }while(opc < 0 || opc > 12);
+    }while(opc < 0 || opc > 14);
 
     return opc;
 }
@@ -237,8 +239,6 @@ int menuEstatisticas(){
         printf("\n ------------------------------\n");
         printf("| 1 - Meio mais alugado        |\n");
         printf("| 2 - Meio com mais distancia  |\n");
-        printf("| 3 - Meio mais caro           |\n");
-        printf("| 4 - Meio mais barato         |\n");
         printf("| 0 - Voltar                   |\n");
         printf(" ------------------------------\n");
         printf("Opcao: ");

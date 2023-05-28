@@ -44,12 +44,7 @@ int main(){
     //lerGrafoBin(&v);
 
     ordenarMeios(&h); //Ordenar Meios por ordem decrescente de Autonomia
-/*     printf("\nTeste a funçao do camiao: \n\n");
-    rotaRecolha(v,h); */
 
-    generico();
-    rotaRecolha(v,h);
-    EsperarQuePrimaEnter();
     //Estrutura do programa
     do{
         menu1 = menu();     //Receber opçao do utilizador
@@ -279,20 +274,13 @@ int main(){
                                                 case 2:     // Meio com mais distancia
                                                     meioMaisDistancia(p,h,v);
                                                     break;
-                                                case 3:     // Alterar autonomia
-                                                    break;
-                                                case 4:     // Alterar custo
-                                                    break;
                                                 case 0:
                                                     break;
                                             }
                                             EsperarQuePrimaEnter();
                                         }while(menuestat != 0);                                
                                         break; 
-                                    case 4:     //Validaçoes
-                                        // Em desenvolvimento
-                                        break;
-                                    case 5:     //Alterar meios
+                                    case 4:     //Alterar meios
                                         do{
                                             count = 0;
                                             generico();
@@ -335,7 +323,7 @@ int main(){
                                             break;
                                         }while(menualtc != 0);
                                         break;
-                                    case 6:     //Alterar dados
+                                    case 5:     //Alterar dados
                                         do{
                                             menualtg = menuAlterarDadosGestor();    //Receber opçao do utilizador 
                                             switch(menualtg){
@@ -379,7 +367,7 @@ int main(){
                                             }
                                         }while(menualtg != 0);
                                         break;
-                                    case 7:     // remover meio
+                                    case 6:     // remover meio
                                         i = 0;
                                         listarMeios(h, v, 0);
                                         do{
@@ -392,27 +380,27 @@ int main(){
                                         }while(!existeMeio(h, id));
                                         removerMeio(&h, id, 1);
                                         break;
-                                    case 8:     //remover conta
+                                    case 7:     //remover conta
                                         removerGestor(&g, loging->id, 1);
                                         generico();
                                         printf("\nConta removida com sucesso, a voltar ao menu principal..\n\n");
                                         EsperarQuePrimaEnter();
                                         menug = 0;
                                         break;
-                                    case 9:     //remover conta
+                                    case 8:     //remover conta
                                         printGestor(loging);
                                         break;
-                                    case 10:
+                                    case 9:
                                         generico();
                                         listarCliente(c, 1);
                                         EsperarQuePrimaEnter();
                                         break;
-                                    case 11:    //Listar Meios
+                                    case 10:    //Listar Meios
                                         generico();
                                         listarMeios(h, v, 0);
                                         EsperarQuePrimaEnter();
                                         break;
-                                    case 12:    //Inicializar meio sem localizaçao
+                                    case 11:    //Inicializar meio sem localizaçao
                                         generico();
                                         i = 0;
                                         if(NumMeiosSemLocalizacao(h) != 0){
@@ -438,6 +426,21 @@ int main(){
                                             printf("Nao existem meios sem localizaçao\n");
                                             EsperarQuePrimaEnter();
                                         }
+                                        break;
+                                    case 12:     //Adicionar uma localizaçao ao grafo
+                                        lerDadosVertice(&v);
+                                        printVertices(v);
+                                        EsperarQuePrimaEnter();
+                                        break;
+                                    case 13:     //Adicionar uma aresta ao grafo
+                                        lerDadosAresta(v);
+                                        printGrafo(v);
+                                        EsperarQuePrimaEnter();
+                                        break;
+                                    case 14:     //Recolha de Meios a menos de 50% de bateria
+                                        generico();
+                                        rotaRecolha(v,h);
+                                        EsperarQuePrimaEnter();
                                         break;
                                     case 0:     //Logout
                                         generico();
