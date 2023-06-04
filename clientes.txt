@@ -1,2 +1,2 @@
-Andre Lopes;Rua da Penide;123456789;andrelopes021@gmail.com;qdthu;97.53;1
 Teste;Rua ;1236789;testec@gmail.com;qdthu;0.00;2
+Andre Lopes;Rua da Penide;123456789;andrelopes021@gmail.com;qdthu;98.33;1
