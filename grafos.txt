@@ -1,4 +1,4 @@
-0;newest.senses.taster;Campo da Feira;1;tiny.heads.improve;A minha farmacia;2;ruled.managed.defender;Estatua do Bombeiro;3;lend.infants.images;Pingo Doce;4;accredit.fillings.tossed;Mercadona;5;monkey.boosted.inch;Digibarcelos;6;machinery.whips.shopping;Retail Parque;7;stamp.initial.friends;Mc Donalds's;8;outdone.contain.wide;Alcaides de Faria;
+0;newest.senses.taster;Campo da Feira1;tiny.heads.improve;A minha farmacia2;ruled.managed.defender;Estatua do Bombeiro3;lend.infants.images;Pingo Doce4;accredit.fillings.tossed;Mercadona5;monkey.boosted.inch;Digibarcelos6;machinery.whips.shopping;Retail Parque7;stamp.initial.friends;Mc Donalds's8;outdone.contain.wide;Alcaides de Faria
 0;1;10.00;2;10.00;
 1;0;10.00;2;10.00;8;10.00;
 2;0;10.00;1;10.00;3;10.00;
