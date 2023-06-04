@@ -860,6 +860,8 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
             numVerticesComMeios++;
     }
 
+    if(numVerticesComMeios > 0){
+
     int *VerticesComMeios = malloc(sizeof(int) * numVerticesComMeios);
 
     for(int i = 0, j = 0; i < numVert; i++){
@@ -983,6 +985,20 @@ void rotaRecolha(VerticeList *v,Meio *inicio) {
     printf("Pontos de recolha visitados: %d\n", pontosRecolhidos);
 
     printf("\nMeios recolhidos com sucesso.\n");
+
+    //Free a memoria alocada
+    free(VerticesComMeios);
+    free(reset);
+    for (int i = 0; i < numColunas; i++) {
+        free(caminho[i]);
+    }
+    free(caminho);
+    }else{
+        printf("Nao existem meios que precisem de recolha.\n");
+    }
+
+    //Free a memoria alocada
+    free(Vertices);
 }
 
 
