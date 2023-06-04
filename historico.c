@@ -61,7 +61,10 @@ void inserirHistoricoInicio(Historico** inicio, int idc, int idm, float custo, c
     new->Custo = custo;
     new->custoFinal = 0;
     new->inicio = *localtime(&t);
+    t = 0;
+    new->fim = *localtime(&t);
     strcpy(new->localinicial, localinicial);
+    strcpy(new->localfinal, "");
 
     new->next = (*inicio);
     (*inicio) = new;    
@@ -398,6 +401,8 @@ void readHistorico(Historico **inicio){
             start = *localtime(&tempoinic);
             end = *localtime(&tempofinal);
 
+            if(strcmp(localfinal,"Nao atribuido") == 0)
+                strcpy(localfinal, "");
 			
             inserirHistorico(&(*inicio), idc, idm, id, custofinal, custo, localinicial, localfinal, start, end);
 		}
@@ -424,11 +429,14 @@ void guardarHistorico(Historico* inicio){
     if (fp!=NULL){
         
         while (inicio != NULL){
-        timeinit = mktime(&(inicio->inicio));
-        fim = mktime(&(inicio->fim));
-        fprintf(fp,"%d;%d;%d;%.2f;%.2f;%s;%s;", inicio->id, inicio->idCliente, inicio->idMeio, inicio->Custo, inicio->custoFinal, inicio->localinicial, inicio->localfinal); 
-        fprintf(fp,"%ld;%ld\n", timeinit, fim);
-        inicio = inicio->next;
+            if(strcmp(inicio->localfinal, "") == 0){
+                strcpy(inicio->localfinal, "Nao atribuido");
+            }
+            timeinit = mktime(&(inicio->inicio));
+            fim = mktime(&(inicio->fim));
+            fprintf(fp,"%d;%d;%d;%.2f;%.2f;%s;%s;", inicio->id, inicio->idCliente, inicio->idMeio, inicio->Custo, inicio->custoFinal, inicio->localinicial, inicio->localfinal); 
+            fprintf(fp,"%ld;%ld\n", timeinit, fim);
+            inicio = inicio->next;
         }
         
         fclose(fp);

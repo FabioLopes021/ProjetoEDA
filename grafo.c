@@ -1080,7 +1080,7 @@ void guardarGrafo(VerticeList *v)
 
         while (v != NULL)
         {
-            fprintf(fp, "%d;%s;%s", v->vertice, v->geocode, v->nome);
+            fprintf(fp, "%d;%s;%s;", v->vertice, v->geocode, v->nome);
             v = v->next;
         }
         fprintf(fp, "\n");

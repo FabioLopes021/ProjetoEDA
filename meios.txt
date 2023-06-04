@@ -1,3 +1,3 @@
 3;30;1500.00;5000.00;0.99;0;Carro;newest.senses.taster;3
-2;44;880.00;2000.00;0.33;0;Bicicleta;machinery.whips.shopping;2
+2;43;860.00;2000.00;0.33;0;Bicicleta;outdone.contain.wide;2
 1;45;90.00;200.00;0.22;0;Trotinete;newest.senses.taster;2

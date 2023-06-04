@@ -220,7 +220,7 @@ Gestores *loginGestores(Gestores **inicio,char password[], char email[]){
         return NULL;
     }
 
-    if (strcmp(password, (*inicio)->password)){
+    if ((strcmp(password, (*inicio)->password) != 0) || (strcmp(email, (*inicio)->email) != 0)){
         return loginGestores(&(*inicio)->next, password, email);
     }
 

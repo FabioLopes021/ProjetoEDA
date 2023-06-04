@@ -31,15 +31,15 @@ int main(){
     //Carregar dados dos ficheiros txt
     readGrafo(&v);
     readMeios(&h);
-    //readClientes(&c);
-    //readGestores(&g);
+    readClientes(&c);
+    readGestores(&g);
     readHistorico(&p);
     
 
     //Carregar dados dos ficheiros bin
-    //lerMeioBin(&h)
-    lerGestoresBin(&g);
-    lerCLientesBin(&c);
+    //lerMeioBin(&h);
+    //lerGestoresBin(&g);
+    //lerCLientesBin(&c);
     //lerHistoricoBin(&p);
     //lerGrafoBin(&v);
 
@@ -486,16 +486,17 @@ int main(){
     clearbuffer();   
 
     //Guardar dados em ficheiro
-    //guardarGestores(g);
-    //guardarClientes(c);
+    guardarGestores(g);
+    guardarClientes(c);
     guardarMeios(h);
     guardarHistorico(p);
     guardarGrafo(v);
 
+
     //Guardar dados em ficheiro binario
     //guardarMeioBin(h);
-    guardarClientesBin(c);
-    guardarGestoresBin(g);
+    //guardarClientesBin(c);
+    //guardarGestoresBin(g);
     //guardarHistoricoBin(p);
     //guardarGrafoBin(v);
 

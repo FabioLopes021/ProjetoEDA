@@ -1,2 +1,4 @@
+3;1;3;0.99;1.77;newest.senses.taster;newest.senses.taster;1685875000;1685875107
 2;1;2;0.33;0.02;ruled.managed.defender;machinery.whips.shopping;1685289214;1685289218
 1;1;3;0.99;1.29;machinery.whips.shopping;newest.senses.taster;1684265765;1684265843
+4;1;2;0.33;0.70;machinery.whips.shopping;outdone.contain.wide;1685875037;1685875164

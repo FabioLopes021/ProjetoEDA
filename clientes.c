@@ -230,7 +230,7 @@ Clientes *loginClientes(Clientes **inicio,char password[], char email[]){
         return NULL;
     }
 
-    if (strcmp(password, (*inicio)->password)){
+    if ((strcmp(password, (*inicio)->password) != 0) || (strcmp(email, (*inicio)->email) != 0)){
         return loginClientes(&(*inicio)->next, password, email);
     }
 
